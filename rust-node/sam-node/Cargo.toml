@@ -1,0 +1,34 @@
+[package]
+name = "sam-node"
+version = "0.1.0"
+license = "ISC"
+edition = "2018"
+exclude = ["index.node"]
+
+[lib]
+crate-type = ["cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.75"
+candle-core = { git = "https://github.com/huggingface/candle.git", version = "0.3.1", feautures = [
+    "accelerate",
+] }
+candle-examples = { git = "https://github.com/huggingface/candle.git", version = "0.3.1", feautures = [
+    "accelerate",
+] }
+candle-nn = { git = "https://github.com/huggingface/candle.git", version = "0.3.1", feautures = [
+    "accelerate",
+] }
+candle-transformers = { git = "https://github.com/huggingface/candle.git", version = "0.3.1", feautures = [
+    "accelerate",
+] }
+hf-hub = "0.3.2"
+image = "0.24.7"
+imageproc = "0.23.0"
+
+[dependencies.neon]
+version = "0.10"
+default-features = false
+features = ["napi-6"]
