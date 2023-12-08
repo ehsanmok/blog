@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "lib"
+version = "0.0.0"
+description = ""
+authors = ["ehsanmok <6980212+ehsanmok@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+modal = "^0.55.4168"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
