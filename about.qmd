@@ -1,6 +1,0 @@
----
-title: "About"
----
-
-Coming soon...
-

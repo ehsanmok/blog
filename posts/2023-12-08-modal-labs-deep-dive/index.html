@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ehsan M. Kermani">
+<meta name="dcterms.date" content="2023-12-08">
+
+<title>Modal Labs Deep Dive – Ehsan’s Blog</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-597958c53c93a607afca12fd375c57ed.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7ac2f9da8c2617a4fdd15004b4601015.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-597958c53c93a607afca12fd375c57ed.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0f54ebcecf29f09aa746c60f2b36b484.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-a59265f28323c50649b21528bab209e7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0f54ebcecf29f09aa746c60f2b36b484.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  }
+};
+</script>
+<script>
+// Add reading time calculation
+document.addEventListener('DOMContentLoaded', function() {
+  const article = document.querySelector('.page-columns');
+  if (article) {
+    const text = article.textContent;
+    const wordCount = text.trim().split(/\s+/).length;
+    const readingTime = Math.ceil(wordCount / 200);
+    const metadata = document.querySelector('.quarto-title-meta');
+    if (metadata && readingTime > 0) {
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'quarto-title-meta-heading';
+      timeDiv.innerHTML = '<div class="quarto-title-meta-heading">Reading Time</div><div class="quarto-title-meta-contents"><p class="article-reading-time">' + readingTime + ' min read</p></div>';
+      metadata.appendChild(timeDiv);
+    }
+  }
+  // Add GRR formula to navbar (centered)
+  const navbarContainer = document.querySelector('.navbar > .container-fluid');
+  if (navbarContainer) {
+    const grr = document.createElement('span');
+    grr.className = 'grr-formula';
+    grr.innerHTML = 'ch(f<sub>!</sub>ℱ) = f<sub>*</sub>(ch(ℱ) · td(T<sub>f</sub>))';
+    navbarContainer.appendChild(grr);
+  }
+});
+</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Ehsan’s Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/ehsanmok"> <i class="bi bi-twitter" role="img" aria-label="X">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ehsanmok"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/ehsanmkermani/"> <i class="bi bi-linkedin" role="img" aria-label="LinkedIn">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../posts.xml"> <i class="bi bi-rss" role="img" aria-label="RSS Feed">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prelude" id="toc-prelude" class="nav-link active" data-scroll-target="#prelude">Prelude</a>
+  <ul class="collapse">
+  <li><a href="#infrastructure-from-code" id="toc-infrastructure-from-code" class="nav-link" data-scroll-target="#infrastructure-from-code">Infrastructure from Code</a></li>
+  <li><a href="#modals-pitch" id="toc-modals-pitch" class="nav-link" data-scroll-target="#modals-pitch">Modal’s Pitch</a></li>
+  <li><a href="#installation-and-official-guide" id="toc-installation-and-official-guide" class="nav-link" data-scroll-target="#installation-and-official-guide">Installation and Official Guide</a></li>
+  <li><a href="#runtime-spec-via-stub" id="toc-runtime-spec-via-stub" class="nav-link" data-scroll-target="#runtime-spec-via-stub">Runtime Spec via stub</a></li>
+  </ul></li>
+  <li><a href="#lets-dive-deep" id="toc-lets-dive-deep" class="nav-link" data-scroll-target="#lets-dive-deep">Let’s Dive Deep</a>
+  <ul class="collapse">
+  <li><a href="#cloudpickle" id="toc-cloudpickle" class="nav-link" data-scroll-target="#cloudpickle">cloudpickle</a></li>
+  <li><a href="#what-objects-are-not-cloudpicklable" id="toc-what-objects-are-not-cloudpicklable" class="nav-link" data-scroll-target="#what-objects-are-not-cloudpicklable">What objects are not cloudpicklable?</a></li>
+  <li><a href="#function-proto" id="toc-function-proto" class="nav-link" data-scroll-target="#function-proto">Function proto</a></li>
+  </ul></li>
+  <li><a href="#lets-come-back-up-breathe-and-dive-deep-again" id="toc-lets-come-back-up-breathe-and-dive-deep-again" class="nav-link" data-scroll-target="#lets-come-back-up-breathe-and-dive-deep-again">Let’s Come back up, Breathe and Dive Deep Again</a>
+  <ul class="collapse">
+  <li><a href="#local-vs-.remote" id="toc-local-vs-.remote" class="nav-link" data-scroll-target="#local-vs-.remote"><code>.local()</code> vs <code>.remote()</code></a></li>
+  <li><a href="#parallel-run-via-.map-and-starmap" id="toc-parallel-run-via-.map-and-starmap" class="nav-link" data-scroll-target="#parallel-run-via-.map-and-starmap"><code>Parallel run via .map() and starmap()</code></a></li>
+  <li><a href="#lookup-and-spawn-functions-remotely" id="toc-lookup-and-spawn-functions-remotely" class="nav-link" data-scroll-target="#lookup-and-spawn-functions-remotely">Lookup and Spawn Functions Remotely</a></li>
+  <li><a href="#async-support" id="toc-async-support" class="nav-link" data-scroll-target="#async-support">Async Support</a></li>
+  <li><a href="#class-support" id="toc-class-support" class="nav-link" data-scroll-target="#class-support">Class Support</a></li>
+  </ul></li>
+  <li><a href="#build-time-dependencies-and-resources" id="toc-build-time-dependencies-and-resources" class="nav-link" data-scroll-target="#build-time-dependencies-and-resources">Build time Dependencies and Resources</a>
+  <ul class="collapse">
+  <li><a href="#modal.image" id="toc-modal.image" class="nav-link" data-scroll-target="#modal.image"><code>modal.Image</code></a></li>
+  <li><a href="#modal.secret" id="toc-modal.secret" class="nav-link" data-scroll-target="#modal.secret"><code>Modal.Secret</code></a></li>
+  <li><a href="#modal.volume-and-modal.networkfilesystem" id="toc-modal.volume-and-modal.networkfilesystem" class="nav-link" data-scroll-target="#modal.volume-and-modal.networkfilesystem"><code>Modal.Volume</code> and <code>Modal.NetworkFileSystem</code></a></li>
+  <li><a href="#build-time-vs-runtime-mental-model" id="toc-build-time-vs-runtime-mental-model" class="nav-link" data-scroll-target="#build-time-vs-runtime-mental-model">Build time vs Runtime Mental Model</a></li>
+  <li><a href="#web-endpoints" id="toc-web-endpoints" class="nav-link" data-scroll-target="#web-endpoints">Web Endpoints</a></li>
+  <li><a href="#modal-supports-crob-jobs-tunnel-sandbox-and-more" id="toc-modal-supports-crob-jobs-tunnel-sandbox-and-more" class="nav-link" data-scroll-target="#modal-supports-crob-jobs-tunnel-sandbox-and-more">Modal Supports Crob-jobs, Tunnel, Sandbox and more</a></li>
+  </ul></li>
+  <li><a href="#modal-launch-jupytervscode" id="toc-modal-launch-jupytervscode" class="nav-link" data-scroll-target="#modal-launch-jupytervscode"><code>modal launch jupyter</code>/<code>vscode</code></a></li>
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices">Best Practices</a>
+  <ul class="collapse">
+  <li><a href="#single-stub-vs-multi-stub" id="toc-single-stub-vs-multi-stub" class="nav-link" data-scroll-target="#single-stub-vs-multi-stub">Single stub vs Multi-stub</a></li>
+  <li><a href="#testing-via-stub.local_entrypoint" id="toc-testing-via-stub.local_entrypoint" class="nav-link" data-scroll-target="#testing-via-stub.local_entrypoint">Testing via <code>@stub.local_entrypoint()</code></a></li>
+  <li><a href="#managing-dependencies" id="toc-managing-dependencies" class="nav-link" data-scroll-target="#managing-dependencies">Managing Dependencies</a></li>
+  <li><a href="#observability" id="toc-observability" class="nav-link" data-scroll-target="#observability">Observability</a></li>
+  </ul></li>
+  <li><a href="#acknowledgement" id="toc-acknowledgement" class="nav-link" data-scroll-target="#acknowledgement">Acknowledgement</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Modal Labs Deep Dive</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">DeepDive</div>
+    <div class="quarto-category">Framework</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ehsan M. Kermani </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 8, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="prelude" class="level2">
+<h2 class="anchored" data-anchor-id="prelude">Prelude</h2>
+<p>In this post, we’re going to deep dive into one of my favourite tools that are revolutionizing how Python code is run in cloud and it’s especially aimed at the computing stack for Machine Learning / Deep Learning applications, called <a href="https://modal.com/">Modal</a> which has recently gone GA!</p>
+<p>There are almost no resources besides the official documents and examples. I have been using Modal for almost a year and this post sums up crucial points on using Modal and does a series of deep dives into its inner working. Finally, we end with a few best practices.</p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/modal-ga-tweet.png"><img src="images/modal-ga-tweet.png" class="img-fluid"></a></p>
+<section id="infrastructure-from-code" class="level3">
+<h3 class="anchored" data-anchor-id="infrastructure-from-code">Infrastructure from Code</h3>
+<p>In the last couple of years, there has been a new trend aimed at simplifying code deployment in cloud. If you’ve likely seen drawbacks with<strong>Infrastructure-as-Code (IaC)</strong>tools such as Terraform, Pulumi, AWS CloudFormation, etc., you’re not alone.<em>Each tool has its own terminology, often in the form of a DSL, library/package, or YAML extension 🤕</em>Decoupled from the application code, meaning that using resources in code requires separately creating the necessary cloud resources</p>
+<p>For certain applications and larger companies, these requirements might be manageable. However, for smaller companies and individual developers, they can be overwhelming.</p>
+<p>So, the main idea of<strong>Infrastructure-from-Code (IfC)</strong>is to simplify IaC by being as close to the application as possible. This means introducing little to no new syntax and providing a way to create and manage cloud resources needed for deploying the application as conveniently as possible, for example, with a CLI.</p>
+<p>In fact,<strong>Modal is an IfC solution for the computing stack, especially for ML/DL apps</strong>.</p>
+<p>If you want to know more about IfC, have a look at my <a href="https://github.com/ehsanmok/awesome-infrastructure-from-code">awesome-infrastructure-from-code</a> resources.</p>
+</section>
+<section id="modals-pitch" class="level3">
+<h3 class="anchored" data-anchor-id="modals-pitch">Modal’s Pitch</h3>
+<blockquote class="blockquote">
+<p>Modal’s goal is to<strong>make running code in the cloud</strong>feel like<strong>you’re running code locally</strong>. You don’t need to run any commands to rebuild, push containers, or go to a web UI to download logs.</p>
+</blockquote>
+</section>
+<section id="installation-and-official-guide" class="level3">
+<h3 class="anchored" data-anchor-id="installation-and-official-guide">Installation and Official Guide</h3>
+<p>First, make sure you’re signed in <a href="https://modal.com">modal.com</a>. Then the <a href="https://modal.com/">installation guide</a></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install modal</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> modal setup</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>installs the modal package which comes with its own CLI. Also configures the CLI and sets up the API token once. After that, let’s create a dev environment for our deep dive</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">modal</span> environment create dev</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">modal</span> config set-environment dev</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Note: All codes are available in <a href="https://github.com/ehsanmok/blog/tree/main/modal-deep-dive">my GitHub</a>.</strong></p>
+</section>
+<section id="runtime-spec-via-stub" class="level3">
+<h3 class="anchored" data-anchor-id="runtime-spec-via-stub">Runtime Spec via stub</h3>
+<p>Let’s see what that means. First,</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/ehsanmok/blog <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> blog/modal-deep-dive</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and have a look at <code>lib/empty.py</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub(<span class="st">"empty"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Let’s deploy an empty stub via</p>
+<p><code>modal deploy lib/empty.py</code></p>
+<p>(since I’m using Poetry, I factor out the <code>poetry run</code> part).</p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/empty-deploy-cli.png"><img src="images/empty-deploy-cli.png" class="img-fluid"></a></p>
+<p>and the Modal dashboard view</p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/modal-empty-dashboard.png"><img src="images/modal-empty-dashboard-1024x254.png" class="img-fluid"></a></p>
+<p>Ok! so far so good. We just deployed an empty stub. You can think about it like a<em>container</em>(either in abstract sense or like docker container) and here the container is empty! We will expand on that later.</p>
+<p>Let’s continue with <code>lib/hello.py</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub(<span class="st">"hello"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hello():</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"hello, world!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Let’s take a look at <code>Stub</code> description (emphasis is mine)</p>
+<blockquote class="blockquote">
+<p>A <code>Stub</code> is a<strong>description</strong>of how to create a Modal application. The stub object principally describes Modal objects (<code>Function</code>, <code>Image</code>, <code>Secret</code>, etc.) associated with the application. It has<em>three responsibilities:</em>&gt;</p>
+<p><em><strong>Syncing of identities across processes (your local Python interpreter and every Modal worker active in your application).</strong>&gt;</em><strong>Making Objects stay alive and not be garbage collected for as long as the app lives (see App lifetime below).</strong>&gt;*<strong>Manage log collection for everything that happens inside your code.</strong>See what happens if we deploy our hello world via</p>
+</blockquote>
+<p><code>modal deploy lib/hello.py</code></p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/deploy-hello-1.png"><img src="images/deploy-hello-1.png" class="img-fluid"></a></p>
+<p>and dashboard says it’s deployed but is “Currently idle”, because it’s not receiving any input</p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/deploy-hello-dashboard-1.png"><img src="images/deploy-hello-dashboard-1-1024x286.png" class="img-fluid"></a></p>
+<p>in fact in order to execute the stubbed hello function we should do <code>modal run lib/hello.py</code>.</p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/run-hello-cli.png"><img src="images/run-hello-cli.png" class="img-fluid"></a></p>
+<p>From the output, we can see it</p>
+<ol type="1">
+<li>Created a mount of some sort (will expand on that later)</li>
+<li>Created our application hello</li>
+<li>Ran the app</li>
+<li>Finally stopped the app</li>
+</ol>
+</section>
+</section>
+<section id="lets-dive-deep" class="level2">
+<h2 class="anchored" data-anchor-id="lets-dive-deep">Let’s Dive Deep</h2>
+<p>What happens when we do <code>modal run</code>?</p>
+<p>The official Modal document describes it as</p>
+<blockquote class="blockquote">
+<h3 id="how-does-it-work" class="anchored">How does it work?</h3>
+<p>Modal takes your code, puts it in a container, and executes it in the cloud.</p>
+<p>Where does it run? Modal runs it in its own cloud environment. The benefit is that we solve all the hard infrastructure problems for you, so you don’t have to do anything. You don’t need to mess with Kubernetes, Docker or even an AWS account.</p>
+<p>Official Modal doc</p>
+</blockquote>
+<p>In the outset, Modal intelligently<em>wraps our code and all of its dependencies (we will get to it later) with metadata</em>containerizes*and finally runs / deploys it</p>
+<p>A few important points:<em>the containerization is<strong>NOT</strong>via docker. Modal has created its own</em>OCI compatible container service<em>suitable for ML apps including heavy duty ones. An issue with the default docker container is being slow when for example including large ML model. Modal has its own container runner (compatible with <a href="https://github.com/opencontainers/runc">runc</a> and <a href="https://github.com/google/gvisor">gvisor</a>) and image builder.</em><strong>Modal has created it’s own filesystem (in Rust 🦀)</strong>that maps everything into a performant container via its FS. This innovating approach makes creating and deploying large containers fast and scalable.</p>
+<blockquote class="blockquote">
+<p>We decided to not build this on top of tools like Docker/Kubernetes because we want infrastructure to be<em>fast</em>… Modal has no problem building a 100GB container, and then booting up 100 of those containers — you can do the whole thing in a few seconds. This is what it’s built for.</p>
+<p><a href="https://erikbern.com/2022/12/07/what-ive-been-working-on-modal">Eric Bernhardsson’s (Modal CEO) blog</a></p>
+</blockquote>
+<p>In fact, the <a href="https://earthly.dev/blog/chroot/">essence of docker is chroot and Unix FileSystem</a>. So with their performant custom FS, Modal has successfully created a very<em>performant runtime for cloud</em>.</p>
+<p>To have a better idea of what is under-the-hood, we use <code>modal shell</code></p>
+<pre class="text"><code>modal shell lib/hello.py
+✓ Initialized. View run at https://modal.com/apps/ap-t46rTYWQKvHzcvjJ2uvpGr
+✓ Created objects.
+├── 🔨 Created mount /Users/ehsan/workspace/blog/modal-deep-dive/lib
+└── 🔨 Created hello.
+Spawning /bin/bash
+root@modal:~#
+root@modal:~# ls
+intro
+root@modal:~# cd lib/
+root@modal:~/lib# ls
+__init__.py  empty.py  hello.py</code></pre>
+<p>Interesting! <code>modal shell</code> spawns bash and shows where our python code is placed. Let’s see what is at the root directory</p>
+<pre class="text"><code>root@modal:~# cd /
+root@modal:/# ls
+bin  boot  dev  dummy_plug  etc  home  lib  lib64  media  mnt  modal_requirements.txt  opt  pkg  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@modal:/# cat modal_requirements.txt
+# Pins Modal dependencies installed within the container runtime.
+aiohttp==3.8.3
+aiostream==0.4.4
+asgiref==3.5.2
+certifi&gt;=2022.12.07
+cloudpickle==2.0.0;python_version&lt;'3.11'
+cloudpickle==2.2.0;python_version&gt;='3.11'
+ddtrace==1.5.2;python_version&lt;'3.11'
+fastapi==0.88.0
+fastprogress==1.0.0
+grpclib==0.4.3
+importlib_metadata==4.8.1
+ipython&gt;=7.34.0
+protobuf&gt;=3.19.0
+python-multipart&gt;=0.0.5
+rich==12.3.0
+tblib==1.7.0
+toml==0.10.2
+typer==0.6.1
+types-certifi==2021.10.8.3
+types-toml==0.10.4
+typeguard&gt;=3.0.0</code></pre>
+<p>So it looks like a usual Unix FS with a few new addops like <code>modal_requirements.txt</code> where we can see its content.</p>
+<section id="cloudpickle" class="level3">
+<h3 class="anchored" data-anchor-id="cloudpickle">cloudpickle</h3>
+<p>Modal uses <a href="https://github.com/cloudpipe/cloudpickle">cloudpickle</a> which extends Python pickle for sending data back and forth. This is a<strong>major requirement</strong>that data must be cloudpicklable. Note that<em>not everything is cloudpicklable</em>.</p>
+<p>Here is an example which we can run directly in Modal python environment</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>root<span class="op">@</span>modal:<span class="op">/</span><span class="co"># python</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Python <span class="fl">3.10.8</span> (main, Dec  <span class="dv">6</span> <span class="dv">2022</span>, <span class="dv">14</span>:<span class="dv">24</span>:<span class="dv">0</span><span class="er">3</span>) [GCC <span class="fl">10.2.1</span> <span class="dv">20210110</span>] on linux</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Type <span class="st">"help"</span>, <span class="st">"copyright"</span>, <span class="st">"credits"</span> <span class="kw">or</span> <span class="st">"license"</span> <span class="cf">for</span> more information.</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> cloudpickle</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">class</span> Unpickleable:</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>...     <span class="kw">def</span> __reduce__(<span class="va">self</span>):</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>...         <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="st">"This object cannot be pickled"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> obj <span class="op">=</span> Unpickleable()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="cf">try</span>:</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>...     serialized_obj <span class="op">=</span> cloudpickle.dumps(obj)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>... <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>...     <span class="bu">print</span>(<span class="ss">f"Error: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>Error: This <span class="bu">object</span> cannot be pickled</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="what-objects-are-not-cloudpicklable" class="level3">
+<h3 class="anchored" data-anchor-id="what-objects-are-not-cloudpicklable">What objects are not cloudpicklable?</h3>
+<p>Objects that cloudpickle<strong>cannot</strong>serialize include</p>
+<p>1.<strong>Objects with unpickleable attributes</strong>: If an object has attributes that cannot be pickled (e.g., file handles, network connections), cloudpickle will fail to serialize it. 2.<strong>Objects with custom <code>__reduce__</code> methods that raise exceptions</strong>: If an object defines a custom <code>__reduce__</code> method that raises exceptions, cloudpickle will not be able to serialize it. 3.<strong>Objects from C extensions or third-party libraries</strong>: Cloudpickle may not be able to serialize objects from C extensions or third-party libraries that do not provide proper serialization support. 4.<strong>Some built-in types</strong>: While cloudpickle can serialize many built-in types, there may be limitations for certain objects like open file objects, network sockets, or database connections. 5.<strong>Functions or lambda functions with closures</strong>: Cloudpickle can serialize simple functions, but functions with complex closures (nested functions with captured variables) may not be serialized correctly.</p>
+<p>The takeaway is cloudpickle almost always works and if there components that cannot be used there usually is a workaround!</p>
+</section>
+<section id="function-proto" class="level3">
+<h3 class="anchored" data-anchor-id="function-proto">Function proto</h3>
+<p>Now back to Modal. Among its dependencies, there are<strong>grpclib</strong>and<strong>protobuf</strong>. If we have look at <a href="https://github.com/modal-labs/modal-client/blob/main/modal_proto/api.proto">modal-client/blob/main/modal_proto/api.proto</a> we will see the protobuf definitions. Of particular interest is <a href="https://github.com/modal-labs/modal-client/blob/959b249e7bccff460cdf356e8609914568e4d868/modal_proto/api.proto#L619-L701">Function</a> and other related <code>message Function*</code> definitions</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode protobuf code-with-copy"><code class="sourceCode protobuf"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">message</span> Function {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> module_name = <span class="dv">1</span>;</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> function_name = <span class="dv">2</span>;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">repeated</span> <span class="dt">string</span> mount_ids = <span class="dv">3</span>;</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> image_id = <span class="dv">4</span>;</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bytes</span> function_serialized = <span class="dv">6</span>;</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">enum</span> DefinitionType {</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    DEFINITION_TYPE_UNSPECIFIED = <span class="dv">0</span>;</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    DEFINITION_TYPE_SERIALIZED = <span class="dv">1</span>;</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    DEFINITION_TYPE_FILE = <span class="dv">2</span>;</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  DefinitionType definition_type = <span class="dv">7</span>;</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">enum</span> FunctionType {</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    FUNCTION_TYPE_UNSPECIFIED = <span class="dv">0</span>;</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    FUNCTION_TYPE_GENERATOR = <span class="dv">1</span>;</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    FUNCTION_TYPE_FUNCTION = <span class="dv">2</span>;</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  FunctionType function_type = <span class="dv">8</span>;</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  Resources resources = <span class="dv">9</span>;</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">repeated</span> <span class="dt">string</span> secret_ids = <span class="dv">10</span>;</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  RateLimit rate_limit = <span class="dv">11</span>;</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  WebhookConfig webhook_config = <span class="dv">15</span>;</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">repeated</span> SharedVolumeMount shared_volume_mounts = <span class="dv">16</span>;</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">optional</span> <span class="dt">string</span> proxy_id = <span class="dv">17</span>;</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  FunctionRetryPolicy retry_policy = <span class="dv">18</span>;</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32</span> concurrency_limit = <span class="dv">19</span>;</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> keep_warm = <span class="dv">20</span>;</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32</span> timeout_secs = <span class="dv">21</span>;</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  PTYInfo pty_info = <span class="dv">22</span>;</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bytes</span> class_serialized = <span class="dv">23</span>;</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32</span> task_idle_timeout_secs = <span class="dv">25</span>;</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  CloudProvider cloud_provider = <span class="dv">26</span>;</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32</span> warm_pool_size = <span class="dv">27</span>;</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> web_url = <span class="dv">28</span>;</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>  WebUrlInfo web_url_info = <span class="dv">29</span>;</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>  <span class="co">// If set, overrides the runtime used by the function, either "runc" or "gvisor".</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> runtime = <span class="dv">30</span>;</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> stub_name = <span class="dv">31</span>;</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="kw">repeated</span> VolumeMount volume_mounts = <span class="dv">33</span>;</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="dt">uint32</span> allow_concurrent_inputs = <span class="dv">34</span>;</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>  <span class="kw">repeated</span> CustomDomainInfo custom_domain_info = <span class="dv">35</span>;</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>  <span class="dt">string</span> worker_id = <span class="dv">36</span>; <span class="co">// For internal debugging use only.</span></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> runtime_debug = <span class="dv">37</span>; <span class="co">// For internal debugging use only.</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>  <span class="co">// </span><span class="al">TODO</span><span class="co">: combine into enum?</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> is_builder_function = <span class="dv">32</span>;</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> is_auto_snapshot = <span class="dv">38</span>;</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> is_method = <span class="dv">39</span>;</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> is_checkpointing_function = <span class="dv">40</span>;</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Checkpoint and restore</span></span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> checkpointing_enabled = <span class="dv">41</span>;</span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="kw">message</span> CheckpointInfo {</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>    <span class="dt">string</span> checksum = <span class="dv">1</span>;</span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>    CheckpointStatus status = <span class="dv">2</span>;</span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>  CheckpointInfo checkpoint = <span class="dv">42</span>;</span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>  <span class="kw">repeated</span> ObjectDependency object_dependencies = <span class="dv">43</span>;</span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>There is a lot going on. We can summarize it as</p>
+<p>1.<strong>Basic Function Information:</strong><em><code>module_name</code>, <code>function_name</code>: Identifiers for the module and function.</em><code>mount_ids</code>, <code>image_id</code>: Refer to identifiers for file systems or images that the function can access or is associated with. 2.<strong>Function and Definition Types:</strong><em><code>DefinitionType</code> and <code>FunctionType</code> enums: These provide information about how the function is defined (serialized, file) and its type (generator, regular function). 3.<strong>Execution Resources and Configuration:</strong></em><code>Resources</code>, <code>RateLimit</code>, <code>WebhookConfig</code>, <code>SharedVolumeMounts</code>: Configuration for computational resources, rate limiting, webhooks for external triggers, and shared file system mounts.<em><code>proxy_id</code>, <code>retry_policy</code>, <code>concurrency_limit</code>, <code>keep_warm</code>, <code>timeout_secs</code>: Deal with network proxy settings, how to handle retries, concurrency limits, whether to keep the function active in memory, execution timeouts, and more. 4.<strong>Advanced Function Settings:</strong></em><code>PTYInfo</code>, <code>class_serialized</code>, <code>CloudProvider</code>, <code>runtime</code>, <code>stub_name</code>: Related to Python perhaps? (PTY), class definitions, the cloud provider specifics, the runtime environment, and some stub or placeholder name.<em><code>volume_mounts</code>, <code>custom_domain_info</code>, <code>worker_id</code>: Volume mounts for additional storage, custom domain configurations for web access, and an identifier for internal debugging. 5.<strong>Concurrency and Security:</strong></em><code>allow_concurrent_inputs</code>, <code>secret_ids</code>: Settings for handling concurrent inputs and identifiers for any secrets needed by the function. 6.<strong>Debugging and Special Function Types:</strong><em><code>runtime_debug</code>, <code>is_builder_function</code>, <code>is_auto_snapshot</code>, <code>is_method</code>, <code>is_checkpointing_function</code>: These flags seem to enable debugging, specify different roles or behaviors of the function (like being a builder, supporting auto-snapshots, etc.), and indicate if the function supports checkpointing for state persistence. 7.<strong>Checkpointing and Dependencies:</strong></em><code>checkpointing_enabled</code>, <code>CheckpointInfo</code>, <code>object_dependencies</code>: Related to the ability to checkpoint (save the state) of the function, with details about the checkpoint and dependencies on other objects.</p>
+</section>
+</section>
+<section id="lets-come-back-up-breathe-and-dive-deep-again" class="level2">
+<h2 class="anchored" data-anchor-id="lets-come-back-up-breathe-and-dive-deep-again">Let’s Come back up, Breathe and Dive Deep Again</h2>
+<p>Following up on the hello world, what if there are multiple modal <code>@stub.functions</code> under one stub?</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub(<span class="st">"hello"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hello():</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"hello, world!"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hello2():</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"hello, world second time!"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>then <code>modal run lib/hello_local_entry.py</code> fails with</p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/two-hello-run-error.png"><img src="images/two-hello-run-error.png" class="img-fluid"></a></p>
+<p>so we need to specify which one to run. We have two options<em>via CLI: <code>modal run lib/hello_local_entry.py::hello</code></em>Or specify it in code using <code>@stub.local_entrypoint</code> decorator and <code>modal run lib/hello_local_entry.py</code> (no need for <code>::hello</code>)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hello():</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"hello, world!"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hello2():</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"hello, world second time!"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    hello.local()  <span class="co"># semantically is `hello()`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Simply calling <code>hello()</code> doesn’t work (anymore) and Modal has its own calling semantics depending on the environment*<code>hello.local()</code> as above</p>
+<p>which outputs</p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/run-two-hello-localentrypoint.png"><img src="images/run-two-hello-localentrypoint.png" class="img-fluid"></a>*Or via <code>hello.remote()</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># hello.local()</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    hello.remote()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/two-hello-remote.png"><img src="images/two-hello-remote.png" class="img-fluid"></a></p>
+<p>There is a subtle difference in their output. Did you notice it? there is an extra <code>None</code> after <code>hello, world!</code> in the <code>.remote()</code> case. Why?</p>
+<section id="local-vs-.remote" class="level3">
+<h3 class="anchored" data-anchor-id="local-vs-.remote"><code>.local()</code> vs <code>.remote()</code></h3>
+<p>What happens with <code>hello.local()</code> tells Modal to run the code locally (your local environment such as laptop) whereas <code>hello.remote()</code> runs the code in the cloud and returns the result back locally.</p>
+<p>One important aspect of Modal is it promises simulating cloud code execution to be as similar and local as possible. It also has<em>hot-reloading</em>(when code is run via <code>modal serve</code> which will get to that later) i.e.&nbsp;changing your code is automatically synced and rerun in the cloud (in an ephemeral environment).</p>
+</section>
+<section id="parallel-run-via-.map-and-starmap" class="level3">
+<h3 class="anchored" data-anchor-id="parallel-run-via-.map-and-starmap"><code>Parallel run via .map() and starmap()</code></h3>
+<p>Modal functions can be run in parallel using <code>.map(...)</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_func(a):</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">list</span>(my_func.<span class="bu">map</span>([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])) <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>.starmap(...)</code> is like&nbsp;<code>map</code>&nbsp;but spreads arguments over multiple function arguments</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_func(a, b):</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">list</span>(my_func.starmap([(<span class="dv">1</span>, <span class="dv">2</span>), (<span class="dv">3</span>, <span class="dv">4</span>)])) <span class="op">==</span> [<span class="dv">3</span>, <span class="dv">7</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="lookup-and-spawn-functions-remotely" class="level3">
+<h3 class="anchored" data-anchor-id="lookup-and-spawn-functions-remotely">Lookup and Spawn Functions Remotely</h3>
+<p>So far, we have tested using one stub. It’s possible to have<em>multiple stubs</em>, too. In that case, it’s possible to lookup a function or spawn it remotely (via a handle). In order to do that, the function that we are looking up or spawning<strong>must be already deployed</strong>(<code>modal deploy</code>) whereas if it’s in the ephemeral phase it can get deleted on the fly we can look it up in different context via<em><code>modal.Function.lookup(STUB_NAME, FUNCTION_NAME)</code></em><code>modal.Function.from_name(STUB_NAME, FUNCTION_NAME)</code></p>
+<p>For example, <code>lib/square.py</code> and <code>model deploy square.py</code> (note<strong>must</strong>be deployed to be found)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub(<span class="st">"my-shared-app"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> square(x):</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">*</span> x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and <code>lib/cube.py</code> can look it up via either <code>Function.from_name</code> or <code>Function.lookup</code> and then <code>modal run cube.py</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub(<span class="st">"another-app"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>stub.square <span class="op">=</span> modal.Function.from_name(<span class="st">"my-shared-app"</span>, <span class="st">"square"</span>) <span class="co"># &lt;-- </span><span class="al">NOTE</span><span class="co">: this must be deployed otherwise `modal run` won't find it</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cube(x):</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">*</span> stub.square.remote(x)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> cube.remote(<span class="dv">42</span>) <span class="op">==</span> <span class="dv">74088</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It’s also possible to remotely <code>modal.Function.spawn</code> a function which doesn’t wait for the result but returns <code>FunctionCall</code> object which can be<strong>polled</strong>. This is useful esp.&nbsp;given a job queue and (async) spawn / poll for long running jobs in the background.</p>
+<p>To see it in action, run <code>modal run lib/cube_spawn.py</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> modal.functions <span class="im">import</span> FunctionCall</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub(<span class="st">"cube-spawn"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>stub.square <span class="op">=</span> modal.Function.from_name(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"my-shared-app"</span>, <span class="st">"square"</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>)  <span class="co"># &lt;-- </span><span class="al">NOTE</span><span class="co">: this must be deployed otherwise `modal run` won't find it</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> spawn_square(x):</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    call <span class="op">=</span> stub.square.spawn(x)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"call_id"</span>: call.object_id}</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> poll(call_id):</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    fcall <span class="op">=</span> FunctionCall.from_id(call_id)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 5 seconds timeout to simulate a long running job</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>        ret <span class="op">=</span> fcall.get(timeout<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">TimeoutError</span>:</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"waiting for result"</span>)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ret</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cube():</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    call <span class="op">=</span> spawn_square.remote(<span class="dv">42</span>)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    call_id <span class="op">=</span> call[<span class="st">"call_id"</span>]</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> call_id <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    ret <span class="op">=</span> poll.remote(call_id)</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> ret <span class="op">*</span> <span class="dv">42</span> <span class="op">==</span> <span class="dv">74088</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The important point is the caller that spawns square returns a <code>call_id</code> which can be retrieved and polled via <code>FunctionCall.from_id(call_id)</code>. A less contrived example is in <a href="https://github.com/modal-labs/modal-examples/blob/main/09_job_queues/doc_ocr_webapp.py">OCR webapp example</a> which is</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="at">@web_app.post</span>(<span class="st">"/parse"</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> parse(request: fastapi.Request):</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    parse_receipt <span class="op">=</span> Function.lookup(<span class="st">"example-doc-ocr-jobs"</span>, <span class="st">"parse_receipt"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    form <span class="op">=</span> <span class="cf">await</span> request.form()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    receipt <span class="op">=</span> <span class="cf">await</span> form[<span class="st">"receipt"</span>].read()  <span class="co"># type: ignore</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    call <span class="op">=</span> parse_receipt.spawn(receipt)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {<span class="st">"call_id"</span>: call.object_id}</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="at">@web_app.get</span>(<span class="st">"/result/</span><span class="sc">{call_id}</span><span class="st">"</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> poll_results(call_id: <span class="bu">str</span>):</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> modal.functions <span class="im">import</span> FunctionCall</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    function_call <span class="op">=</span> FunctionCall.from_id(call_id)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> function_call.get(timeout<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">TimeoutError</span>:</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> fastapi.responses.JSONResponse(content<span class="op">=</span><span class="st">""</span>, status_code<span class="op">=</span><span class="dv">202</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and the frontend code uses them like</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> resp <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="st">"/parse"</span><span class="op">,</span> {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>      <span class="dt">method</span><span class="op">:</span> <span class="st">"POST"</span><span class="op">,</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>      <span class="dt">body</span><span class="op">:</span> formData<span class="op">,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _intervalID <span class="op">=</span> <span class="pp">setInterval</span>(<span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> resp <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(<span class="vs">`/result/</span><span class="sc">${</span>callId<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (resp<span class="op">.</span><span class="at">status</span> <span class="op">===</span> <span class="dv">200</span>) {</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>        <span class="fu">setResult</span>(<span class="cf">await</span> resp<span class="op">.</span><span class="fu">json</span>())<span class="op">;</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span> <span class="dv">100</span>)<span class="op">;</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setIntervalId</span>(_intervalID)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="async-support" class="level3">
+<h3 class="anchored" data-anchor-id="async-support">Async Support</h3>
+<p>Modal stubbed functions can be async as well. The only thing that changes is how they are called; <code>await</code> is prepended as well as <code>.aio</code> appended<strong>func.remote(…)</strong>⟹<strong>await func.remote.aio(…)</strong>The magic is behind Modal’s<strong><a href="https://github.com/modal-labs/synchronicity">synchronicity</a></strong>library that makes sync and async functions to be used uniformly.</p>
+</section>
+<section id="class-support" class="level3">
+<h3 class="anchored" data-anchor-id="class-support">Class Support</h3>
+<p>Modal supports decorating Python classes with <code>@stub.cls()</code> but requires <code>__(a)enter__</code> with/without <code>__(a)exit__</code> methods and <code>@modal.method</code> decorator for the class methods. The <code>__(a)enter__</code> and <code>__(a)exit__</code> come with the the following<strong>caveat</strong>&gt; The syntax and behavior for the&nbsp;<code>__(a)enter__</code>&nbsp;and&nbsp;<code>__(a)exit__</code>&nbsp;functions are similar to&nbsp;<a href="https://docs.python.org/3/reference/datamodel.html#with-statement-context-managers">context managers</a>. However, they<strong>do not</strong>have the exact same semantics as Python’s corresponding&nbsp;<a href="https://docs.python.org/3/reference/datamodel.html#special-method-names">special methods</a>&nbsp;with the same name. <code>__(a)enter__</code> and <code>__(a)exit__</code>. &gt; &gt; &gt; &gt;<strong>The container entry handler is called when a new container is started. This is useful for doing one-time initialization, such as loading model weights or importing packages that are only present in that image.</strong>&gt; &gt; Mo</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> modal <span class="im">import</span> Stub, method</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> Stub()</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.cls</span>()</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Model:</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__enter__</span>(<span class="va">self</span>):</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> pickle.load(<span class="bu">open</span>(<span class="st">"model.pickle"</span>))</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">@method</span>()</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> predict(<span class="va">self</span>, x):</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.model.predict(x)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    Model().predict.remote(x) <span class="co"># &lt;-- it's not like context manager `with ...` at all!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In fact, <code>@stub.cls</code> is more like a<strong>syntactic sugar for functions</strong>that needs to load an object or make a connection once and proceed with the rest of the work. The <code>__(a)enter__</code> is particularly useful for example, when we want to load a large ML model once and use it for inference.</p>
+</section>
+</section>
+<section id="build-time-dependencies-and-resources" class="level2">
+<h2 class="anchored" data-anchor-id="build-time-dependencies-and-resources">Build time Dependencies and Resources</h2>
+<section id="modal.image" class="level3">
+<h3 class="anchored" data-anchor-id="modal.image"><code>modal.Image</code></h3>
+<p>So far, we have created and run functions with no dependency. Modal supports specifying build time dependencies via the <code>Image</code> object. For example,</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> Image.debian_slim().pip_install(<span class="st">"pandas"</span>, <span class="st">"numpy"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(image<span class="op">=</span>image)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_function():</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The Image object is very versatile. One can do*pip install targeting GPU</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> (</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    Image.debian_slim(python_version<span class="op">=</span><span class="st">"3.10"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    .pip_install(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"optimum[onnxruntime-gpu]==1.7.3"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transformers[onnx-gpu]==4.28.1"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        gpu<span class="op">=</span><span class="st">"A10G"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>apt install:</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>Image.debian_slim().apt_install(<span class="st">"ffmpeg"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>add custom commands:</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>Image.debian_slim().apt_install(<span class="st">"curl"</span>).run_commands(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">"curl -O https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalcatface.xml"</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>build from dockerhub registry with a specific python version</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>Image.from_registry(<span class="st">"huanjason/scikit-learn"</span>, add_python<span class="op">=</span><span class="fl">3.10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Conda</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>Image.conda().conda_install(<span class="st">"theano-pymc==1.1.2"</span>, <span class="st">"pymc3==3.11.2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Poetry</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> modal.Image.debian_slim(python_version<span class="op">=</span><span class="st">"3.10"</span>).poetry_install_from_file(<span class="st">"pyproject.toml"</span>, without<span class="op">=</span>[<span class="st">"dev"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>from local Dockerfile</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>Image.from_dockerfile(<span class="st">"Dockerfile"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Or any combinations (also supports poetry) and with custom <code>run_function</code></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> download_models():</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    SentenceTransformer(settings.EMBEDDING_MODEL_NAME, cache_folder<span class="op">=</span>EMBEDDING_MODEL_DIR)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> (</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    modal.Image.debian_slim(python_version<span class="op">=</span><span class="st">"3.10"</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    .env({<span class="st">"ENV"</span>: ENV})</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    .run_commands(<span class="st">"python -m pip install --upgrade pip"</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    .poetry_install_from_file(<span class="st">"pyproject.toml"</span>, without<span class="op">=</span>[<span class="st">"dev"</span>])</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    .pip_install(</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"torch==2.1.0+cu118"</span>,</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        find_links<span class="op">=</span><span class="st">"https://download.pytorch.org/whl/torch_stable.html"</span>,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    .env({<span class="st">"HF_HUB_ENABLE_HF_TRANSFER"</span>: <span class="st">"1"</span>})</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    .env({<span class="st">"TRANSFORMERS_CACHE"</span>: EMBEDDING_MODEL_DIR})</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    .run_function(download_models)</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If you have suffered from Python lack of proper dependency management, you will like this very powerful approach (yes, there are some caveat in mixing but you get the point). Also we can see how much it would<em>save</em>us from write our own Dockerfile, downloading the modal and include it in the image.</p>
+<p>So far, we have established the mental model behind Modal (stubbed) functions as containers and how dependencies can be specified but for running a full-fledge app in cloud Modal defines its own resources. To start, similar to how docker-compose or k8s have the notion of Volume and Secrets, those can be specified in the stub too.</p>
+</section>
+<section id="modal.secret" class="level3">
+<h3 class="anchored" data-anchor-id="modal.secret"><code>Modal.Secret</code></h3>
+<p>For example, Secrets can either be defined and set via Modal’s dashboard or from <code>.env</code> file</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>secret <span class="op">=</span> modal.Secret.from_dotenv(<span class="st">".env"</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    image<span class="op">=</span>image,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    secret<span class="op">=</span>secret)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> example():</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    ....</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="modal.volume-and-modal.networkfilesystem" class="level3">
+<h3 class="anchored" data-anchor-id="modal.volume-and-modal.networkfilesystem"><code>Modal.Volume</code> and <code>Modal.NetworkFileSystem</code></h3>
+<p>Volume is almost the same. As of writing this post, Modal has two ways to include Volume.<em><code>modal.Volume</code>: mutable volume built for high-performance file serving</em><code>modal.NetworkFileSystem</code>: A shared, writable file system accessible by one or more Modal functions.</p>
+<p>Both must be attached to the stub like <code>stub.volume</code> and mapped in <code>@stub.function</code> runtime</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> pathlib.Path(<span class="st">"/root/foo/bar.txt"</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub()</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>stub.volume <span class="op">=</span> modal.Volume.new()</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(volumes<span class="op">=</span>{<span class="st">"/root/foo"</span>: stub.volume})</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f():</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>    p.write_text(<span class="st">"hello"</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Created </span><span class="sc">{</span>p<span class="op">=</span><span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    stub.volume.commit()  <span class="co"># Persist changes</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Committed </span><span class="sc">{</span>p<span class="op">=</span><span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub()</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>volume <span class="op">=</span> modal.NetworkFileSystem.new()</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(network_file_systems<span class="op">=</span>{<span class="st">"/root/foo"</span>: volume})</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f():</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(network_file_systems<span class="op">=</span>{<span class="st">"/root/goo"</span>: volume})</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> g():</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both can also be examined with CLI too, <code>modal volume</code> and <code>modal nfs</code>.</p>
+<p>Other resources like CPU/GPU, memory and more runtime configurations are also supported. For example,</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    image<span class="op">=</span>image,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    secret<span class="op">=</span>secret,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    concurrency_limit<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    cpu<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    gpu<span class="op">=</span><span class="st">"t4"</span>,</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    memory<span class="op">=</span><span class="dv">1024</span> <span class="op">*</span> <span class="dv">8</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    timeout<span class="op">=</span><span class="dv">5</span> <span class="op">*</span> <span class="dv">60</span>,</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    keep_warm<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    cloud<span class="op">=</span><span class="st">"aws"</span>, <span class="co"># as of now, 'aws', 'gcp' and oracle cloud are supported</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="at">@modal.asgi_app</span>(label<span class="op">=</span><span class="st">"server"</span>)</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main() <span class="op">-&gt;</span> Callable:</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    app <span class="op">=</span> get_app()</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> app</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><a href="https://modal.com/pricing">Billing</a> is also pay as you go.</p>
+</section>
+<section id="build-time-vs-runtime-mental-model" class="level3">
+<h3 class="anchored" data-anchor-id="build-time-vs-runtime-mental-model">Build time vs Runtime Mental Model</h3>
+<p>Understanding the distinctions is very important for writing working apps. Anything that is defined<strong>outside</strong>of decorated stub using Modal constructs such as<strong>Image, Secret etc. are build time</strong>whereas anything that’s specified<strong>inside <code>@stub.function(...)</code> or <code>@stub.cls(...)</code> is for runtime</strong>.</p>
+<p>For example,</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>secret <span class="op">=</span> modal.Secret.from_dotenv(<span class="st">".env"</span>))</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> (</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    modal.Image.debian_slim(python_version<span class="op">=</span><span class="st">"3.10"</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    .env({<span class="st">"ENV"</span>: ENV})</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    .run_commands(<span class="st">"python -m pip install --upgrade pip"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    .poetry_install_from_file(<span class="st">"pyproject.toml"</span>, without<span class="op">=</span>[<span class="st">"dev"</span>])</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>are happening at build time so <code>ENV</code> and <code>.env</code> must be available at the build time (including the imports) and the runtime specifications is done as usual. At the runtime, Modal allocates cloud resources, injects image, secrets etc. and runs our application.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    image<span class="op">=</span>image,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    secret<span class="op">=</span>secret,</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    cpu<span class="op">=</span><span class="dv">8</span>,</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>    gpu<span class="op">=</span><span class="st">"any"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    memory<span class="op">=</span><span class="dv">1024</span> <span class="op">*</span> <span class="dv">8</span>,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    cloud<span class="op">=</span><span class="st">"aws"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="web-endpoints" class="level3">
+<h3 class="anchored" data-anchor-id="web-endpoints">Web Endpoints</h3>
+<p>Another advantage of Modal is it can turn<strong>any function</strong>to a web endpoint via <code>@web_enpoint</code>. It basically wraps the function in a FastAPI app. It can also work with any WSGI and ASGI compliant frameworks as well, including Flask, FastAPI, Sanic etc.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> modal <span class="im">import</span> Stub, web_endpoint</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> Stub()</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>()</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="at">@web_endpoint</span>()</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f():</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="st">"Hello world!"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>For development, we can use <code>modal serve lib/hello_server.py</code> which supports hot-reloading of local changes automatically. And for deployment the usual <code>modal deploy</code> just works. See <a href="https://modal.com/docs/guide/webhooks">official docs</a>.</p>
+<p>This works nicely esp.&nbsp;for rapid development, however, in my opinion when the number of endpoints grows it’s better to use the normal FastAPI or Flask way and hand it to Modal for serving via <code>@asgi_app</code> or <code>@wsgi_app</code>, respectively.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastapi <span class="im">import</span> FastAPI, Request</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastapi.responses <span class="im">import</span> HTMLResponse</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> modal <span class="im">import</span> Image, Stub, asgi_app</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>web_app <span class="op">=</span> FastAPI()</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> Stub()</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> Image.debian_slim().pip_install(<span class="st">"boto3"</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="at">@web_app.post</span>(<span class="st">"/foo"</span>)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> foo(request: Request):</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>    body <span class="op">=</span> <span class="cf">await</span> request.json()</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> body</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="at">@web_app.get</span>(<span class="st">"/bar"</span>)</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> bar(arg<span class="op">=</span><span class="st">"world"</span>):</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> HTMLResponse(<span class="ss">f"&lt;h1&gt;Hello Fast </span><span class="sc">{</span>arg<span class="sc">}</span><span class="ss">!&lt;/h1&gt;"</span>)</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(image<span class="op">=</span>image)</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a><span class="at">@asgi_app</span>()</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fastapi_app():</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> web_app</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="modal-supports-crob-jobs-tunnel-sandbox-and-more" class="level3">
+<h3 class="anchored" data-anchor-id="modal-supports-crob-jobs-tunnel-sandbox-and-more">Modal Supports Crob-jobs, Tunnel, Sandbox and more</h3>
+<p>There are more resource objects available. Make sure to check out the <a href="https://modal.com/docs/guide">official guide</a> and <a href="https://modal.com/docs/reference">reference doc</a>. Some of the important ones are<em>Dict: distributed dictionary</em>Queue: distributed queue backed by Redis<em>Volume</em>Network Filesystem (NFS)<em>Period (for Cron jobs)</em>Secrets<em>Tunnel</em>…</p>
+</section>
+</section>
+<section id="modal-launch-jupytervscode" class="level2">
+<h2 class="anchored" data-anchor-id="modal-launch-jupytervscode"><code>modal launch jupyter</code>/<code>vscode</code></h2>
+<p>Modal CLI has the option of<strong>launching jupyter or vscode from modal by also configuring CPU/GPU and memory as needed</strong>. This essentially makes manual SSHing and to EC2 instances<em>obsolete</em>. Jupyter is a great tool for exploratory part of ML such as<strong>training</strong>. The vscode is just another cherry on top. Here I have launched vscode with T4 GPU using</p>
+<p><code>modal launch vscode --gpu T4</code></p>
+<p><a href="https://ehsanmkermani.com/wp-content/uploads/2023/12/modal-vscode.png"><img src="images/modal-vscode-1024x383.png" class="img-fluid"></a></p>
+<p>The CLI command is basically running the following which you can customize as well.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copyright Modal Labs 2023</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># type: ignore</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> secrets</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> socket</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> threading</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> webbrowser</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Any</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> modal <span class="im">import</span> Image, Queue, Stub, forward</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>args: Any <span class="op">=</span> {<span class="st">'cpu'</span>: <span class="dv">8</span>, <span class="st">'memory'</span>: <span class="dv">32768</span>, <span class="st">'gpu'</span>: <span class="st">'T4'</span>, <span class="st">'timeout'</span>: <span class="dv">3600</span>}</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> Stub()</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>stub.image <span class="op">=</span> Image.from_registry(<span class="st">"codercom/code-server"</span>, add_python<span class="op">=</span><span class="st">"3.11"</span>).dockerfile_commands(<span class="st">"ENTRYPOINT []"</span>)</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>stub.q <span class="op">=</span> Queue.new()</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> wait_for_port(data):</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>    start_time <span class="op">=</span> time.monotonic()</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> socket.create_connection((<span class="st">"localhost"</span>, <span class="dv">8080</span>), timeout<span class="op">=</span><span class="fl">15.0</span>):</span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">OSError</span> <span class="im">as</span> exc:</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>            time.sleep(<span class="fl">0.01</span>)</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> time.monotonic() <span class="op">-</span> start_time <span class="op">&gt;=</span> <span class="fl">15.0</span>:</span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">TimeoutError</span>(<span class="st">"Waited too long for port 8080 to accept connections"</span>) <span class="im">from</span> exc</span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>    stub.q.put(data)</span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.function</span>(cpu<span class="op">=</span>args[<span class="st">"cpu"</span>], memory<span class="op">=</span>args[<span class="st">"memory"</span>], gpu<span class="op">=</span>args[<span class="st">"gpu"</span>], timeout<span class="op">=</span>args[<span class="st">"timeout"</span>])</span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_jupyter():</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a>    os.chdir(<span class="st">"/home/coder"</span>)</span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>    token <span class="op">=</span> secrets.token_urlsafe(<span class="dv">13</span>)</span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> forward(<span class="dv">8080</span>) <span class="im">as</span> tunnel:</span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>        url <span class="op">=</span> tunnel.url</span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a>        threading.Thread(target<span class="op">=</span>wait_for_port, args<span class="op">=</span>((url, token),)).start()</span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a>        subprocess.run(</span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"/usr/bin/entrypoint.sh"</span>, <span class="st">"--bind-addr"</span>, <span class="st">"0.0.0.0:8080"</span>, <span class="st">"."</span>],</span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>            env<span class="op">=</span>{<span class="op">**</span>os.environ, <span class="st">"SHELL"</span>: <span class="st">"/bin/bash"</span>, <span class="st">"PASSWORD"</span>: token},</span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb38-43"><a href="#cb38-43" aria-hidden="true" tabindex="-1"></a>    stub.q.put(<span class="st">"done"</span>)</span>
+<span id="cb38-44"><a href="#cb38-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-45"><a href="#cb38-45" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb38-46"><a href="#cb38-46" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb38-47"><a href="#cb38-47" aria-hidden="true" tabindex="-1"></a>    stub.run_jupyter.spawn()</span>
+<span id="cb38-48"><a href="#cb38-48" aria-hidden="true" tabindex="-1"></a>    url, token <span class="op">=</span> stub.q.get()</span>
+<span id="cb38-49"><a href="#cb38-49" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="dv">1</span>)  <span class="co"># Give Jupyter a chance to start up</span></span>
+<span id="cb38-50"><a href="#cb38-50" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">VS Code on Modal, opening in browser..."</span>)</span>
+<span id="cb38-51"><a href="#cb38-51" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"   -&gt; </span><span class="sc">{</span>url<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb38-52"><a href="#cb38-52" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"   -&gt; password: </span><span class="sc">{</span>token<span class="sc">}</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb38-53"><a href="#cb38-53" aria-hidden="true" tabindex="-1"></a>    webbrowser.<span class="bu">open</span>(url)</span>
+<span id="cb38-54"><a href="#cb38-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> stub.q.get() <span class="op">==</span> <span class="st">"done"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="best-practices">Best Practices</h2>
+<p>Since Modal is new there are almost no written best practices available. Here are my suggestions after using Modal for almost a year and trying many things</p>
+<section id="single-stub-vs-multi-stub" class="level3">
+<h3 class="anchored" data-anchor-id="single-stub-vs-multi-stub">Single stub vs Multi-stub</h3>
+<p>Initially there seems to be a tendency to create one<em>new</em>stub per Modal function or class and use CLI to run / deploy each. If the application is simple and only a couple of stubs are used, is fine but using a single stub is not only possible also definitely more convenient for running, testing and deploying apps. In fact,<em>a single stub can contain any number of functions and each scale independently</em>. So<strong>deploy all together and scale independently</strong>is the idea here. At the root of my Python applications, I have</p>
+<pre class="text"><code>myapp /
+    __init__.py
+    stub.py
+    app /
+        api.py
+    services /
+        service1.py
+        service2.py</code></pre>
+<p>where <code>stub.py</code> defined a global stub like</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> myapp.settings <span class="im">import</span> get_settings</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>settings <span class="op">=</span> get_settings()</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>stub <span class="op">=</span> modal.Stub(settings.STUB_NAME)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>stub.queue <span class="op">=</span> modal.Queue.new().persisted(label<span class="op">=</span>settings.STUB_QUEUE_NAME)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and I import<strong>all</strong>the modules that use the stub in the root <code>__init__.py</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> myapp.api.app <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> myapp.services.service1 <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> myapp.services.service2 <span class="im">import</span> <span class="op">*</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In Python, this is not necessarily a good practice for libraries but for Modal apps is<em>fine</em>.</p>
+<p>Having this allows running the entire application with a single command <code>modal deploy myapp</code> without specifying which stub to be deployed.</p>
+</section>
+<section id="testing-via-stub.local_entrypoint" class="level3">
+<h3 class="anchored" data-anchor-id="testing-via-stub.local_entrypoint">Testing via <code>@stub.local_entrypoint()</code></h3>
+<p>We can test each individual Modal function via <code>@stub.local_entrypoint()</code>. For example, in <code>services/service1.py</code>, we can have a embedding service and test it using</p>
+<p><code>ENV=test modal run myapp/services/service1.py</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> List</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tqdm</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> modal</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> myapp.settings <span class="im">import</span> get_settings</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> myapp.stub <span class="im">import</span> stub</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>settings <span class="op">=</span> get_settings()</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>secret <span class="op">=</span> modal.Secret.from_dotenv( <span class="st">".env"</span>))</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> download_models():</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>image <span class="op">=</span> (</span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>    modal.Image.debian_slim(python_version<span class="op">=</span><span class="st">"3.10"</span>)</span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>    .run_function(download_models)</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a><span class="at">@stub.cls</span>(image<span class="op">=</span>image, secret<span class="op">=</span>secret)</span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BatchEmbedding:</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__enter__</span>(<span class="va">self</span>):</span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> sentence_transformers <span class="im">import</span> SentenceTransformer</span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> SentenceTransformer(</span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>            settings.EMBEDDING_MODEL_NAME,</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>            cache_folder<span class="op">=</span>EMBEDDING_MODEL_DIR,</span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">@modal.method</span>()</span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> embed(<span class="va">self</span>, texts) <span class="op">-&gt;</span> np.ndarray:</span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a>        vectors <span class="op">=</span> <span class="va">self</span>.model.encode(</span>
+<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a>            texts,</span>
+<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a>            show_progress_bar<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a>            batch_size<span class="op">=</span>settings.EMBED_BATCH_SIZE,</span>
+<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> vector</span>
+<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DocumentEmbeddingFn:</span>
+<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, document: Document) <span class="op">-&gt;</span> List[np.ndarray]:</span>
+<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> <span class="bu">len</span>(document):</span>
+<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> []</span>
+<span id="cb42-46"><a href="#cb42-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-47"><a href="#cb42-47" aria-hidden="true" tabindex="-1"></a>        batches: List[List[TextDoc]] <span class="op">=</span> [</span>
+<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a>            document.chunks[i : i <span class="op">+</span> settings.EMBED_BATCH_SIZE]</span>
+<span id="cb42-49"><a href="#cb42-49" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(document), settings.EMBED_BATCH_SIZE)</span>
+<span id="cb42-50"><a href="#cb42-50" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb42-51"><a href="#cb42-51" aria-hidden="true" tabindex="-1"></a>        chunked_batches: List[List[<span class="bu">str</span>]] <span class="op">=</span> [[chunk.text <span class="cf">for</span> chunk <span class="kw">in</span> batch] <span class="cf">for</span> batch <span class="kw">in</span> batches <span class="cf">if</span> <span class="bu">len</span>(batch)]</span>
+<span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a>        vectors: List[np.ndarray] <span class="op">=</span> []</span>
+<span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> batch <span class="kw">in</span> tqdm(<span class="bu">list</span>(BatchEmbedding().embed.<span class="bu">map</span>(chunked_batches))):</span>
+<span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a>            vectors.extend(batch)</span>
+<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> vectors</span>
+<span id="cb42-57"><a href="#cb42-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-58"><a href="#cb42-58" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> settings.ENV <span class="op">==</span> <span class="st">"test"</span>:</span>
+<span id="cb42-59"><a href="#cb42-59" aria-hidden="true" tabindex="-1"></a>    <span class="im">import</span> io</span>
+<span id="cb42-60"><a href="#cb42-60" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb42-61"><a href="#cb42-61" aria-hidden="true" tabindex="-1"></a>    <span class="im">from</span> fastapi <span class="im">import</span> UploadFile</span>
+<span id="cb42-62"><a href="#cb42-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-63"><a href="#cb42-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">@stub.local_entrypoint</span>()</span>
+<span id="cb42-64"><a href="#cb42-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">async</span> <span class="kw">def</span> test_embedding():</span>
+<span id="cb42-65"><a href="#cb42-65" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Testing embedding service with sample PDF file"</span>)</span>
+<span id="cb42-66"><a href="#cb42-66" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> Path(<span class="va">__file__</span>) <span class="op">/</span> <span class="st">"tests/data.pdf"</span></span>
+<span id="cb42-67"><a href="#cb42-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(<span class="bu">str</span>(data), <span class="st">"rb"</span>) <span class="im">as</span> fin:</span>
+<span id="cb42-68"><a href="#cb42-68" aria-hidden="true" tabindex="-1"></a>            <span class="bu">file</span> <span class="op">=</span> UploadFile(</span>
+<span id="cb42-69"><a href="#cb42-69" aria-hidden="true" tabindex="-1"></a>                <span class="bu">file</span><span class="op">=</span>io.BytesIO(fin.read()),</span>
+<span id="cb42-70"><a href="#cb42-70" aria-hidden="true" tabindex="-1"></a>                filename<span class="op">=</span><span class="st">"data.pdf"</span>,</span>
+<span id="cb42-71"><a href="#cb42-71" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb42-72"><a href="#cb42-72" aria-hidden="true" tabindex="-1"></a>        doc <span class="op">=</span> ..</span>
+<span id="cb42-73"><a href="#cb42-73" aria-hidden="true" tabindex="-1"></a>        embeddings <span class="op">=</span> DocumentEmbeddingFn()(doc)</span>
+<span id="cb42-74"><a href="#cb42-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">len</span>(embeddings) <span class="op">==</span> <span class="bu">len</span>(doc)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="managing-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="managing-dependencies">Managing Dependencies</h3>
+<p>If you’re like me who want all dependencies to be in the same place as much as possible, I recommend using Poetry and grouping your dependencies. The simplest default case is including <code>dev</code> dependencies. Modal <code>Image</code> can build them using</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>poetry_install_from_file(<span class="st">"pyproject.toml"</span>, without<span class="op">=</span>[<span class="st">"dev"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It’s also possible to have a fine-grained grouping like the following in <code>pyproject.toml</code></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb44"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">[tool.poetry.dependencies]</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="dt">python</span> <span class="op">=</span> <span class="st">"&gt;=3.10,&lt;3.12"</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="dt">modal</span> <span class="op">=</span> <span class="st">"^0.52.3366"</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="kw">[tool.poetry.core.dependencies]</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="dt">numpy</span> <span class="op">=</span> <span class="st">"^1.20.0"</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="dt">pydantic</span> <span class="op">=</span> <span class="st">"^2.3.0"</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="kw">[tool.poetry.db.dependencies]</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="dt">pymongo</span> <span class="op">=</span> <span class="op">{ </span><span class="dt">version</span><span class="op"> =</span> <span class="st">"^4.5"</span><span class="op">, </span><span class="dt">extras</span><span class="op"> =</span> <span class="op">[</span><span class="st">"srv"</span><span class="op">] }</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a><span class="kw">[tool.poetry.service1.dependencies]</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="dt">...</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a><span class="kw">[tool.poetry.service2.dependencies]</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a><span class="dt">...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and build each stubbed function or class image using</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>poetry_install_from_file(<span class="st">"pyproject.toml"</span>, with_<span class="op">=</span>[<span class="st">"core"</span>, <span class="st">"db"</span>, <span class="st">"service1"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>this way centralizes the dependencies and makes upgrading and managing them easier esp.&nbsp;for medium to large projects than inlining them via <code>Image.debian_image().pip_install(...)</code>.</p>
+</section>
+<section id="observability" class="level3">
+<h3 class="anchored" data-anchor-id="observability">Observability</h3>
+<p>Modal offers granular logs for each functions as well as usage. I’ve been using <a href="https://sentry.io/welcome/">Sentry</a> along side Modal and hasn’t disappointed me all at. I’ve found its distributed tracing and performance monitoring adequate which help debugging eps. at times when finding the relevant stacktraces is hard from the Modal logs.</p>
+</section>
+</section>
+<section id="acknowledgement" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgement">Acknowledgement</h2>
+<p>I want to thank Modal engineers in particular <a href="https://twitter.com/akshat_b">Akshat Bubna</a> (Modal’s co-founder), <a href="https://twitter.com/jonobelotti_IO">Jonathon Belotti</a> and <a href="https://twitter.com/luiscape">Luis Capelo</a> for their immense help, patient and being very responsive to my queries throughout using Modal. From my experience, Modal’s customer service is fantastic despite it being run by small developer team.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ehsanmkermani\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="ehsanmok/blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2025 Ehsan M. Kermani</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -1,0 +1,58 @@
+[
+  {
+    "listing": "/posts.html",
+    "items": [
+      "/posts/2023-12-08-modal-labs-deep-dive/index.html",
+      "/posts/2023-11-23-the-core-of-attention-is-communication/index.html",
+      "/posts/2023-11-19-rust-and-node-js-harmonizing-performance-and-safety/index.html",
+      "/posts/2023-08-13-notes-on-the-current-state-of-llm-frameworks/index.html",
+      "/posts/2022-09-20-announcing-releasing-dlpackrs/index.html",
+      "/posts/2022-09-07-announcement-releasing-smartalloc/index.html",
+      "/posts/2020-06-08-create-your-own-programming-language-with-rust/index.html",
+      "/posts/2019-08-16-rust-std-study-series-pin/index.html",
+      "/posts/2019-07-03-rust-std-study-series-alloc/index.html",
+      "/posts/2019-06-18-rust-std-study-series-interior-mutability/index.html",
+      "/posts/2019-05-13-state-of-machine-learning-in-rust/index.html",
+      "/posts/2019-04-28-rust-std-study-series-vecdeque/index.html",
+      "/posts/2019-03-25-rust-std-study-linkedlist/index.html",
+      "/posts/2019-03-16-variance-in-rust-an-intuitive-explanation/index.html",
+      "/posts/2019-03-10-rust-std-study-series-vec/index.html",
+      "/posts/2017-12-06-nips-ai-hype-and-the-lost-rigor/index.html",
+      "/posts/2017-07-12-whats-up-with-word-embedding/index.html",
+      "/posts/2017-06-30-from-machine-learning-to-type-theory/index.html",
+      "/posts/2016-05-05-monty-hall-simulation/index.html",
+      "/posts/2015-09-13-restaurant-revenue-prediction-with-bart-machine/index.html",
+      "/posts/2012-12-06-vector-bundles-locally-free-sheaves-and-divisors-on-a-curve/index.html",
+      "/posts/2012-11-30-classification-of-vector-bundles-on-elliptic-curves-2/index.html",
+      "/posts/2012-11-26-some-homological-algebra-computation/index.html"
+    ]
+  },
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/2023-12-08-modal-labs-deep-dive/index.html",
+      "/posts/2023-11-23-the-core-of-attention-is-communication/index.html",
+      "/posts/2023-11-19-rust-and-node-js-harmonizing-performance-and-safety/index.html",
+      "/posts/2023-08-13-notes-on-the-current-state-of-llm-frameworks/index.html",
+      "/posts/2022-09-20-announcing-releasing-dlpackrs/index.html",
+      "/posts/2022-09-07-announcement-releasing-smartalloc/index.html",
+      "/posts/2020-06-08-create-your-own-programming-language-with-rust/index.html",
+      "/posts/2019-08-16-rust-std-study-series-pin/index.html",
+      "/posts/2019-07-03-rust-std-study-series-alloc/index.html",
+      "/posts/2019-06-18-rust-std-study-series-interior-mutability/index.html",
+      "/posts/2019-05-13-state-of-machine-learning-in-rust/index.html",
+      "/posts/2019-04-28-rust-std-study-series-vecdeque/index.html",
+      "/posts/2019-03-25-rust-std-study-linkedlist/index.html",
+      "/posts/2019-03-16-variance-in-rust-an-intuitive-explanation/index.html",
+      "/posts/2019-03-10-rust-std-study-series-vec/index.html",
+      "/posts/2017-12-06-nips-ai-hype-and-the-lost-rigor/index.html",
+      "/posts/2017-07-12-whats-up-with-word-embedding/index.html",
+      "/posts/2017-06-30-from-machine-learning-to-type-theory/index.html",
+      "/posts/2016-05-05-monty-hall-simulation/index.html",
+      "/posts/2015-09-13-restaurant-revenue-prediction-with-bart-machine/index.html",
+      "/posts/2012-12-06-vector-bundles-locally-free-sheaves-and-divisors-on-a-curve/index.html",
+      "/posts/2012-11-30-classification-of-vector-bundles-on-elliptic-curves-2/index.html",
+      "/posts/2012-11-26-some-homological-algebra-computation/index.html"
+    ]
+  }
+]

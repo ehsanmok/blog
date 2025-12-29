@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ehsan M. Kermani">
+<meta name="dcterms.date" content="2012-12-06">
+
+<title>Vector Bundles, Locally Free Sheaves and Divisors on a Curve – Ehsan’s Blog</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-597958c53c93a607afca12fd375c57ed.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7ac2f9da8c2617a4fdd15004b4601015.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-597958c53c93a607afca12fd375c57ed.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0f54ebcecf29f09aa746c60f2b36b484.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-a59265f28323c50649b21528bab209e7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0f54ebcecf29f09aa746c60f2b36b484.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  }
+};
+</script>
+<script>
+// Add reading time calculation
+document.addEventListener('DOMContentLoaded', function() {
+  const article = document.querySelector('.page-columns');
+  if (article) {
+    const text = article.textContent;
+    const wordCount = text.trim().split(/\s+/).length;
+    const readingTime = Math.ceil(wordCount / 200);
+    const metadata = document.querySelector('.quarto-title-meta');
+    if (metadata && readingTime > 0) {
+      const timeDiv = document.createElement('div');
+      timeDiv.className = 'quarto-title-meta-heading';
+      timeDiv.innerHTML = '<div class="quarto-title-meta-heading">Reading Time</div><div class="quarto-title-meta-contents"><p class="article-reading-time">' + readingTime + ' min read</p></div>';
+      metadata.appendChild(timeDiv);
+    }
+  }
+  // Add GRR formula to navbar (centered)
+  const navbarContainer = document.querySelector('.navbar > .container-fluid');
+  if (navbarContainer) {
+    const grr = document.createElement('span');
+    grr.className = 'grr-formula';
+    grr.innerHTML = 'ch(f<sub>!</sub>ℱ) = f<sub>*</sub>(ch(ℱ) · td(T<sub>f</sub>))';
+    navbarContainer.appendChild(grr);
+  }
+});
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Ehsan’s Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../posts.html"> 
+<span class="menu-text">Posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/ehsanmok"> <i class="bi bi-twitter" role="img" aria-label="X">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ehsanmok"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/ehsanmkermani/"> <i class="bi bi-linkedin" role="img" aria-label="LinkedIn">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../posts.xml"> <i class="bi bi-rss" role="img" aria-label="RSS Feed">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Vector Bundles, Locally Free Sheaves and Divisors on a Curve</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Algebraic Geometry</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ehsan M. Kermani </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 6, 2012</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In this post, I’ll be&nbsp;summarizing the basics of the correspondence between vector bundles, locally free sheaves and divisors on a smooth curve (defined over an algebraically closed field <span class="math inline">\(k\)</span> of characteristic zero) together with some of their individual properties.<strong>Locally free sheaves and Vector bundles:</strong>&gt;<strong>Proposition 1</strong>: a)&nbsp;A coherent sheaf <span class="math inline">\(\mathcal{E}\)</span> on a curve <span class="math inline">\(C\)</span> is locally free <span class="math inline">\(\iff\)</span> the fibers (stalks)&nbsp;<span class="math inline">\(\mathcal{E}\_p\)</span> are free at every point <span class="math inline">\(p \in C.\)</span> &nbsp;(note that the statement is local.) &gt; b) A subsheaf of a locally free sheaf is locally free. (Use the fact that local rings of a (smooth) curve are DVR, hence PID and a submodule of a finitely generated free is free) &gt; c) A non-zero map from a rank one locally free sheaf to a locally free sheaf is injective. (If there is a non-zero kernel, by b) it is locally free of rank one, then the cokernel will be a torsion sheaf injecting to a locally free sheaf!) &gt; d) Let&nbsp;<span class="math inline">\(\mathcal{E}\)</span> be a locally free sheaf of rank <span class="math inline">\(r\)</span> and <span class="math inline">\(\mathcal{E}'\)</span> a subsheaf of rank <span class="math inline">\(r'.\)</span> There exists a subsheaf <span class="math inline">\(\mathcal{E}''\)</span> or rank <span class="math inline">\(r''\)</span> containing&nbsp;<span class="math inline">\(\mathcal{E}'\)</span> s.t. <span class="math inline">\(\mathcal{E}/\mathcal{E}''\)</span> is locally free. In particular, if&nbsp;<span class="math inline">\(\mathcal{E}'\)</span> is the maximal (w.r.t inclusion) the quotient is already locally free. (Think how to kill the torsion!)<strong>Theorem</strong>: There is a natural one-to-one correspondence between vector bundles (or rank <span class="math inline">\(r\)</span>) and locally free sheaves (of rank <span class="math inline">\(r\)</span>) on <span class="math inline">\(C.\)</span><em>Idea</em>: Given a vector bundle, the sheaf of sections is the corresponding sheaf. The converse is a little tricky. Given a locally free sheaf&nbsp;<span class="math inline">\(\mathcal{E},\)</span> one can define a vector bundle as follows</p>
+<p><span class="math inline">\(E:= \{ (p,t)|\; p \in C, \;\; t \in \mathcal{E}\_p/{\mathfrak{m}\_p \mathcal{E}\_p} \}\)</span></p>
+<p>where <span class="math inline">\(\mathfrak{m}\_p\)</span> is the unique maximal ideal of the local ring <span class="math inline">\(\mathcal{O}\_p.\)</span><em>Remark</em>: Subsheaves of a locally free sheaf do not necessarily correspond to the subbundles of its associated bundle. The point is that, injectivity of the map of locally free sheaves may fail to be injective when it is reduced modulo the maximal ideal of some point.<em>Lemma 1</em>: A non-trivial global section of a vector bundle <span class="math inline">\(E\)</span> correspond to a non-zero map of sheaves&nbsp;<span class="math inline">\(\mathcal{O} \to \mathcal{E}\)</span> where&nbsp;<span class="math inline">\(\mathcal{E}\)</span> is the sheaf associated to <span class="math inline">\(E.\)</span><strong>Divisors:</strong>A<em>Weil</em>divisor on <span class="math inline">\(C\)</span> is a finite formal sum of points with integral multiplicities. If <span class="math inline">\(f\)</span> is a rational function on <span class="math inline">\(C\)</span> the divisor corresponding to <span class="math inline">\(f\)</span> is defined as <span class="math inline">\((f)=\sum \text{ord}\_p(f) p.\)</span> A<em>Cartier</em>divisor on <span class="math inline">\(C\)</span> is given by a covering <span class="math inline">\(U\_i\)</span> of <span class="math inline">\(C\)</span> together with functions <span class="math inline">\(f\_i \in \mathcal{O}(U\_i)\)</span> s.t. <span class="math inline">\(f\_i/f\_j\)</span> are &nbsp;invertible on <span class="math inline">\(U\_i \cap U\_j.\)</span>&nbsp;A principal divisor is given by the cover consisting of <span class="math inline">\(C\)</span> alone and a function on <span class="math inline">\(C\)</span> (global section of <span class="math inline">\(\mathcal{O}\_C.\)</span>) Given a Cartier divisor, one can associate a Weil divisor to it by considering on each open set <span class="math inline">\(U\_i\)</span> the zeros minus the poles of <span class="math inline">\((f\_i)\)</span> and this is well-defined, since <span class="math inline">\(f\_i/f\_j\)</span> is invertible on <span class="math inline">\(U\_i \cap U\_j.\)</span> Conversely, given a Weil divisor <span class="math inline">\(D,\)</span> one can construct a Cartier divisor by choosing open sets that contain at most one of the point on the support of <span class="math inline">\(D\)</span> and functions that vanish at these points with the assigned multiplicities. Therefore, these two seemingly different notions are<strong>equivalent</strong>over a smooth curve <span class="math inline">\(C.\)</span><strong>Line Bundles (locally free sheaves of rank one) and Divisors:</strong>Given a Cartier divisor, one can define a locally free sheaf of rank one by taking the trivial sheaf <span class="math inline">\(\mathcal{O}(U\_i)\)</span> and gluing them by the isomorphisms <span class="math inline">\(f\_i/f\_j\)</span> on <span class="math inline">\(U\_i \cap U\_j.\)</span> Conversely, given an invertible sheaf and a trivialization <span class="math inline">\(\{ U\_i, f\_{i,j} \},\)</span> one can define a Cartier divisor as follows; &nbsp;take an arbirtary open set, say <span class="math inline">\(U\_0\)</span> and define a Cartier divisor with <span class="math inline">\((U\_i,f\_{i,o}),\)</span> as <span class="math inline">\(f\_{j,o}=f^{-1}\_{0,j}\)</span> and <span class="math inline">\(f\_{0,j}f\_{i,0}=f\_{i,j}\)</span> which is a unit on <span class="math inline">\(U\_i \cap U\_j.\)</span><strong>Definition:</strong>Let <span class="math inline">\(D=\sum n\_p p\)</span> be an effective divisor. Define the sheaf <span class="math inline">\(\mathcal{F}\)</span> on the support of <span class="math inline">\(D\)</span> by <span class="math inline">\(\mathcal{F}\_p=k^{n\_p}.\)</span> Now, define the skyscraper sheaf <span class="math inline">\(k\_D\)</span> as the extension by zero outside of <span class="math inline">\(D.\)</span><em>Lemma 2</em>: A line bundle <span class="math inline">\(\mathcal{L}\)</span> corresponds to an effective divisor <span class="math inline">\(D\)</span> if and only if <span class="math inline">\(\mathcal{L}\)</span> has a non-zero global section (by<em>lemma 1</em>, there is a non-zero map of sheaves <span class="math inline">\(\mathcal{O} \to \mathcal{L}\)</span> which is&nbsp;injective by<em>Proposition 1, b)</em>) In this case, one has the following short exact sequence of sheaves</p>
+<p><span class="math inline">\(0 \longrightarrow \mathcal{O} \longrightarrow \mathcal{L} \longrightarrow k\_D \longrightarrow 0\)</span></p>
+<p>one then write <span class="math inline">\(\mathcal{L}=\mathcal{O}(D).\)</span><strong>Riemann-Roch Theorem:</strong>If <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf (line bundle), then the Euler-Poincare characteristic can be computed as</p>
+<p><span class="math inline">\(\chi(\mathcal{L})=\deg(\mathcal{L})+\chi(\mathcal{O})=\deg(\mathcal{L})+1-g\)</span></p>
+<p>where <span class="math inline">\(g=h^1(\mathcal{O})\)</span> is the genus of the curve.<em>Proof</em>: First, assume that <span class="math inline">\(\mathcal{L}\)</span> corresponds to an effective divisor <span class="math inline">\(D,\)</span> then by lemma 2, there is a short exact sequence, thus the associated long exact sequence gives rise to <span class="math inline">\(\chi(\mathcal{O}(D))= \chi (\mathcal{O})+ \chi (k\_D).\)</span> Since <span class="math inline">\(k\_D\)</span> is a skyscraper sheaf, its support is a zero-dimensional set, hence <span class="math inline">\(h^1(k\_D)=0, \chi(k\_D)=h^0(k\_D)=\deg D\)</span> so the result. In the general case, assume that <span class="math inline">\(\mathcal{L}\)</span> corresponds to <span class="math inline">\(D-D'\)</span> with both <span class="math inline">\(D,D'\)</span> effective. Then <span class="math inline">\(\mathcal{O}(D-D')=\mathcal{O}(D) \otimes \mathcal{O}(-D')\)</span> where <span class="math inline">\(\mathcal{O}(-D')=\mathcal{O}(D')^\*.\)</span> Indeed, <span class="math inline">\(\mathcal{O}(-D')\)</span> is a locally free sheaf so is flat and tensoring the above short exact sequence with <span class="math inline">\(\mathcal{O}(-D')\)</span> one obtains</p>
+<p><span class="math inline">\(0\longrightarrow \mathcal{O}(-D') \longrightarrow \mathcal{L} \longrightarrow k\_D \otimes \mathcal{O}(-D') \longrightarrow 0\)</span></p>
+<p>Therefore,&nbsp;<span class="math inline">\(\chi(\mathcal{L})= \chi (\mathcal{O}(-D'))+ \chi(k\_D \otimes \mathcal{O}(-D')).\)</span> On the other hand, replacing <span class="math inline">\(D\)</span> by <span class="math inline">\(D'\)</span> in the above sequence and tensoring with <span class="math inline">\(\mathcal{O}(-D')\)</span> and do the same thing as above leads to the desired&nbsp;formula.<em>Lemma 3</em>: Given a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> there exists a short exact sequence of sheaves</p>
+<p><span class="math inline">\(0 \longrightarrow \mathcal{L} \longrightarrow \mathcal{E} \longrightarrow \mathcal{E}' \longrightarrow 0\)</span></p>
+<p>where <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf and <span class="math inline">\(\mathcal{E}'\)</span> a locally free sheaf of rank <span class="math inline">\(r-1.\)</span> Using<em>lemma 3</em>and induction, one can prove the following formula for the calculation of <span class="math inline">\(\deg(\mathcal{E}\_1 \otimes \mathcal{E}\_2)\)</span> where <span class="math inline">\(\mathcal{E}\_1, \mathcal{E}\_2\)</span> are locally free sheaves of rank <span class="math inline">\(r\_1, r\_2\)</span> respectively.</p>
+<p><span class="math inline">\(\deg(\mathcal{E}\_1 \otimes \mathcal{E}\_2)=r\_1 \deg(\mathcal{E}\_2) + r\_2 \deg(\mathcal{E}\_1)\)</span></p>
+<p>where the degree of a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> is defined by</p>
+<p><span class="math inline">\(\deg(\mathcal{E})=\chi(\mathcal{E})-r \chi (\mathcal{O})\)</span><strong>Definition:</strong>A sheaf <span class="math inline">\(\mathcal{F}\)</span> is said to be generated by global sections if the natural map</p>
+<p><span class="math inline">\(H^0(\mathcal{F}) \otimes \mathcal{O} \longrightarrow \mathcal{F}\)</span></p>
+<p>is onto. &gt;<strong>Proposition 2</strong>: If <span class="math inline">\(\mathcal{E}\)</span> is a locally free sheaf on <span class="math inline">\(C,\)</span> there exists a positive divisor <span class="math inline">\(D\)</span> on <span class="math inline">\(C\)</span> s.t. <span class="math inline">\(\mathcal{E}(D):=\mathcal{E} \otimes \mathcal{O}(D)\)</span> is generated by global sections.<strong>Atiyah’s theorem:</strong>Given a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> generated by global sections, there exists an exact sequence</p>
+<p><span class="math inline">\(0 \longrightarrow \mathcal{O}^{r-1} \longrightarrow \mathcal{E} \longrightarrow \mathcal{L} \longrightarrow 0\)</span></p>
+<p>where <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/ehsanmkermani\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<script src="https://utteranc.es/client.js" repo="ehsanmok/blog-comments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>© 2025 Ehsan M. Kermani</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
