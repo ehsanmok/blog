@@ -1,1 +1,10 @@
 __pycache__
+.venv
+/.quarto/
+/_site/
+/.vscode/
+.DS_Store
+.Rproj.user
+*.Rproj
+
+**/*.quarto_ipynb

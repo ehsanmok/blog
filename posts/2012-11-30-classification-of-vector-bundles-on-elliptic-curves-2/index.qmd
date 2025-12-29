@@ -1,0 +1,44 @@
+---
+title: "Classification of Vector Bundles on Elliptic curves"
+author: "Ehsan M. Kermani"
+date: "2012-11-30"
+categories: [Algebraic Geometry]
+---
+
+I'm supposed to give a talk on this subject for one of my courses, so I consider this post as a "pre-exposition." I learned from and heavily used the great exposition "*Vector bundles on curves*" by*Montserrat Teixidor I Bigas*in this post. I wrote up the pre-requisites [here](http://wp.me/p2zmPY-55).
+In 1957,*Atiyah*in this famous paper "**Vector bundles over an elliptic curve**" classified indecomposable vector bundles of arbitrary rank and degree. Briefly, every vector bundle (locally free sheaf) is decomposed uniquely (up to the order) to the direct sum of indecomposable vector bundles and*the set of isomorphism classes of indecomposable vector bundles of a fixed rank and degree is isomorphic to the Jacobian of the curve which the latter is isomorphic to the curve itself.*The isomorphisms are*canonical*for vector bundles of degree zero and for higher degree, they*depend on the choice*of a*line bundle of degree one*(a base point on the curve)  ["*Vector bundles on curves" by Montserrat Teixidor I Bigas, section 4.*]
+An elliptic curve $C$ is a smooth projective curve of genus one over an algebraically closed field $k.$ One may assume that $\text{char}(k)=0.$ Throughout, the words vector bundle $E$ and locally free sheaf $\mathcal{E}$ are used interchangeably.
+Denote by $U(r,d)$ the set of isomorphism classes of indecomposable vector bundles of rank $r$ and degree $d$ where the degree of a vector bundle $E$ of rank $r$ is defined as the degree of the associated locally free sheaf $\mathcal{E}$ which is
+
+$\deg(\mathcal{E})= \chi (\mathcal{E})-r \chi (\mathcal{O})=\chi (\mathcal{E})-r(1-g).$
+
+One can also show that $\deg(\mathcal{E})$ is equal to the degree of its*determinant*.**Case 1**: Vector bundles of degree zero $d=0.$
+For every positive integer $r$ there exists a unique (self-dual) indecomposable vector bundle $\overline{E}\_{r,0}$ of rank $r$ and degree zero with only one section. It turns out that any indecomposable vector bundle of rank $r$ and degree zero is isomorphic to $\overline{E}\_{r,0} \otimes L$ for a unique line bundle $L$ of degree zero. Therefore, the set (moduli space) of indecomposable vector bundles of degree zero on $C,$ i.e. $U(r,0)$ is (canonically) isomorphic to the moduli space of degree zero line bundles on $C$ which in turn by definition is the [Jacobian](http://en.wikipedia.org/wiki/Jacobian_variety) of $C.$**Case 2**: Vector bundles of non-negative degree $d \geq 0,$ (general case)
+In general, let $L$ be a fixed line bundle of*degree one*, (which corresponds to fixing a base point) on $C$ then there is an isomorphism $U(r,d) \tilde{\to} U(r,d+rk)$ sending $E \mapsto E \otimes L^k.$ Note that $\deg(E \otimes L^k)=\text{rk} (L^k) \deg (E)+\text{rk} (E) \deg(L^k)=d+rk.$
+If $r>0$ there is an isomorphism $U(r,d) \tilde{\to} U(r+d,d)$ sending $E$ to $E'$ where $E'$ is given by the following extension with $\mathcal{O}^d,$
+
+$0 \longrightarrow \mathcal{O}^d \longrightarrow E' \longrightarrow E \longrightarrow 0$
+
+By these two operations, we can assume that $d \geq 0$ and $r>0.$ Moreover, if $d \geq r$ we will have $U(r,d) \cong U(r,r-d)$ and if $d<r$ then $U(r,d) \cong U(r-d,d).$ Note that non of these operations changes $h=\gcd(r,d).$ Thus, we can construct a sequence of isomorphisms $U(r\_i,d\_i) \cong U(r\_{i+1}, d\_{i+1})$ with $r\_i>0, \; d\_i \geq 0$ s.t. $\gcd(r\_i,d\_i)=\gcd(r\_{i+1},d\_{i+1})$ and $r\_i+d\_i> r\_{i+1}+d\_{i+1}.$ This is the sequence of positive numbers, so it will terminate when $r\_i=h$ and $d\_i=0.$ Hence, we have established the isomorphism
+
+$U(r,d) \cong U(h,0)$
+
+and by*case 1*, $U(h,0)$ is isomorphic to the*Jacobian*of $C$ (and is isomorphic to the curve itself.)
+That being said, the above isomorphism is*completely determined*up to the choice of a line bundle $L$ of*degree one*.
+So far, we have achieved what we wanted. Let's now, try to dig more. Denote by $E^L\_{r,d}$ the element in $U(r,d)$ corresponding to $\overline{E}\_{h,0}$ in $U(h,0).$
+>**Proposition 1**: a) Every vector bundle $E$ of rank $r$ and degree $d$ can be written as $E^L\_{r,d} \otimes L'$ for some line bundle $L'$ of degree zero.
+>
+> b) If $\gcd(r,d)=1,$ then $E^L\_{r,d} \otimes (E^L\_{r,d})^\*\cong \bigoplus^{r^2}\_{i=1} L\_i$ where $L\_i$ run over the set of line bundles of order (in the Picard group) $r.$
+>
+> c) If $r \geq s,$ then $\overline{E}\_{r,0} \otimes \overline{E}\_{s,0} \cong \overline{E}\_{r-s+1,0} \oplus \overline{E}\_{r-s+3,0} \oplus \cdots \oplus \overline{E}\_{r+s-3} \oplus \overline{E}\_{r+s-1,0}.$
+>
+> d) If $gcd(r,d)=1,$ then $E^L\_{r,d} \otimes \overline{E}\_{h,0}=E^L\_{rh,dh}.$
+>
+> e) If $\gcd(r,r')=\gcd(r,d)=\gcd(r',d')=1,$ then $E^L\_{r,d} \otimes E^L\_{r',d'}=E^L\_{rr',rd'+r'd}.$
+
+Here is some results involving [stability and semi-stability](http://en.wikipedia.org/wiki/Stable_vector_bundle) of vector bundles on $C.$
+>**Proposition 2**: a) An indecomposable vector bundle of degree zero is semi-stable not stable.
+>
+> b) Indecomposable vector bundles are semi-stable and they are stable if and only if $\gcd(r,d)=1.$
+
+For detailed and complete description of vector bundles on an elliptic curve, especially  when the ground field is of $\text{char}(k)=p,$ look at Atiyah's original paper.

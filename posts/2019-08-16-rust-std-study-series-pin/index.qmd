@@ -1,0 +1,123 @@
+---
+title: "Rust std study series: Pin"
+author: "Ehsan M. Kermani"
+date: "2019-08-16"
+categories: [Rust]
+tags: [rustlang, std, study]
+---
+
+![](images/rustacean-flat-happy-2.png)
+
+This time we dive into `std::pin` which has a dense documentation.
+
+> Types that**pin data**to its location in**memory**.
+>
+> It is sometimes useful to have objects that are**guaranteed to not move**, in the sense that their**placement in memory does not change**, and can thus be relied upon. A prime example of such a scenario would be**building self-referential structs**, since moving an object with pointers to itself will invalidate them, which could cause undefined behavior.
+>
+>  Rust std doc
+
+## Pin and Unpin
+
+```rust
+#[fundamental] // compiler thing
+#[repr(transparent)] // --> ensures same memory repr as P
+pub struct Pin<P> {
+    pointer: P,
+}
+pub auto trait Unpin { }  // marker trait
+```
+
+To construct a `Pin` safely via `Pin::new(pointer: P)`, we need to make sure that `P: Deref` (pointer-like) and `P::Target: Unpin`.
+
+Note that `Unpin` ensures
+
+> Types which can be**safely moved after being pinned**.
+>
+> Since Rust itself has no notion of immovable types, and considers moves (e.g. through assignment or [`mem::replace`](https://doc.rust-lang.org/std/mem/fn.replace.html)) to always be safe, this trait cannot prevent types from moving by itself.  
+>  Instead it is used to**prevent moves through the type system**, by controlling the behavior of pointers `P` wrapped in the [`Pin<P>`](https://doc.rust-lang.org/std/pin/struct.Pin.html) wrapper, which "pin" the type in place by not allowing it to be moved out of them.
+>
+>  Rust std doc
+
+Basically, the vast majority of types are "movable" i.e. `Unpin`, so for most cases,**`Pin<Pointer<T>>`**is exactly like**`Pointer<T>`**when**`T: Unpin`**. However, if the referent (referenced type `T`) is "immovable" i.e. `T: !Unpin`, then the pinned wrapper won't let the underlying value to move.*Intuitively it's like having**`&mut`* *but with* *`&`* *access safety and immovability invariant*. It is in fact, `Unpin` that controls how `Pin` to work.
+
+To iterate; `Pin<P>` ensures that the**underlying data behind a pointer type**`P`**has a stable location in memory**and**its memory cannot be deallocated until it is dropped**. So `Pin` pins the pointee (the data behind the pointer)*not the pointer itself*. Moreover,[`Pin<P>`](https://doc.rust-lang.org/std/pin/struct.Pin.html)**does not let clients actually obtain a**`Box<T>`**or**`&mut T`**to the underlying pinned data**, which implies that you*cannot*use operations such as [`mem::swap`](https://doc.rust-lang.org/std/mem/fn.swap.html).
+
+Furthermore,
+
+> For correctness, [`Pin<P>`](https://doc.rust-lang.org/std/pin/struct.Pin.html) relies on the [`Deref`](https://doc.rust-lang.org/std/ops/trait.Deref.html) and [`DerefMut`](https://doc.rust-lang.org/std/ops/trait.DerefMut.html) implementations to**not move out of their**`self`**parameter**, and to only ever return a pointer to pinned data when they are called on a pinned pointer.
+>
+>  Rust std doc
+
+To implement `!Unpin` for a type directly, (up to this write up) we need nightly with `![feature(optin_builtin_traits)]`. The stable way is through the marker type `PhantomPinned` which already has `impl !Unpin for PhantomPinned {}`
+
+## Closer look
+
+We cannot create `Pin` for a `Pointer<T>` where `T: !Unpin` safely
+
+```rust
+pub struct Pin<P> {
+    pointer: P,
+}
+impl<P: Deref> Pin<P> 
+where P::Target: Unpin // --> underlying data is movable
+{
+    pub fn new(pointer: P) -> Pin<P> {
+        // Safety: the value pointed to is `Unpin`, and so has no requirements
+        // around pinning.
+        unsafe { Pin::new_unchecked(pointer) }
+    }
+}
+impl<P: Deref> Pin<P> {
+   pub unsafe fn new_unchecked(pointer: P) -> Pin<P> {
+        Pin { pointer }
+    }
+}
+```
+
+### So how to pin a `T: !Unpin` safely?
+
+We can use `Box::pin` (similarity with `Rc::pin` or `Arc::pin`) where
+
+```rust
+impl<T> Box<T> {
+    #[inline(always)]
+    pub fn pin(x: T) -> Pin<Box<T>> {
+        (box x).into()
+    }
+}
+impl<T: ?Sized> From<Box<T>> for Pin<Box<T>> {
+    /// This conversion does not allocate on the heap and happens in place.
+    fn from(boxed: Box<T>) -> Self {
+        Box::into_pin(boxed)
+    }
+}
+impl<T: ?Sized> Box<T> {
+    pub fn into_pin(boxed: Box<T>) -> Pin<Box<T>> {
+        // It's not possible to move or replace the insides of a `Pin<Box<T>>`
+        // when `T: !Unpin`,  so it's safe to pin it directly without any
+        // additional requirements.
+        unsafe { Pin::new_unchecked(boxed) }
+    }
+}
+```
+
+Some notable methods of `Pin` are*`as_ref: &Pin<Pointer<T>> ---> Pin<&T>`*`as_mut: &mut Pin<Pointer<T>> ---> Pin<&mut T>`*`get_ref: Pin<Pointer<T>> ---> &T`*`get_mut: Pin<Pointer<T>> ---> &mut T` (given `T: Unpin`)
+
+There is also a `set` method which overwrites the pinned data and it might seem is invalidating the pinned construct but the subtle point is that before assigning the new value, the destructor of the old data is run so it's ok.
+
+```rust
+impl<P: DerefMut> Pin<P> {
+    pub fn set(self: &mut Pin<P>, value: P::Target)
+    where
+        P::Target: Sized,
+    {
+        *(self.pointer) = value; // --> before assignment the pointee *self.pointer is dropped
+    }
+}
+```
+
+So the whole point is, we can change the pointee `Pointer::Target` of a mutable pinned pointer but cannot get a `&mut T` out of a `Pin<Pointer<T>>` (`Pointer::Target = T` in here) when `T: !Unpin`.
+
+`Pin` has been introduced to resolve the issues around `Future` and `async/.await` (and more general, `Generator`). To get a better idea, I recommend looking into `async book pin section` to see, for example, how an `async` block is turned into structs (like closures) with potentially*self-referential mutable fields*and how `Pin` helps there.
+
+Hope we have entangled some of the complications for understanding what `Pin` is and what it does. For more details, checkout the complete documentation as well as more discussion on [structural pinning and the safety issues around it](https://doc.rust-lang.org/std/pin/index.html#projections-and-structural-pinning).

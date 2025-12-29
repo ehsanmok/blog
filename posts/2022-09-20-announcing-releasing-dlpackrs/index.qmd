@@ -1,0 +1,51 @@
+---
+title: "Announcement 📢 Releasing dlpackrs"
+author: "Ehsan M. Kermani"
+date: "2022-09-20"
+categories: [Rust]
+tags: [array-processing, deep-learning, dlpack]
+---
+
+[DLPack](https://dmlc.github.io/dlpack/latest/) is the standard in-memory data format that facilitates*zero-cost*tensor transfer across major Deep Learning frameworks (PyTorch, TensorFlow and TVM) and the supported Python Array processing frameworks such as Numpy, CuPy. The [dlpackrs](https://github.com/ehsanmok/dlpackrs) provides a safe idiomatic Rust binding where Rust ndarray and tensor frameworks can use it to gain the same kind of benefits (if not done already) across the supported hardware types.
+
+In Python, such conversion goes through [PyCapsule](https://github.com/python/cpython/blob/main/Include/pycapsule.h) (minimal example for TVM - numpy conversion is [here](https://github.com/jwfromm/numpy_dlpack)) but Rust needs no such restrictions or workaround. In fact, the [PyO3/numpy](https://github.com/PyO3/rust-numpy) conversion to [Rust ndarray](https://github.com/rust-ndarray/ndarray) is*already zero-cost*through pointers (taken from [here](https://github.com/PyO3/rust-numpy/blob/v0.17.2/src/convert.rs#L148-L184)) which is
+
+```rust
+impl<S, D, A> ToPyArray for ArrayBase<S, D>
+where
+    S: Data<Elem = A>,
+    D: Dimension,
+    A: Element,
+{
+    type Item = A;
+    type Dim = D;
+
+    fn to_pyarray<'py>(&self, py: Python<'py>) -> &'py PyArray<Self::Item, Self::Dim> {
+        let len = self.len();
+        match self.order() {
+            Some(flag) if A::IS_COPY => {
+                // if the array is contiguous, copy it by `copy_nonoverlapping`.
+                let strides = self.npy_strides();
+                unsafe {
+                    let array = PyArray::new_uninit(py, self.raw_dim(), strides.as_ptr(), flag);
+                    ptr::copy_nonoverlapping(self.as_ptr(), array.data(), len); // <-- pointer copy
+                    array
+                }
+            }
+            _ => {
+                // if the array is not contiguous, copy all elements by `ArrayBase::iter`.
+                let dim = self.raw_dim();
+                unsafe {
+                    let array = PyArray::<A, _>::new(py, dim, false);
+                    let mut data_ptr = array.data();
+                    for item in self.iter() { // <-- pointer copy starts
+                        data_ptr.write(item.clone());
+                        data_ptr = data_ptr.add(1);
+                    }
+                    array
+                }
+            }
+        }
+    }
+}
+```

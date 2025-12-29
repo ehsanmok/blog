@@ -1,0 +1,114 @@
+---
+title: "Rust std study series: LinkedList"
+author: "Ehsan M. Kermani"
+date: "2019-03-25"
+categories: [Rust]
+tags: [linkedlist, rustlang, std, study]
+---
+
+![](images/rustacean-flat-happy-2.png)
+
+Continuing from [Rust standard library](https://doc.rust-lang.org/std/) study series, it's time for `LinkedList<T>`. Note that implementation are taken from*Rust stable v1.33.0*.
+
+> A**doubly-linked**list with**owned nodes**.  
+>  The `LinkedList` allows*push*ing and*pop*ping elements at either end in**constant time**.  
+>  Almost always it is better to use `Vec` or `VecDeque` instead of `LinkedList`. In general, array-based containers are**faster**, more memory efficient**and make better use of CPU**cache**.
+>
+>  Rust std doc
+
+Note that unlike `Vec<T>`
+
+1. accessing an element through index is $O(n)$ i.e. needs to iterate linearly over the list.
+2. `append` is $O(1).$
+3. Interesting how `linked_list::Iter` is different from `linked_list::IterMut`. Invariant of `IterMut` is enforced with `&mut` and `PhantomData<&'a Node<T>>` ensures soundness (more on `PhantomData`, dropck later).
+
+There's an [entire book](http://cglab.ca/~abeinges/blah/too-many-lists/book/) (which I highly recommend to go through details if you haven't already) convincing the reader why it's tricky to implement even*singly*-linked list and most probably not a good idea for new Rust users!
+
+Because of Rust's affine type system / ownership, it's actually tricky to implement*doubly*-linked list. The main reason is it seems a node needs to have*two owners*from adjacent nodes. However, that's possible with `NonNull<T>` which we talked about in `Vec<T>` [study](https://ehsanmkermani.com/2019/03/10/rust-std-study-series-vec/).
+
+Here's the stripped down definition
+
+```rust
+// Note: NonNull<T> does NOT own the referent
+#[repr(transparent)] // <-- enforces the same type representation as *const T
+struct NonNull<T: ?Sized> {
+    pointer: *const T,
+}
+
+struct Node<T> {
+    next: Option<NonNull<Node<T>>>, // Not Option<Box<Node<T>>>
+    prev: Option<NonNull<Node<T>>>,
+    element: T,
+}
+
+struct LinkedList<T> {
+    head: Option<NonNull<Node<T>>>,
+    tail: Option<NonNull<Node<T>>>,
+    len: usize,
+    marker: PhantomData<Box<Node<T>>>, // <-- sound dropck
+}
+```
+
+### Why not `Option<Box<Node<T>>>` ?
+
+It's probably a good idea to see what would be the difference if we use `Box<Node<T>>` instead. We discussed what `Unique<T>` is and how it's different from `NonNull<T>` previously, but as a quick reminder, `Unique<T>` owns the referent whereas `NonNull<T>` does not and in fact `Box<T>` (a**pointer type**for**heap allocation**) just wraps `Unique<T>` and provides new interface for interacting with `Unique<T>`.
+
+Let's consider `Node<T>` with `Box` as follows ([playpen link](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=0bee2ec0e478b34557daffcb05e4a55a))
+
+```rust
+struct Node<T> {
+    prev: Option<Box<Node<T>>>,
+    next: Option<Box<Node<T>>>,
+    element: T,
+}
+
+fn main() {
+    let mut head_node = Node {
+        prev: None,
+        next: None,
+        element: 1,
+    };
+    
+    let next_node = Node {
+        prev: Some(Box::new(head_node)), // <-- head_node is moved here
+        next: None,
+        element: 2,
+    };
+    
+    head_node.next = Some(Box::new(next_node)); // Not good!
+}
+```
+
+This begs for*Use-After-Free*(UAF) so*Undefined Behavior*(UB) which we know we shouldn't push further. However, using a non-owning `NonNull<T>` can solve the problem as follows ([playpen link](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=16f03cf6df4832dc45c19d7d549a1bcf))
+
+```rust
+use std::ptr::NonNull;
+
+struct Node<T> {
+    prev: Option<NonNull<Node<T>>>,
+    next: Option<NonNull<Node<T>>>,
+    element: T,
+}
+
+fn main() {
+    let mut head_node = Node {
+        prev: None,
+        next: None,
+        element: 1,
+    };
+    
+    let next_node = Node {
+        prev: NonNull::new(&mut head_node as *mut _),
+        next: None,
+        element: 2,
+    };
+    
+    head_node.next = NonNull::new(&next_node as *const _ as *mut _);
+}
+```
+
+But how can we make sure this is sound esp. when using it in `LinkedList<T>`. More precisely
+
+### What's the relation between `PhantomData` and dropck ?
+
+I've been trying to understand the deeper relation between `PhantomData` and what makes dropck sound (so does `LinkedList<T>` sound), but couldn't find any clear explanations so I asked it in the user channel and got an [amazing thorough answer](https://users.rust-lang.org/t/phantomdata-and-dropck-confusion/26624) which can be generalized to `Vec`, `LinkedList` etc.

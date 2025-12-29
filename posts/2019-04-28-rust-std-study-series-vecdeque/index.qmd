@@ -1,0 +1,48 @@
+---
+title: "Rust std study series: VecDeque"
+author: "Ehsan M. Kermani"
+date: "2019-04-28"
+categories: [Rust]
+tags: [rust, std, study]
+---
+
+![](images/rustacean-flat-happy-2.png)
+
+Continuing from [Rust standard library](https://doc.rust-lang.org/std/) study series, it's time for [VecDeque<T>](https://doc.rust-lang.org/std/collections/struct.VecDeque.html). Because of its similarity to `Vec`, there isn't much to say.
+
+> A*double-ended***queue**implemented with a*growable [ring buffer](https://en.wikipedia.org/wiki/Circular_buffer)*.  
+>  The "default" usage of this type as a queue is to use [`push_back`](https://doc.rust-lang.org/std/collections/struct.VecDeque.html#method.push_back) to**add**to the queue, and [`pop_front`](https://doc.rust-lang.org/std/collections/struct.VecDeque.html#method.pop_front) to**remove**from the queue. [`extend`](https://doc.rust-lang.org/std/collections/struct.VecDeque.html#method.extend) and [`append`](https://doc.rust-lang.org/std/collections/struct.VecDeque.html#method.append) push onto the back in this manner, and iterating over `VecDeque` goes front to back.
+>
+>  Rust std doc*Similar to `Vec`, `VecDeque` has amortized $O(1)$ insert to both ends of the container, but unlike `Vec`, it has amortized $O(1)$ removal from both ends. (Recalling from `Vec` study, removal is strictly $O(1)$ with no shrink factor involved)*Similar to `Vec`, indexing is $O(1).$
+
+Similar to [Vec<T> study](https://ehsanmkermani.com/2019/03/10/rust-std-study-series-vec/), here's the stripped down definition of `VecDeque<T>`
+
+```rust
+struct VecDeque<T> {
+    // tail and head are pointers into the buffer. Tail always points
+    // to the first element that could be read, Head always points
+    // to where data should be written.
+    // If tail == head the buffer is empty. The length of the ringbuffer
+    // is defined as the distance between the two.
+    tail: usize,
+    head: usize,
+    buf: RawVec<T>,
+}
+
+// Default Global allocator
+struct RawVec<T, A: Alloc = Global> {
+    ptr: Unique<T>,
+    cap: usize,
+    a: A,
+}
+
+#[repr(transparent)]
+struct Unique<T: ?Sized> {
+    pointer: *const T,
+    _marker: PhantomData<T>,
+}
+```
+
+The same `Vec` methods, such as `with_capacity` (note that ring buffer always*leaves one space empty*), `truncate`, `shrink_to` etc. exist and follow the same observations as in `Vec` study. The notable methods are*`push_back` and `pop_back` which involve moving the `head` pointer and `push_front` and `pop_front` which involve moving the `tail` pointer.*[retain](https://doc.rust-lang.org/std/collections/struct.VecDeque.html#method.retain) which acts as the filter method.*[resize\_with](https://doc.rust-lang.org/std/collections/struct.VecDeque.html#method.resize_with) with a `generator: impl FnMut() -> T`*[as\_slices](https://doc.rust-lang.org/std/collections/struct.VecDeque.html#method.as_slices) (and the mut one) which contains, in order the content of the `VecDeque`.
+
+That's it for now!

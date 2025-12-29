@@ -1,0 +1,38 @@
+---
+title: "From Machine Learning to Formal Math and Type Theory"
+author: "Ehsan M. Kermani"
+date: "2017-06-30"
+categories: [Functional Programming, Machine Learning, Type Theory]
+tags: [deep-learning]
+---
+
+The idea of this post was sparkled from the new paper*[Developing Bug-Free Machine Learning Systems with Formal Mathematics.](https://arxiv.org/abs/1706.08605)*Meanwhile, I have had the idea of writing about what you're going to readfor a long time and this paper happily forced me to do it finally! The first and final parts are about my journey and thoughts I want to write about. They may not seem directly related. If you only want to know about the paper, you can read that part.
+
+## Brief history
+
+When I was studying Algebraic Geometry the language of category, object, morphism, functors, natural-morphism, etc. were essential in understanding modern aspects of the field as well as modern Mathematics, in general. When I switched to Computer Science I stumbled upon Functional Language and Functional Programming (FP) through Scala programming language (mainly because of Apache Spark) and I loved it. I clearly remember the moment when I realized the connections between category theory language that I was using in my Math-time and then in Computer Science, with the implementations of Functor, Monad, Moniod, etc. It was fascinating and sweet, indeed. I quickly found out that Scala has a purely functional extension called [Scalaz](https://github.com/scalaz/scalaz) that even has [Yoneda object](https://github.com/1ambda/scala/blob/master/learning-scalaz/src/main/scala/yoneda/Yoneda.scala) defined. It was a WOW moment! I really enjoyed understanding and applying [Yoneda lemma](https://en.wikipedia.org/wiki/Yoneda_lemma#Formal_statement) in my Math-time.
+
+## The paper
+
+It discusses about the a way for developers to
+> use an**interactive proof assistant**to both*implement their system*and to*state a formal theorem*defining what it means for their system to be correct.
+
+It is a way to close the gap between implementation errors and the formal Mathematical theory behind the implementation. The mechanism is important because when you design a machine learning system that enables you to
+> find implementation errors*systematically*without recourse to empirical testing.
+
+Basically, it gives you [formal verification](https://en.wikipedia.org/wiki/Formal_verification) of your program. It does so by using [Lean programming language](https://github.com/leanprover/lean) which is an*interactive proof assistant*as well as a programming language ([talk](https://www.youtube.com/watch?v=69ytTKfSSgc) by the creator of Lean). I'll explain more about what interactive proof assistant does.
+As a case study, the author developed a system called [Centigrad](https://github.com/dselsam/certigrad)
+> which allows users to construct arbitrary stochastic computation graphs.**Stochastic computation graph**is a DAG (computation graph) having deterministic or stochastic computational units. Its*loss function*is defined as the*expected value*of sum of the leaf nodes*over stochastic choices*.
+Here's an example of a simple variational autoencoder (VAE) (which is a generative model with stochastic computation graph introduced by the normal sampling layer in the middle. For more about VAE, see the nice post by [fastforwardlabs](http://blog.fastforwardlabs.com/2016/08/12/introducing-variational-autoencoders-in-prose-and.html))
+![vae](images/vae.png)
+Assume that you want to develop a backpropagation algorithm for such loss function. You may also have a sketch of  the final derivation. Also assume that we don't have access to Tensorflow or other deeplearning frameworks that do automatic differentiation. You may even have no data!**It's you and your computer**and you want to make a formal Mathematical system that does all the things for you. You can be sure that the derivation is correct formally, when your system doesn't fail and is then*bug-free*. To do so, you'd need to define a long series of things in your system so that it can understand what the above loss function mean and how to compute backpropagration.
+Basically, you'd need to define real number $\mathbb{R}$ type, tensors, function, differentiation operator $\nabla$, differentiability, integration operator $\int$, integrability, conditions such that differentiation commutes with integration, notion of distribution, sampling from a distribution, computing the expectation (monadic operation!) and more details so that the system can understand the meaning the loss function and what backpropagation supposed to do.*The novelty is that in Lean you can do so and it even can lead you interactively from in between steps / lemmas (aka tactics in Lean) to the final machine-checkable formal derivation*.
+In conclusion, the authors wrote
+> ... we were able to achieve extremely high confidence that our system was bug-free without needing to think about how all the pieces of the system fit together. In our approach, the computer— not the human—is responsible for ensuring that all the local properties that the developer establishes imply that the overall system is correct.
+
+## Thoughts
+
+Given the initial background
+
+1. Scala is really a good fit, if one wants to create next Lean programming language.
+2. This paper lead me to read and think about [type theory](https://en.wikipedia.org/wiki/Intuitionistic_type_theory#Extensional_versus_intensional), [decidability](https://en.wikipedia.org/wiki/Decision_problem) and [homotopy type theory.](https://en.wikipedia.org/wiki/Homotopy_type_theory) Their applications and contributions to the foundations of modern Mathematics. It is truly fascinating that such abstractions not only paves the road for Mathematicians in various fields such as Algebraic Geometry, Algebraic Topology, etc. but also enables creation of computer languages to assist us in constructing proofs and verify computations formally.

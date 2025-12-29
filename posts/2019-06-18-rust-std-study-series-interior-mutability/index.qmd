@@ -1,0 +1,118 @@
+---
+title: "Rust std study series: Interior mutability"
+author: "Ehsan M. Kermani"
+date: "2019-06-18"
+categories: [Rust]
+tags: [rustlang, std, study]
+---
+
+![](images/rustacean-flat-happy-2.png)
+
+Continuing the standard library study, it's time for `Cell<T>`!
+
+Rust compiler enforces*multiple reads*access and a*single write*access mutually exclusive, i.e. either multiple shared references `&` or one and only one mutable reference `& mut`. So essentially, Rust prevents the evil of*aliasing and mutation between multiple threads*.
+
+`Cell<T>` is a**sharable mutable container**designed carefully to prevent stepping into the UB land. Note that*unsafe cast*of `&` to `& mut` is**immediate UB**, so `Cell` was designed to manage/catch such UB at compile time. This container behaves like `&` allowing `& mut`. However, there's a distinction between a single threaded behavior and multi-threaded one:*Single threaded: `Cell<T>` (**owns**a values) and `RefCell<T>` (**borrows**a value with*runtime*cost).*Multi-threaded: `Mutex<T>`, `RwLock<T>`, etc. (synchronization primitives)
+
+The essence of `Cell` can be understood in terms of*Variance*and the compiler support which [we explored before](https://ehsanmkermani.com/2019/03/16/variance-in-rust-an-intuitive-explanation/). As usual, std has a great explanations in particular, an enlightening example in [**mutating implementations of Clone**](https://doc.rust-lang.org/std/cell/#mutating-implementations-of-clone) that manages the side-effect of `Rc<T>` via `Cell`. In other words, an*immutable struct*with a `Cell` ed field allows mutation for that field.
+
+There core primitive for interior mutability is `UnsafeCell<T>` which to my knowledge is the only*invariant container*.
+
+## Cell<T>
+
+```rust
+#[lang = "unsafe_cell"] // <-- invariant type support
+#[repr(transparent)] // <-- enforces the same type repr as the underlying `T`
+pub struct UnsafeCell<T: ?Sized> {
+    value: T,
+}
+// UnsafeCell is not Sync, hence "single-threadedness".
+// In other words, it cannot share references between multiple threads 
+impl<T: ?Sized> !Sync for UnsafeCell<T> {}
+
+impl<T: ?Sized> UnsafeCell<T> {
+    pub const fn get(&self) -> *mut T {
+        // We can just cast the pointer from `UnsafeCell<T>` to `T` because of
+        // #[repr(transparent)]
+        self as *const UnsafeCell<T> as *const T as *mut T
+    }
+}
+#[repr(transparent)] // <-- so the final type repr is the same as `T`
+pub struct Cell<T: ?Sized> {
+    value: UnsafeCell<T>,
+}
+
+impl<T: Copy> Cell<T> { // <-- note that `T` must be `Copy`
+    pub fn get(&self) -> T {
+        unsafe{ *self.value.get() }
+    }
+}
+
+impl<T> Cell<T> {
+    // compile time guarantee that we process the ONLY one reference
+    pub fn get_mut(&mut self) -> &mut T {
+        unsafe {
+            &mut *self.value.get()
+        }
+    }
+    
+    pub fn set(&self, val: T) {
+        let old = self.replace(val);
+        drop(old); // <-- drops the old value
+    }
+}
+
+// Uphold the assumption of the wrapped `UnsafeCell`
+impl<T: ?Sized> !Sync for Cell<T> {}
+// If `T` can be transferred across thread boundaries, so does `Cell`
+unsafe impl<T: ?Sized> Send for Cell<T> where T: Send {}
+```
+
+### Notable properties*[Cell's get method](https://doc.rust-lang.org/std/cell/struct.Cell.html#method.get) is defined**only**for `Copy` i.e.*bit-wise copyable*, otherwise cannot move of the borrowed `&self`.*Only when the underlying type is `Copy` it is possible to `clone` the `Cell`.*[Cell's swap method](https://doc.rust-lang.org/std/cell/struct.Cell.html#method.swap) is just a pointer swap and the difference between this and [`mem::swap`](https://doc.rust-lang.org/std/mem/fn.swap.html) is Cell's swap doesn't need `& mut`.*[Cell's take method](https://doc.rust-lang.org/std/cell/struct.Cell.html#method.take), takes the value of the cell and leaves `Default::default` value in its place.*[Cell's replace method](https://doc.rust-lang.org/std/cell/struct.Cell.html#method.replace) uses `mem::replace` to replace the new value and return the old value.*`Cell<T>` is `Send + !Sync` (given `T: Send`), meaning it is safe to transfer `Cell` between multiple threads (when the underlying value allows us) but**references**of the `Cell`**cannot be shared**between multiple threads.
+
+### RefCell<T>
+
+> A mutable memory location with dynamically checked borrow rules
+>
+> Rust std doc
+
+```rust
+// Positive values shows the number of active `Ref`
+// Negative values shows the number of active `RefMut`
+type BorrowFlag = isize;
+
+pub struct RefCell<T: ?Sized> {
+    borrow: Cell<BorrowFlag>, // <-- subtle
+    value: UnsafeCell<T>,
+}
+
+unsafe impl<T: ?Sized> Send for RefCell<T> where T: Send {}
+impl<T: ?Sized> !Sync for RefCell<T> {}
+
+struct BorrowRef<'b> {
+    borrow: &'b Cell<BorrowFlag>,
+}
+
+/// A wrapper type for an immutably borrowed value from a `RefCell<T>`
+pub struct Ref<'b, T: ?Sized + 'b> {
+    value: &'b T,
+    borrow: BorrowRef<'b>,
+}
+
+struct BorrowRefMut<'b> {
+    borrow: &'b Cell<BorrowFlag>,
+}
+
+/// A wrapper type for a mutably borrowed value from a `RefCell<T>`
+pub struct RefMut<'b, T: ?Sized + 'b> {
+    value: &'b mut T,
+    borrow: BorrowRefMut<'b>,
+}
+```
+
+> `Ref` and `RefMut` are both two words in size, and so there will likely never be enough `Ref`s or `RefMut`s in existence to overflow half of the `usize` range. Thus, a `BorrowFlag` will probably never overflow or underflow. However, this is not a guarantee, as a pathological program could repeatedly create and then `mem::forget` `Ref`s or `RefMut`s. Thus, all code must explicitly check for overflow and underflow in order to avoid unsafety, or at least behave correctly in the event that overflow or underflow happens.
+>
+>  Internal std doc of BorrowFlag
+
+One important distinction between `RefCell` and `Cell` is the ability to*`try_borrow` (and the panicking version`borrow`):*It immutably borrows the wrapped value, returning an error if the value is currently mutably borrowed**.**The borrow lasts until the returned `Ref` exits scope.*
+*[`try_borrow_mut`](https://doc.rust-lang.org/std/cell/struct.RefCell.html#method.try_borrow_mut) (panicking version `borrow_mut`):*Mutably borrows the wrapped value, returning an error if the value is currently borrowed. The borrow lasts until the returned `RefMut` or all `RefMut`s derived from it exit scope. The value cannot be borrowed while this borrow is active.*We've covered most of details and important points of how managed interior mutability is possible in Rust.

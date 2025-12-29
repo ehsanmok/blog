@@ -1,0 +1,11 @@
+---
+title: "Announcement 📢 Create your own programming language with Rust"
+author: "Ehsan M. Kermani"
+date: "2020-06-08"
+categories: [Rust]
+tags: [compiler, programming language, rustlang]
+---
+
+After almost a year from my last blog post, in this short post I'm very happy to announce that I'm writing a free online book where early chapters are [available](http://createlang.rs) now. I've explained my motivations and goals in the introduction. The accompanying codes are also available on my [GitHub](https://github.com/ehsanmok/create-your-own-lang-with-rust).
+
+Feedbacks are welcome and happy learning. If you've found the book useful, please consider donating to any of the organizations listed at either GitHub readme or at the end of the introduction chapter.

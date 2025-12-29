@@ -1,0 +1,129 @@
+---
+title: "What's up with word embedding?"
+author: "Ehsan M. Kermani"
+date: "2017-07-12"
+categories: [Deep Learning, Machine Learning, NLProc]
+---
+
+Word embedding is one of the interesting areas of research in Natural Language Processing. There are huge amount of materials with a lot of interesting ideas. I have been studying some of them lately and in this post, I'd like to create a*brief account*of the ideas I have found most interesting so far.
+
+## Word2Vec (Yet another explanation)
+
+![youtho](images/youtho.jpg)
+Let's start with the intuitive [distributional hypothesis](https://en.wikipedia.org/wiki/Distributional_semantics#Distributional_hypothesis)
+> A*word is characterized by the company it keeps*or*linguistic items with similar distributions have similar meanings.*In other words, we expect to see words used in similar*contexts*have similar*meaning (semantic relations)*.
+The goal is to build a mathematical model such that given a word (token) $w,$ we can assign real-valued vector $v\_w$ (in some space), so that interesting properties of words such as semantic relations, are preserved  for example, by using their inner product or [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) of vectors as metric.
+[Mikolov et. al.](https://arxiv.org/abs/1301.3781) constructed such vector representations of words from natural language text that preserve semantic relations via simple quantities of vectors such as their*inner product*. Their*set of models*is called Word2Vec. Intuitively, there are two basic ideas; for a series of words (tokens) $w\_1, w\_2, \cdots, w\_T$ in a corpus/*Text*data, and a choice of*context*$C$ i.e. a*window (set)*of words, either find the probability of some word $w\_i$ given the some word in the context $c \in C$ that is, $p(w\_i | c)$*or*find the probability of observing a context given a word $w\_i,$ that is, $p(c|w\_i).$ The first model is called Continuous Bag of Words (CBOW) and the second model is called SkipGram. (If you've never heard of these terms before, I suggest reading [this note](https://web.stanford.edu/class/cs224n/lecture_notes/cs224n-2017-notes1.pdf).)
+One of well-known tasks that Word2Vec performed well is the analogy task. Word2Vec captures the following type of relations between words:
+Formally, let $v\_{\text{w}}$ be a vector representation (embedding) of a word $w$ in some Euclidean vector space. Then
+
+ $v\_{\text{man}} - v\_{\text{woman}} \simeq v\_{\text{king}} - v\_{\text{queen}}$
+
+and one such similarity measure $\simeq$ can be [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) of vectors, for example.
+
+## SkipGram model
+
+Given the notations above and the conditional probabilities $p(c|w),$ the goal is to find some parameters $\theta$ of the parametrized $p(c|w; \theta)$ in order to maximize the corpus probability, i.e.
+
+$\text{argmax}\_{\theta} \prod\_{w \in W} \left(\prod\_{c \in C(w)} p(c | w; \theta) \right) \;\;\;\; (\star)$
+
+There is an independent assumption (reflected in $\prod\_{c \in C(w)} p(c | w; \theta) $) that given a word then observing different words in a context are independent from each other and those events for each word themselves are independent (reflected in the outer $\prod\_{w \in \text{W}}$). Note also that contexts are words and SkipGram models each context given a word*independently*.
+One approach to model the conditional probabilities $p(c | w; \theta)$ so as to connect the word-vector representation idea, is via softmax function
+
+$p(c | w; \theta) = \dfrac{\exp(\langle v\_c, v\_w \rangle)}{\sum\_{c' \in C(w)}\exp(\langle v\_c', v\_w \rangle)} \;\;\;\; (\star \star)$
+
+where $v\_c, v\_w$ are the desired vector representations for $c, w,$ and $\langle v\_c, v\_w \rangle$ is the (Euclidean) inner product. Note that $\theta$ is the set of all $v\_w, v\_c$ for all $w \in W$ and $c \in C,$ so there are $|W| \times |C| \times d$ number of parameters where $d$ is the embedding dimension.
+This representation can be considered as a shallow neural network with softmax output.
+To address some of the difficulties on the training such as finding the denominator in the softmax there're two proposed solutions; 1)*hierarchical softmax*2)*negative sampling*.  In practice negative sampling is more favorable. To get to know more I recommend reading [Word2Vec explained](https://arxiv.org/abs/1402.3722) paper and more expanded version in [Word2Vec parameter learning explained](https://arxiv.org/abs/1411.2738).
+
+### Point-wise mutual information matrix (PMI)
+
+Recall that if two random outcomes $x, y$ are independent, then $p(x,y) = p(x) p(y).$ That is, their join distribution factorizes into their individual distributions. To have a general measure of this phenomenon, given any two (not necessarily independent) random outcomes, we can define their Point-wise Mutual Information as $\text{pmi}(x, y) = \log \left(\dfrac{p(x,y)}{p(x)p(y)} \right).$ In case of word-context pairs, we can define the PMI matrix whose entries are $\text{pmi}(w, c)$ which is $|W| \times |C|$ matrix.
+
+One can use Singular Value Decomposition on the PMI matrix to get lower dimensional representations of words. Let $U \Sigma V^T$ be the SVD of the PMI matrix, then for example, the symmetric factorization $W = U \Sigma^{\frac 12}$ and $C = V \Sigma^{\frac 12}$ provide word and context representations, respectively. However, SVD provides the best rank $d$ approximation wrt $L\_2$ matrix norm, and in practice, this is not enough!
+
+>*What's the relation between SkipGram and PMI?*### SkipGram with negative sampling (SGNS) vs. PMI
+
+[Levy-Goldberg](https://papers.nips.cc/paper/5477-neural-word-embedding-as-implicit-matrix-factorization.pdf) showed that if you take the word embedding $W$ and the context embedding $C$ obtained in SGNS, then $WC^T$ is in fact, a factorization of (shifted) [PMI](https://en.wikipedia.org/wiki/Pointwise_mutual_information) matrix. In other words, $\langle v\_w, v\_c \rangle  \simeq \text{PMI}(w, c) - \log k$ where $k$ is the number of negative samples. This result bridges the neural network method with the traditional [vector space model of semantics](https://arxiv.org/pdf/1003.1141.pdf). Another important advantage is that**PMI approach suffers from scalability but SGNS is very scalable, indeed.**### Variants of SGNS
+
+#### i) NCE:
+
+[Minh et. al](http://papers.nips.cc/paper/5165-learning-word-embeddings-efficiently-with-noise-contrastive-estimation.pdf) used noise contrastive estimation (NCE) to model the probability of a word-context coming from correct sample vs. incorrect one. Levy-Goldberg also showed that this approach is equivalent to factorizing the word-context matrix whose entries are shifted $\log p(w|c).$
+
+#### ii) GloVe:
+
+Another approach is described in [GloVe: Global vectors for word representations](https://nlp.stanford.edu/pubs/glove.pdf).  The idea is to related*inner product*of desired vectors to the*ratio*of the context-word conditional probabilities. The optimization function that is
+
+$\sum\_{i,j} f(X\_{ij}) (v\_{w\_i}^T v\_{c\_j} - \log X\_{ij} + b\_{w} + b\_c)$
+
+where $X\_{ij}$ is the element $(i, j)$ of the matrix of word-word co-occurence count $X,$ $b\_w, b\_c$ are biases and $f$ is some function (found empirically) with some desired properties. Despite GloVe gives more parameters to the model,**its performance is quite*similar*to SGNS**. In fact, by fixing the biases to be the logarithm of word and context counts, GloVe also factorizes a shifted version of PMI matrix.
+
+### SGNS as weighted logistic PCA and its generalization
+
+Levy-Goldberg have also provided a much more clear description of the SGNS model, which briefly goes like this:
+After taking $\log$ from $(\star)$ and using the softmax $(\star \star)$ it  becomes equivalent to
+
+$\text{argmax}\_{\theta} \sum\_{(w, c) \in D} \log p(c | w; \theta) = \sum\_{(w, c) \in D} (v\_c^T v\_w - \log \sum\_{c'} \exp(v\_{c'}^Tv\_w))$
+
+where $D$ is the set of all word-context pairs from $\text{Text}.$
+The role of Negative Sampling is to approximation the softmax log of probabilities. Basically, to approximate the above objective, we change it to a classification task of $p(D=1|w,c) = \dfrac{1}{1 + \exp(v\_c^Tv\_w)},$ which is given a word-context $(w, c)$ whether it is coming from our $\text{Text}$ or not $p(D=0 | w,c).$ So we need to gather some noise word-contexts $D'$. Mikolov et. al, did it by randomly sampling from*smoothed*unigram distribution (i.e. to power $0.75$), $k$ context noises $c\_{\text{Noise}}$ (in short $c\_N$) for each word $w.$
+Note that without negative samples, the above objective can be maximized*when all word and context vectors become equal  $v\_w = v\_c$ with big enough inner product*. Therefore, with negative sampling, the approximation goes like this;
+
+$\text{argmax}\_{\theta} \prod\_{(w, c) \in D} p(D=1|c,w;\theta)\prod\_{(w, c) \in D'} p(D=0|c,w ; \theta)$
+
+After some standard simplifications (see [Word2Vec Explained](https://arxiv.org/abs/1402.3722)),  the above objective becomes
+
+$\text{argmax}\_{\theta} \sum\_{(w,c) \in D} \log \sigma(v\_c^Tv\_w) + \sum\_{(w, c) \in D'} \log \sigma (-v\_c^Tv\_w) \;\;\;\; (\star \star \star)$
+
+where $\sigma$ is the Sigmoid function.
+In the presence of negative samples $c\_N$, for each $(w, c) \in D,$ we are computing
+
+$\log \sigma(v\_c^Tv\_w) + \sum\_{(w, c) \in D'} \log \sigma (-v\_c^Tv\_w) =\log \sigma(v\_c^Tv\_w) + k \mathbb{E}\_{c\_N} [\log \sigma (-v\_c^Tv\_w)]$
+
+For a given $(w, c)$ let $n\_{w,c}$ be the number of times they appear in $D.$ (this about $D$ like matrix, $n\_{w,c}$ is the entry in row $w$ and column $c$). So the SGNS objective (equation $(\star \star \star)$) summed with multiplicities becomes
+
+$\sum\_{(w, c)} n\_{w, c} (\log \sigma(v\_c^Tv\_w) + k \mathbb{E}\_{c\_N} [\log \sigma (-v\_c^Tv\_w)])$
+
+[Landgrad-Bellay](https://arxiv.org/abs/1705.09755) has recently provided another interpretation of the above SGNS objective and they showed that it is equivalent to the*weighted logistic*PCA. The generalization of this fact is captured through [exponential family PCA](https://www.cs.jhu.edu/~jason/papers/cotterell+al.eacl17.pdf).
+
+## Enriching the word embedding
+
+Another interesting idea is to do with the recent work of [Avraham-Goldberg](https://arxiv.org/pdf/1704.01938.pdf) to include morphological information of words with Part of Speech (POS) tagging with preprocessing of the text and consider the*pair*$(w, \text{POS})$ instead of the word $w$ alone. The result is having different vector representations for cases like $\text{plant}\_{\text{NOUN}}$ and $\text{plant}\_{\text{VERB}}.$
+
+## Geometry of the word embedding
+
+To understand geometric structures of data, one can look into [Topological Data Analysis](https://en.wikipedia.org/wiki/Topological_data_analysis) and its methods such as [Persistent Homology](https://en.wikipedia.org/wiki/Persistent_homology). [Zhu](http://pages.cs.wisc.edu/~jerryzhu/pub/homology.pdf) has an introduction of such approach for Natural Language Processing. In basic algebraic topology (with enough assumption), the dimension of zeroth homology group (zeroth Betti number) of a topological space is the number of connected components and its first Betti number counts the number of holes. Given some data points, the idea of persistent homology is to*track homological classes along increasing neighborhoods of (simplicial complexes) data points*.
+Recently [Michel et. al](https://arxiv.org/abs/1705.10900) using persistent homological approach concluded that such method doesn't have positive impact on document classification and clustering tasks. They have used Gromov-Haussdorff distance (which is insensitive to isometries) and defined two documents have the same "geometry" if their GH distance if zero. However, it could be argued that this definition of "geometry" is very limiting and doesn't capture all existing structures in document data!
+
+## Generalization to graph and manifold embedding
+
+Arora et. al. in their work, [RAND-WALK: A latent variable model approach to word embeddings](https://arxiv.org/abs/1502.03520) with generative modelling approach, provided more justifications for relations between PMI, Word2Vec and GloVe.
+[Hashimoto-Alvarez-Melis](https://arxiv.org/abs/1509.05808) considered the task of word embedding as*metric recovery*. That is, given a word embedding $v\_{w\_1}, \cdots, v\_{w\_m}$ over a document with $s$ sentences with total number $m$ words and $n$ vocabulary (unique words), one can view $p(c\_j|w\_i)$ (where context is a word as well and there's no separate context embedding vectors, such as SGNS throwing away the context vectors) as a Markov (Gaussian) random walk $X\_1, \cdots, X\_m$ with transition function
+
+$p(X\_t = v\_{w\_j} | X\_{t-1}=v\_{w\_i}) = \dfrac{\exp(- \|v\_{w\_i} - v\_{w\_j} \|\_2^2)}{\sum\_{k=1}^n \exp(- \|v\_{w\_i} - v\_{w\_k} \|\_2^2)}$
+
+then there exists a sequence $a\_i^m, b\_j^m$ such that in probability, as $m \to \infty,$
+
+$-\log(C\_{ij}) - a\_i^m \stackrel{p}{\longrightarrow} \|v\_{w\_i} - v\_{w\_j} \|\_2^2 + b\_j^m$
+
+where $C = [C\_{ij}]$ is the co-occurence matrix over our document. (matrix version of earlier $D$ with contexts as words). This described**log-linear relation between co-occurences and distance.**The metric recovery holds in more general setting for random walk over*unweighted directed graphs and data manifold.*Intuitively,
+
+$-\log(\text{co-occurence}) \stackrel{\text{converges}}{\longrightarrow} \text{geodesic}(v\_{w\_i}, v\_{w\_j})^2$
+
+for some meaning of convergence and distance/geodesic.
+
+## Hyperbolic embedding
+
+We can view words as symbolic data and try to represent their relations with graphs. To learn a representation of symbolic data with hierarchical relations (with existence of power-law distribution), one well-known approach is embedding the data in a**non-Euclidean space**, such as $d$-dimensional*Poincaré ball*$\mathbb{B}^d = \{x \in \mathbb{R}^d | \|x\|\_2 < 1\}$ (or complex upper half-plane $\mathbb{H}$) which is the Euclidean $d$ dimensional ball equipped with (non-Euclidean) Riemannian metric. In two closely published papers [Chamberlain et. al](https://arxiv.org/abs/1705.10359) studied hyperbolic embedding for $2$-dimensional Poincaré ball and [Nickel-Kiela](https://arxiv.org/abs/1705.08039) for a general $d$-dimensional Poincaré ball. They examined such embeddings for different types of symbolic data such as text and network graphs and showed improvements as well as the ability of capturing more information in lower dimension because hyperbolic spaces are richer than flat Euclidean spaces.
+
+## Encode-Decoder
+
+Another line of ideas is related to encode-decoder (seq2seq) approach where either encoder or decoder can be any of Convolutional NN or Recurrent NN such as LSTM or GRU. The basic idea is to encode a sequence of data (sentences) and try to reconstruct them back with decoder. In the meantime, compact representations are constructed. One such successful approach has been introduced by Kiros et. al. in their [Skip-Thought Vectors](https://arxiv.org/abs/1506.06726) with GRU as encoder and decoder. Given a tuple of sentences $(s\_{i-1}, s\_i, s\_{i+1}),$ let $w\_i^t$ be the $t$-th word for sentence $s\_i$ and let $v\_{w\_i^t}$ be its embedding.  The objective is to maximize the log-probabilities for the**forward and backward sentences conditioned on the encoder representation**:
+
+$\sum\_t \log p(w\_{i+1}^t | w\_{i+1}^{< t}, h\_i) +\sum\_t \log p(w\_{i-1}^t | w\_{i-1}^{< t}, h\_i)$
+
+where $w\_{i+1}^{< t}$ is the sequence of words in sentence $s\_i$ coming before the $t$-th words and $h\_i$ is the hidden state of the encoder GRU.
+
+## Conclusion
+
+Thanks for reading this post!  I'm still learning and will try to update this post if I find more interesting ideas. If you have any thoughts, please comment below.

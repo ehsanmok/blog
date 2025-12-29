@@ -1,0 +1,496 @@
+/* ========================================
+   Ehsan's Blog - Custom Styles
+   Modern, Clean, Professional Design
+   ======================================== */
+
+/* ========== COLOR PALETTE ========== */
+:root {
+    --primary-color: #2563eb;
+    --primary-dark: #1e40af;
+    --accent-color: #06b6d4;
+    --accent-light: #67e8f9;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --border-color: #e5e7eb;
+    --code-bg: #f3f4f6;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --gradient-primary: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+    --gradient-accent: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%);
+}
+
+/* ========== DARK MODE COLORS ========== */
+body.quarto-dark {
+    --primary-color: #3b82f6;
+    --primary-dark: #2563eb;
+    --accent-color: #22d3ee;
+    --accent-light: #67e8f9;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --border-color: #374151;
+    --code-bg: #1f2937;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
+}
+
+/* ========== TYPOGRAPHY ========== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-primary);
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+    margin-top: 2em;
+    margin-bottom: 0.8em;
+}
+
+h1 {
+    font-size: 2.5rem;
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+h2 {
+    font-size: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.3em;
+}
+
+/* ========== HOMEPAGE HERO - HIDDEN ========== */
+.quarto-title-banner {
+    display: none !important;
+}
+
+/* ========== LISTING PAGE IMPROVEMENTS ========== */
+.quarto-listing {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 3rem;
+}
+
+.quarto-listing-default .list,
+.quarto-listing-grid .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 0;
+}
+
+.quarto-listing-default .listing-item,
+.quarto-listing-grid .listing-item {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0;
+    margin-bottom: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+}
+
+.quarto-listing-default .listing-item:hover,
+.quarto-listing-grid .listing-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.listing-item-img-placeholder {
+    display: none !important;
+}
+
+..listing-item img.thumbnail-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin: 0 !important;
+}
+
+/* Hide posts without images gracefully */
+.quarto-post:not(:has(img.thumbnail-image)) .listing-image {
+    display: none;
+}
+
+.listing-item .listing-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 1rem 1.5rem 0.5rem 1.5rem;
+    line-height: 1.3;
+}
+
+.listing-item .listing-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.listing-item .listing-title a:hover {
+    color: var(--primary-color);
+}
+
+.listing-item .listing-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin: 0 1.5rem;
+    line-height: 1.5;
+}
+
+.listing-item .listing-description {
+    padding: 0 1.5rem 1rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    flex-grow: 1;
+}
+
+/* ========== CATEGORY BADGES ========== */
+.listing-categories {
+    padding: 0 1.5rem 1rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.quarto-category {
+    background: var(--gradient-accent);
+    color: white;
+    padding: 0.3em 0.8em;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+    display: inline-block;
+}
+
+.quarto-category:hover {
+    transform: scale(1.05);
+    color: white;
+    text-decoration: none;
+}
+
+/* ========== READING TIME ========== */
+.listing-reading-time,
+.article-reading-time {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.listing-reading-time::before {
+    content: "📖 ";
+}
+
+/* ========== CODE BLOCKS ========== */
+pre.sourceCode {
+    border-radius: 8px;
+    padding: 1.5em;
+    margin: 1.5em 0;
+    background-color: var(--code-bg) !important;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+}
+
+code {
+    background-color: var(--code-bg);
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+}
+
+.code-with-filename .code-with-filename-file {
+    background: var(--gradient-accent);
+    color: white;
+    padding: 0.7em 1.2em;
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    font-size: 0.9em;
+    border: none;
+}
+
+/* ========== MATH DISPLAY ========== */
+.mjx-chtml {
+    font-size: 1.15em !important;
+}
+
+mjx-container[display="true"] {
+    margin: 1.5em 0;
+    padding: 1em;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+/* ========== IMAGES ========== */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2em auto;
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+}
+
+/* ========== NAVIGATION BAR ========== */
+.navbar {
+    background: #000000 !important;
+    border-bottom: none;
+    box-shadow: var(--shadow-md);
+    padding: 0.8rem 1rem;
+}
+
+.navbar-brand {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+    font-size: 1.4rem !important;
+    letter-spacing: -0.02em;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #ffffff !important;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--accent-color) !important;
+}
+
+.navbar .bi {
+    color: #ffffff !important;
+    font-size: 1.2rem;
+}
+
+.navbar .bi:hover {
+    color: var(--accent-color) !important;
+}
+
+/* Grothendieck-Riemann-Roch Formula */
+.grr-formula {
+    color: #ffffff;
+    font-family: "Times New Roman", Georgia, serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    text-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+}
+
+.grr-formula sub {
+    font-size: 0.7em;
+}
+
+@media (min-width: 992px) {
+    .grr-formula {
+        display: inline-block;
+    }
+}
+
+.navbar>.container-fluid {
+    position: relative;
+}
+
+/* ========== TABLE OF CONTENTS ========== */
+#TOC {
+    border-left: 3px solid var(--primary-color);
+    padding-left: 1.5em;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 1.5em;
+}
+
+#TOC ul {
+    list-style: none;
+    padding-left: 1em;
+}
+
+#TOC a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+#TOC a:hover {
+    color: var(--primary-color);
+}
+
+/* ========== LINKS ========== */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* ========== BLOCKQUOTES ========== */
+blockquote {
+    border-left: 4px solid var(--primary-color);
+    padding-left: 1.5em;
+    margin: 1.5em 0;
+    font-style: italic;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 1em 1em 1em 1.5em;
+    border-radius: 0 8px 8px 0;
+}
+
+/* ========== TABLES ========== */
+table {
+    width: 100%;
+    margin: 1.5em 0;
+    border-collapse: collapse;
+    box-shadow: var(--shadow-sm);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background: var(--gradient-accent);
+    color: white;
+}
+
+th,
+td {
+    padding: 0.8em 1em;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tbody tr:hover {
+    background: var(--bg-secondary);
+}
+
+/* ========== FOOTER ========== */
+.nav-footer {
+    border-top: 1px solid var(--border-color);
+    margin-top: 4em;
+    padding-top: 2em;
+    background: var(--bg-secondary);
+}
+
+.nav-footer a {
+    color: var(--text-secondary);
+    margin: 0 0.5em;
+    transition: color 0.2s ease;
+}
+
+.nav-footer a:hover {
+    color: var(--primary-color);
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+    .quarto-listing-default .list {
+        grid-template-columns: 1fr;
+    }
+
+    .quarto-title-banner h1.title {
+        font-size: 2.5rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    body {
+        font-size: 16px;
+    }
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.listing-item {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ========== SHOW ALL POSTS (Override list.js pagination) ========== */
+.quarto-post {
+    display: flex !important;
+}
+
+.quarto-listing .list .quarto-post {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ========== DISQUS COMMENTS ========== */
+#disqus_thread {
+    margin-top: 3em;
+    padding-top: 2em;
+    border-top: 2px solid var(--border-color);
+}
+
+/* ========== MISCELLANEOUS ========== */
+.page-columns {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Wider content for blog posts */
+article .page-columns {
+    max-width: 1400px;
+}
+
+/* Ensure body column is wider */
+.column-body {
+    width: 100%;
+}
+
+.quarto-title-block {
+    margin-bottom: 2em;
+}
+
+.article-metadata {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 2em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid var(--border-color);
+}

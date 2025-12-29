@@ -1,0 +1,102 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Ehsan's Blog"
+  site-url: https://ehsanmkermani.com
+
+  navbar:
+    background: dark
+    search: true
+    pinned: true
+    left:
+      - href: index.qmd
+        text: Home
+      - href: posts.qmd
+        text: Posts
+      - href: about.qmd
+        text: About
+    right:
+      - icon: twitter
+        href: https://x.com/ehsanmok
+        aria-label: X
+      - icon: github
+        href: https://github.com/ehsanmok
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://www.linkedin.com/in/ehsanmkermani/
+        aria-label: LinkedIn
+      - icon: rss
+        href: posts.xml
+        aria-label: RSS Feed
+
+  page-footer:
+    center: "© 2025 Ehsan M. Kermani"
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-tools: false
+    code-fold: false
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    highlight-style: github
+    html-math-method: mathjax
+    max-width: 1400px
+    grid:
+      body-width: 1000px
+      sidebar-width: 250px
+      margin-width: 250px
+    comments:
+      utterances:
+        repo: ehsanmok/blog-comments
+        theme: github-light
+    include-in-header:
+      - text: |
+          <script>
+          window.MathJax = {
+            tex: {
+              inlineMath: [['$', '$'], ['\\(', '\\)']],
+              displayMath: [['$$', '$$'], ['\\[', '\\]']],
+              processEscapes: true
+            }
+          };
+          </script>
+      - text: |
+          <script>
+          // Add reading time calculation
+          document.addEventListener('DOMContentLoaded', function() {
+            const article = document.querySelector('.page-columns');
+            if (article) {
+              const text = article.textContent;
+              const wordCount = text.trim().split(/\s+/).length;
+              const readingTime = Math.ceil(wordCount / 200);
+              const metadata = document.querySelector('.quarto-title-meta');
+              if (metadata && readingTime > 0) {
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'quarto-title-meta-heading';
+                timeDiv.innerHTML = '<div class="quarto-title-meta-heading">Reading Time</div><div class="quarto-title-meta-contents"><p class="article-reading-time">' + readingTime + ' min read</p></div>';
+                metadata.appendChild(timeDiv);
+              }
+            }
+            // Add GRR formula to navbar (centered)
+            const navbarContainer = document.querySelector('.navbar > .container-fluid');
+            if (navbarContainer) {
+              const grr = document.createElement('span');
+              grr.className = 'grr-formula';
+              grr.innerHTML = 'ch(f<sub>!</sub>ℱ) = f<sub>*</sub>(ch(ℱ) · td(T<sub>f</sub>))';
+              navbarContainer.appendChild(grr);
+            }
+          });
+          </script>
+
+execute:
+  freeze: auto
+
