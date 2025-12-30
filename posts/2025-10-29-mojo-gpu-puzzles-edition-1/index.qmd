@@ -1,0 +1,33 @@
+---
+title: "Mojo GPU Puzzles Edition 1"
+author: "Ehsan M. Kermani"
+date: "2025-10-29"
+categories: [Mojo, GPU, Tutorial, Modular]
+description: "A hands-on guide that teaches GPU programming through 34 progressive challenges - learn by doing, not lectures."
+---
+
+I'm excited to announce the release of **Mojo GPU Puzzles Edition 1**, a hands-on guide that teaches GPU programming through 34 progressive challenges.
+
+GPU programming has become essential infrastructure, but most resources bury you in theory before you write a single line of code. Mojo GPU Puzzles flips this approach - you start coding immediately. No abstract lectures, just practical problems that build real understanding.
+
+## Why Mojo for GPU Programming?
+
+- Python-like syntax with systems performance
+- Zero-cost abstractions
+- Strong type system catching errors at compile time
+- Cross-hardware portability (NVIDIA, AMD, Apple GPUs)
+- Built-in tensor support
+- Direct access to GPU intrinsics
+- Safer than C/CUDA
+- Write once, run on multiple GPU vendors
+
+## What You'll Learn
+
+The same Mojo code works across NVIDIA, AMD, and Apple GPUs (partial support). Through these puzzles, you'll understand both the "why" and the "how" of GPU programming.
+
+All 34 puzzles are live and ready. Start with Puzzle 1, work through thread indexing, and build your way to tensor cores.
+
+**Learn GPU programming by actually programming GPUs.**
+
+**Start now:** [puzzles.modular.com](https://puzzles.modular.com)
+
