@@ -2,6 +2,13 @@
   {
     "listing": "/posts.html",
     "items": [
+      "/posts/2025-10-29-mojo-gpu-puzzles-edition-1/index.html",
+      "/posts/2025-02-06-paged-attention-prefix-caching-max-serve/index.html",
+      "/posts/2025-01-21-hands-on-with-mojo-24-6/index.html",
+      "/posts/2024-10-01-hands-on-with-mojo-24-5/index.html",
+      "/posts/2024-06-25-whats-new-in-max-24-4/index.html",
+      "/posts/2024-05-29-what-ownership-is-really-about/index.html",
+      "/posts/2024-03-21-semantic-search-max-engine/index.html",
       "/posts/2023-12-08-modal-labs-deep-dive/index.html",
       "/posts/2023-11-23-the-core-of-attention-is-communication/index.html",
       "/posts/2023-11-19-rust-and-node-js-harmonizing-performance-and-safety/index.html",
@@ -30,6 +37,13 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2025-10-29-mojo-gpu-puzzles-edition-1/index.html",
+      "/posts/2025-02-06-paged-attention-prefix-caching-max-serve/index.html",
+      "/posts/2025-01-21-hands-on-with-mojo-24-6/index.html",
+      "/posts/2024-10-01-hands-on-with-mojo-24-5/index.html",
+      "/posts/2024-06-25-whats-new-in-max-24-4/index.html",
+      "/posts/2024-05-29-what-ownership-is-really-about/index.html",
+      "/posts/2024-03-21-semantic-search-max-engine/index.html",
       "/posts/2023-12-08-modal-labs-deep-dive/index.html",
       "/posts/2023-11-23-the-core-of-attention-is-communication/index.html",
       "/posts/2023-11-19-rust-and-node-js-harmonizing-performance-and-safety/index.html",
