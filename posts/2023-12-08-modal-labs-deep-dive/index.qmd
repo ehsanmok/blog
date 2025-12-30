@@ -46,14 +46,14 @@ modal environment create dev
 modal config set-environment dev
 ```
 
-**Note: All codes are available in [my GitHub](https://github.com/ehsanmok/blog/tree/main/modal-deep-dive).**
+**Note: All codes are available in [my GitHub](https://github.com/ehsanmok/blog/tree/main/code/modal-deep-dive).**
 
 ### Runtime Spec via stub
 
 Let's see what that means. First,
 
 ```bash
-git clone https://github.com/ehsanmok/blog && cd blog/modal-deep-dive
+git clone https://github.com/ehsanmok/blog && cd blog/code/modal-deep-dive
 ```
 
 and have a look at `lib/empty.py`

@@ -8,7 +8,7 @@ tags: [deep-learning, high-performance, neon, node.js, rustlang]
 
 ## Prelude
 
-In the Rust world, the interaction between Python and Rust is very well-known through the amazing [PyO3](https://github.com/PyO3/pyo3) ecosystem. There is a similar relation between Python and Javascript in particular Node.js that I'm going to describe in this post. All the code is available [here](https://github.com/ehsanmok/blog/tree/main/rust-node).
+In the Rust world, the interaction between Python and Rust is very well-known through the amazing [PyO3](https://github.com/PyO3/pyo3) ecosystem. There is a similar relation between Python and Javascript in particular Node.js that I'm going to describe in this post. All the code is available [here](https://github.com/ehsanmok/blog/tree/main/code/rust-node).
 
 Most programming language interactions happen through C layer ABI i.e. FFI. However, interacting Rust with JavaScript is commonly achieved through WebAssembly (WASM). Furthermore, Node.js (written in C++) [addon-api](https://nodejs.org/api/addons.html) offers writing extending Node functionalities through C++ (FFI) without stepping into the WASM and the Rust ecosystem has created two frameworks on top*[napi-rs](https://github.com/napi-rs/napi-rs)*[neon](https://github.com/neon-bindings/neon)
 
