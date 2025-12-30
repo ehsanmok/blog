@@ -1,0 +1,22 @@
+---
+title: "Agentic Building Blocks: Creating AI Agents with MAX Serve and OpenAI Function Calling"
+author: "Ehsan M. Kermani"
+date: "2025-01-30"
+categories: [AI, LLM, MAX, Agents]
+description: "Learn how to build AI agents by integrating MAX Serve with OpenAI's function calling capabilities - originally published on Modular's blog."
+---
+
+I wrote a blog post on the [Modular blog](https://www.modular.com/blog) about building AI agents using MAX Serve and OpenAI's function calling capabilities.
+
+AI agents are becoming increasingly important in modern applications. This article provides a practical guide to creating dynamic and responsive AI agents using Modular's MAX Serve infrastructure.
+
+**Key topics covered:**
+
+- Introduction to agentic AI patterns
+- Setting up MAX Serve for agent workflows
+- Integrating OpenAI function calling
+- Step-by-step guide to building your first agent
+- Best practices for production deployments
+
+**Read the full article:** [Agentic Building Blocks: Creating AI Agents with MAX Serve and OpenAI Function Calling](https://www.modular.com/blog/agentic-building-blocks-creating-ai-agents-with-max-serve-and-openai-function-calling)
+

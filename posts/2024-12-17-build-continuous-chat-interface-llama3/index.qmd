@@ -1,0 +1,22 @@
+---
+title: "Build a Continuous Chat Interface with Llama 3 and MAX Serve"
+author: "Ehsan M. Kermani"
+date: "2024-12-17"
+categories: [AI, LLM, MAX, Tutorial]
+description: "A step-by-step guide to building a chat application using Llama 3 and MAX Serve - originally published on Modular's blog."
+---
+
+I wrote a blog post on the [Modular blog](https://www.modular.com/blog) providing a comprehensive guide to building a continuous chat interface using Llama 3 and MAX Serve.
+
+This tutorial walks through the entire process of creating a responsive chat application, from initial setup to deployment.
+
+**Key topics covered:**
+
+- Setting up MAX Serve for LLM inference
+- Configuring Llama 3 for chat applications
+- Building a continuous conversation interface
+- Managing chat context and history
+- Deployment strategies and best practices
+
+**Read the full article:** [Build a Continuous Chat Interface with Llama 3 and MAX Serve](https://www.modular.com/blog/build-a-continuous-chat-interface-with-llama-3-and-max-serve)
+

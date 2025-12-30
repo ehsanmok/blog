@@ -1,0 +1,23 @@
+---
+title: "Paged Attention & Prefix Caching Now Available in MAX Serve"
+author: "Ehsan M. Kermani"
+date: "2024-11-01"
+categories: [AI, LLM, MAX, Performance]
+description: "Announcing state-of-the-art optimizations for LLM inference in MAX Serve - originally published on Modular's blog."
+---
+
+I wrote a blog post on the [Modular blog](https://www.modular.com/blog) announcing the integration of Paged Attention and Prefix Caching into MAX Serve.
+
+These features bring state-of-the-art optimizations to LLM inference, significantly improving computational efficiency and memory management.
+
+**Key topics covered:**
+
+- What is Paged Attention and why it matters
+- How Prefix Caching improves inference performance
+- Addressing computational challenges in Multi-Head Attention
+- Installation and setup instructions
+- Commands for enabling these optimizations
+- Performance benchmarks and improvements
+
+**Read the full article:** [Paged Attention & Prefix Caching Now Available in MAX Serve](https://www.modular.com/blog/paged-attention-prefix-caching-now-available-in-max-serve)
+
