@@ -1,0 +1,22 @@
+---
+title: "What's New in MAX 24.4? MAX on macOS, Fast Local Llama3, Native Quantization and GGUF Support"
+author: "Ehsan M. Kermani"
+date: "2024-06-25"
+categories: [MAX, AI, LLM, Release]
+description: "Exploring the new features in MAX 24.4 including macOS support and Llama3 - originally published on Modular's blog."
+---
+
+I wrote a blog post on the [Modular blog](https://www.modular.com/blog) announcing the new features in MAX 24.4.
+
+This release brings exciting capabilities including native macOS support, fast local Llama3 inference, native quantization, and GGUF format support.
+
+**Key topics covered:**
+
+- MAX now available on macOS
+- Fast local Llama3 inference capabilities
+- Native quantization support for efficient model deployment
+- GGUF format support for broader model compatibility
+- Performance improvements and benchmarks
+
+**Read the full article:** [What's New in MAX 24.4?](https://www.modular.com/blog/whats-new-in-max-24-4-max-on-macos-fast-local-llama3-native-quantization-and-gguf-support)
+

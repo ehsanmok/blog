@@ -1,0 +1,22 @@
+---
+title: "Semantic Search with MAX Engine"
+author: "Ehsan M. Kermani"
+date: "2024-03-21"
+categories: [AI, MAX, Search, Tutorial]
+description: "Building semantic search applications using MAX Engine - originally published on Modular's blog."
+---
+
+I wrote a blog post on the [Modular blog](https://www.modular.com/blog) about building semantic search applications using MAX Engine.
+
+Semantic search goes beyond keyword matching to understand the meaning and context of queries. This article demonstrates how to leverage MAX Engine for building powerful semantic search systems.
+
+**Key topics covered:**
+
+- Introduction to semantic search concepts
+- Setting up MAX Engine for embedding generation
+- Building a semantic search pipeline
+- Practical implementation examples
+- Performance considerations and best practices
+
+**Read the full article:** [Semantic Search with MAX Engine](https://www.modular.com/blog/semantic-search-with-max-engine)
+

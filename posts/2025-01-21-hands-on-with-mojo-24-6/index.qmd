@@ -1,0 +1,23 @@
+---
+title: "Hands-on with Mojo 24.6"
+author: "Ehsan M. Kermani"
+date: "2025-01-21"
+categories: [Mojo, Programming Languages, Tutorial]
+description: "A practical walkthrough of the new features in Mojo 24.6 - originally published on Modular's blog."
+---
+
+I wrote a blog post on the [Modular blog](https://www.modular.com/blog) exploring the new features introduced in Mojo 24.6.
+
+This release brings significant improvements to argument conventions, memory management, and reference tracking. The article provides practical examples to help developers understand and implement these enhancements.
+
+**Key topics covered:**
+
+- New `mut` keyword for mutable arguments
+- Origins system for reference tracking
+- Improved memory management
+- New collection types
+- Practical code examples demonstrating each feature
+
+**Read the full article:** [Hands-on with Mojo 24.6](https://www.modular.com/blog/hands-on-with-mojo-24-6)
+
+
