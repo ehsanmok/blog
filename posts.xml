@@ -58,7 +58,7 @@ font-style: inherit;">modal</span> environment create dev</span>
 <span id="cb2-2"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">modal</span> config set-environment dev</span></code></pre></div></div>
-<p><strong>Note: All codes are available in <a href="https://github.com/ehsanmok/blog/tree/main/modal-deep-dive">my GitHub</a>.</strong></p>
+<p><strong>Note: All codes are available in <a href="https://github.com/ehsanmok/blog/tree/main/code/modal-deep-dive">my GitHub</a>.</strong></p>
 </section>
 <section id="runtime-spec-via-stub" class="level3">
 <h3 class="anchored" data-anchor-id="runtime-spec-via-stub">Runtime Spec via stub</h3>
@@ -70,7 +70,7 @@ background-color: null;
 font-weight: bold;
 font-style: inherit;">&amp;&amp;</span> <span class="bu" style="color: null;
 background-color: null;
-font-style: inherit;">cd</span> blog/modal-deep-dive</span></code></pre></div></div>
+font-style: inherit;">cd</span> blog/code/modal-deep-dive</span></code></pre></div></div>
 <p>and have a look at <code>lib/empty.py</code></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
 background-color: null;
@@ -2814,7 +2814,7 @@ font-style: inherit;">@</span> w_v</span></code></pre></div></div>
 
 <section id="prelude" class="level2">
 <h2 class="anchored" data-anchor-id="prelude">Prelude</h2>
-<p>In the Rust world, the interaction between Python and Rust is very well-known through the amazing <a href="https://github.com/PyO3/pyo3">PyO3</a> ecosystem. There is a similar relation between Python and Javascript in particular Node.js that I’m going to describe in this post. All the code is available <a href="https://github.com/ehsanmok/blog/tree/main/rust-node">here</a>.</p>
+<p>In the Rust world, the interaction between Python and Rust is very well-known through the amazing <a href="https://github.com/PyO3/pyo3">PyO3</a> ecosystem. There is a similar relation between Python and Javascript in particular Node.js that I’m going to describe in this post. All the code is available <a href="https://github.com/ehsanmok/blog/tree/main/code/rust-node">here</a>.</p>
 <p>Most programming language interactions happen through C layer ABI i.e.&nbsp;FFI. However, interacting Rust with JavaScript is commonly achieved through WebAssembly (WASM). Furthermore, Node.js (written in C++) <a href="https://nodejs.org/api/addons.html">addon-api</a> offers writing extending Node functionalities through C++ (FFI) without stepping into the WASM and the Rust ecosystem has created two frameworks on top<em><a href="https://github.com/napi-rs/napi-rs">napi-rs</a></em><a href="https://github.com/neon-bindings/neon">neon</a></p>
 <p>We are going to explore neon as well since it is also the more mature alternative.</p>
 <p>As a quick recap, companies such as <a href="https://dteare.medium.com/behind-the-scenes-of-1password-for-linux-d59b19143a23">1Password</a> and <a href="https://github.com/signalapp/libsignal">Signal</a> have adopted Rust in their Node applications, and more recently, a number of other companies like <a href="https://blog.logrocket.com/improving-node-js-performing-rust/">LogRocket</a> and <a href="https://blog.risingstack.com/node-js-native-modules-with-rust/">RisingStack</a> have supercharged their Node apps. They’ve achieved this by delegating critical parts to Rust where Node.js falls short. Consequently, Rust enhances these applications with its memory and type safety, while also being more efficient in CPU and memory usage. This leads to orders of magnitude higher Requests Per Second (RPS), showcasing Rust’s robust capabilities in optimizing performance.</p>

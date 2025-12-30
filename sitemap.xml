@@ -2,106 +2,106 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ehsanmkermani.com/posts.html</loc>
-    <lastmod>2025-12-29T19:02:51.035Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.865Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2015-09-13-restaurant-revenue-prediction-with-bart-machine/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.037Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.867Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-07-03-rust-std-study-series-alloc/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.046Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.876Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-03-16-variance-in-rust-an-intuitive-explanation/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.045Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.875Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-04-28-rust-std-study-series-vecdeque/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.046Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.876Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2023-11-19-rust-and-node-js-harmonizing-performance-and-safety/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.048Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.878Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2012-11-26-some-homological-algebra-computation/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.035Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.865Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2023-12-08-modal-labs-deep-dive/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.051Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.881Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2022-09-07-announcement-releasing-smartalloc/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.047Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.877Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-03-10-rust-std-study-series-vec/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.045Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.875Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2017-06-30-from-machine-learning-to-type-theory/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.040Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.869Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-08-16-rust-std-study-series-pin/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.047Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.877Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2023-08-13-notes-on-the-current-state-of-llm-frameworks/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.047Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.877Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.034Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.865Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2023-11-23-the-core-of-attention-is-communication/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.049Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.879Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-03-25-rust-std-study-linkedlist/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.046Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.875Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2012-11-30-classification-of-vector-bundles-on-elliptic-curves-2/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.036Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.866Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2017-07-12-whats-up-with-word-embedding/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.043Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.873Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2022-09-20-announcing-releasing-dlpackrs/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.047Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.877Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2020-06-08-create-your-own-programming-language-with-rust/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.047Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.877Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2017-12-06-nips-ai-hype-and-the-lost-rigor/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.045Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.875Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-05-13-state-of-machine-learning-in-rust/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.046Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.876Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2016-05-05-monty-hall-simulation/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.039Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.869Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2019-06-18-rust-std-study-series-interior-mutability/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.046Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.876Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/posts/2012-12-06-vector-bundles-locally-free-sheaves-and-divisors-on-a-curve/index.html</loc>
-    <lastmod>2025-12-29T19:02:51.036Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.866Z</lastmod>
   </url>
   <url>
     <loc>https://ehsanmkermani.com/about.html</loc>
-    <lastmod>2025-12-29T19:02:51.034Z</lastmod>
+    <lastmod>2025-12-30T00:40:20.855Z</lastmod>
   </url>
 </urlset>
