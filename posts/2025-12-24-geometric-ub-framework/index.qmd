@@ -1,0 +1,193 @@
+---
+title: "A Geometric Framework for Undefined Behavior: From a 2019 Tweet to an Actual Paper"
+author: "Ehsan M. Kermani"
+date: "2025-12-24"
+categories: [Programming Languages, Type Theory, Research]
+description: "How a random thought about using algebraic topology to understand undefined behavior turned into a real paper."
+---
+
+## The Paper
+
+Alright, so I finally finished writing this up. Here's the paper if you want to dive straight in (I like coffee!):
+
+```{=html}
+<div style="border: 1px solid #444; border-radius: 8px; overflow: hidden; margin: 2rem 0; background: #f5f5f5;">
+<object data="geometric-ub.pdf" type="application/pdf" width="100%" height="700px">
+  <p style="padding: 20px;">Your browser doesn't support embedded PDFs.
+     <a href="geometric-ub.pdf" download>Download the PDF here</a></p>
+</object>
+</div>
+```
+
+```{=html}
+<div style="text-align: center; margin: 1rem 0;">
+  <a href="geometric-ub.pdf"
+     class="btn btn-primary"
+     download="geometric-ub-kermani.pdf"
+     style="background: #0d6efd; color: white; padding: 0.75rem 2rem; border-radius: 6px; text-decoration: none; display: inline-block; font-size: 1.1rem;">
+    📥 Download Paper (PDF)
+  </a>
+</div>
+```
+
+---
+
+## Acknowledgments
+
+Huge thanks to [Chris Lattner](https://www.linkedin.com/in/chris-lattner-5664498a/) and [Abdul Dakkak](https://www.linkedin.com/in/adakkak/) for taking the time to review drafts of this paper. Your feedback was incredibly helpful and pushed me to clarify and strengthen the ideas. I'm really grateful for your encouragement and thoughtful comments.
+
+---
+
+## How This Started
+
+So this whole thing started back in 2019 with [this tweet thread](https://x.com/ehsanmok/status/1090499786174656512) about using category theory to understand Rust's lifetime system. I was thinking about lifetimes as categories, references as functors, that kind of thing.
+
+::: {.callout-note}
+## The Original 2019 Tweet Thread
+
+```{=html}
+<blockquote class="twitter-tweet" data-conversation="none" data-theme="dark">
+<a href="https://twitter.com/ehsanmok/status/1090499786174656512"></a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+
+Can't see the embed? [View the thread on X →](https://x.com/ehsanmok/status/1090499786174656512)
+:::
+
+I was working with Rust a lot and thinking about borrow checking and lifetime systems, and the categorical structure felt important. Also the origin goes back to my earlier blog on [Variance in Rust](https://ehsanmkermani.com/posts/2019-03-16-variance-in-rust-an-intuitive-explanation/). But later I started wondering: what if we could *geometrize* this? What if undefined behavior isn't just a type system violation, but has actual *geometric structure*? Like, what if memory safety violations are *holes* in some space of program states?
+
+Fast forward to 2025, and I started playing around with the idea more seriously. I was using ChatGPT 5.1 to bounce ideas around, and it made a suggestion that ended up being crucial: **use the Alexandroff topology on a poset of abstract program states**. That insight was the key that made everything click. Once I had that, the rest of the framework started falling into place.
+
+---
+
+## The Basic Idea
+
+Here's the pitch in plain English:
+
+Systems languages like Rust, C++, and Mojo try to give you low-level control while keeping you safe from things like use-after-free, iterator invalidation, and all the other ways you can shoot yourself in the foot with memory.
+
+The standard way to think about this is through type systems (Rust's borrow checker), logical models ([RustBelt](https://plv.mpi-sws.org/rustbelt/)), or operational semantics ([Stacked Borrows](https://plv.mpi-sws.org/rustbelt/stacked-borrows/)). These are great, but they're often language-specific and pretty complex.
+
+My approach is different. I'm treating program states as points in a geometric space, and undefined behavior as *topological holes* in that space. Specifically:
+
+**1. States form a partially ordered set (poset)**
+
+Think of each state as representing what your program knows about memory at some point. If state `w` can safely evolve into state `w'`, we say `w ≤ w'`. So the "safe extension" relation gives you a poset.
+
+**2. The Alexandroff topology**
+
+This was the key insight GPT 5.1 gave me. In the [Alexandroff topology](https://en.wikipedia.org/wiki/Alexandroff_topology), a set is "open" if it's upward-closed: if a state is in the set, all safe extensions of it are also in the set. This perfectly captures the idea that safety is monotonic. Once you're in a safe state, staying safe means continuing upward.
+
+**3. Build a simplicial complex**
+
+From the poset, you can build a simplicial complex. Vertices are states, edges are safe transitions, 2-simplices are pairs of operations that commute safely, and so on. This complex describes the *shape* of the safe state space.
+
+**4. Homology finds the holes**
+
+Here's where it gets cool. If there's a cycle in your state space that you can't fill in (like trying to use a reference after it's been invalidated), that shows up as nontrivial homology. Specifically, it's a loop that doesn't bound a 2-dimensional disk, which means you have a hole in $H_1$ (the first homology group).
+
+Undefined behavior *is* those holes.
+
+---
+
+## A Concrete Example
+
+Let's do Rust. Consider this pattern (which thankfully doesn't compile):
+
+```rust
+let mut v = vec![1, 2, 3];
+let r = &v[0];      // borrow v
+v.push(4);          // realloc may move v (UB if r is used)
+println!("{}", *r); // use-after-free
+```
+
+In the paper, I model this as a state space with four states:
+
+- `w₀`: `v` exists
+- `w₁`: reference `r` to `v[0]` is created
+- `w₂`: `v` gets reallocated (invalidates `r`)
+- `w₃`: `r` is dereferenced (UB!)
+
+The problem is that there's a cycle `w₁ → w₂` (reallocate while borrowed) and `w₂ → w₁` (somehow un-reallocate?) that doesn't bound a 2-simplex. There's no safe "commuting square" where you can do both operations in either order. This cycle is a generator of $H_1$, a 1-dimensional hole.
+
+Rust's borrow checker *prevents this statically* by not letting you do `v.push(4)` while `r` is live. But in C++ or unsafe Rust, the hole is there. And you can detect it by computing homology.
+
+---
+
+## Wait, Lifetimes Are a Category?
+
+Yeah, this part is kind of fun. In addition to the topological view, the paper gives a categorical semantics for Rust's lifetime system:
+
+- **Lifetimes form a category** where objects are lifetime parameters (`'a`, `'b`, etc.) and morphisms are outlives relations (`'a: 'b`).
+- **Reference types are bifunctors** from (Lifetimes × Types) to Types. So `&'a T` is functorial in both the lifetime `'a` and the type `T`.
+- **Reborrows are natural transformations**. When you reborrow `&'a T` to `&'b T` with `'a: 'b`, that's a natural transformation between bifunctors.
+
+This is pretty standard category theory (in the sense of Mac Lane's [*Categories for the Working Mathematician*](https://link.springer.com/book/10.1007/978-1-4757-4721-8)), but I think it's cool that Rust's lifetime system actually *is* a functorial construction. It's not just an analogy.
+
+---
+
+## C++ and Mojo Too
+
+The framework isn't Rust-specific. In the paper I also work through:
+
+- **C++**: I build a toy example with raw pointers *and* iterator invalidation happening in the same function. The complex has $H_1 \cong \mathbb{Z}^2$, meaning there are *two independent UB holes*. You can trigger one, the other, or both.
+
+- **Mojo**: Mojo has this cool system of [*origins*](https://docs.modular.com/mojo/manual/values/lifetimes) that parameterize lifetimes. I sketch how origins fit into the same geometric picture, and how you can use cohomology (specifically, sheaf cohomology on the poset of origins) to detect global inconsistencies.
+
+The details are in the paper. The point is that once you have the geometric layer, you can apply it to any language where you can define abstract states and safe transitions.
+
+---
+
+## Can You Actually Compute This?
+
+Short answer: yes, on small scopes.
+
+Homology is just linear algebra. If you have $N$ abstract states and $M$ transitions, you build a simplicial complex with $N$ vertices and at most $M$ edges, and computing $H_1$ reduces to finding the kernel and image of some matrices over $\mathbb{Z}$. For intraprocedural analysis (like checking a single function or loop), this is totally doable.
+
+The paper includes a high-level algorithm:
+
+1. Extract abstract states and safe transitions from your program (using existing static analysis).
+2. Build the simplicial complex.
+3. Compute $H_1$.
+4. Report any nontrivial cycles as candidate UB patterns.
+
+This isn't a replacement for the borrow checker or sanitizers. It's a complementary technique. You'd run it on suspicious regions (like around `unsafe` blocks) to get a geometric sanity check.
+
+---
+
+## Why I Think This Matters
+
+**For language designers:** Thinking about UB geometrically gives you design principles. If you can design your type system so that certain complexes are contractible (no holes), you've ruled out whole classes of bugs by construction.
+
+**For static analysis:** You get algebraic invariants (homology groups) that are language-independent. Any tool that can extract abstract states can plug into this framework.
+
+**For programmers:** It's a mental model. When you write unsafe code, you're navigating a space that has holes in it. The borrow checker is trying to keep you in the safe, contractible regions. Understanding that helps you reason about what's going on.
+
+---
+
+## What's Next?
+
+I want to build a prototype. Take Rust MIR or some C++ intermediate representation, extract small state complexes around uses of `unsafe` or raw pointers, compute $H_1$, and see if it finds known bugs. If it does, that's validation. If it finds new ones, that's even better.
+
+There are also some deeper directions:
+
+- **Concurrency**: Extend the poset to include thread interleavings. Use directed topology or directed homology to detect data races as higher-dimensional holes.
+- **Type system integration**: Use homological properties as meta-invariants. Design type rules that guarantee contractibility.
+- **Sheaf cohomology**: Treat types and invariants as sheaves over the state poset and use cohomology to find global inconsistencies.
+
+But honestly, I'm just excited that the basic idea works. It's been six years since that tweet, and turning a vague intuition into actual math felt really satisfying.
+
+---
+
+## Final Thoughts
+
+From a random tweet in 2019 to a finished paper in 2025, this has been a weird journey. The idea that you can think about memory safety bugs as *literal holes* in a topological space still feels kind of magical to me.
+
+## A Note on Publication
+
+I tried to submit this to arXiv, but couldn't get an endorsement. My old grad school advisors and colleagues aren't eligible due to arXiv's strict policies on endorser recency and paper count. The endorsement system makes sense for preventing spam, but it also creates a barrier for researchers who aren't currently in academia or don't have recent connections to active arXiv users. It's a bit of a catch-22: you need endorsement to build a publication record, but you need a publication record (or the right connections) to get endorsed.
+
+So for now, the paper lives here. The web is a perfectly fine place for ideas to exist.
+
+Thanks for reading.
