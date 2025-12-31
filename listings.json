@@ -2,6 +2,7 @@
   {
     "listing": "/posts.html",
     "items": [
+      "/posts/2025-12-24-geometric-ub-framework/index.html",
       "/posts/2025-10-29-mojo-gpu-puzzles-edition-1/index.html",
       "/posts/2025-04-23-what-ownership-is-really-about/index.html",
       "/posts/2025-02-06-paged-attention-prefix-caching-max-serve/index.html",
@@ -41,6 +42,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2025-12-24-geometric-ub-framework/index.html",
       "/posts/2025-10-29-mojo-gpu-puzzles-edition-1/index.html",
       "/posts/2025-04-23-what-ownership-is-really-about/index.html",
       "/posts/2025-02-06-paged-attention-prefix-caching-max-serve/index.html",

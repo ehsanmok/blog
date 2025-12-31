@@ -10,7 +10,226 @@
 <atom:link href="https://ehsanmkermani.com/posts.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.8.26</generator>
-<lastBuildDate>Wed, 29 Oct 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 24 Dec 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>A Geometric Framework for Undefined Behavior: From a 2019 Tweet to an Actual Paper</title>
+  <dc:creator>Ehsan M. Kermani</dc:creator>
+  <link>https://ehsanmkermani.com/posts/2025-12-24-geometric-ub-framework/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="the-paper" class="level2">
+<h2 class="anchored" data-anchor-id="the-paper">The Paper</h2>
+<p>Alright, so I finally finished writing this up. Here’s the paper if you want to dive straight in (I like coffee!):</p>
+<div style="border: 1px solid #444; border-radius: 8px; overflow: hidden; margin: 2rem 0; background: #f5f5f5;">
+<object data="geometric-ub.pdf" type="application/pdf" width="100%" height="700px">
+  <p style="padding: 20px;">Your browser doesn't support embedded PDFs.
+     <a href="geometric-ub.pdf" download="">Download the PDF here</a></p>
+</object>
+</div>
+<div style="text-align: center; margin: 1rem 0;">
+  <a href="geometric-ub.pdf" class="btn btn-primary" download="geometric-ub-kermani.pdf" style="background: #0d6efd; color: white; padding: 0.75rem 2rem; border-radius: 6px; text-decoration: none; display: inline-block; font-size: 1.1rem;">
+    📥 Download Paper (PDF)
+  </a>
+</div>
+<hr>
+</section>
+<section id="acknowledgments" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgments">Acknowledgments</h2>
+<p>Huge thanks to <a href="https://www.linkedin.com/in/chris-lattner-5664498a/">Chris Lattner</a> and <a href="https://www.linkedin.com/in/adakkak/">Abdul Dakkak</a> for taking the time to review drafts of this paper. Your feedback was incredibly helpful and pushed me to clarify and strengthen the ideas. I’m really grateful for your encouragement and thoughtful comments.</p>
+<hr>
+</section>
+<section id="how-this-started" class="level2">
+<h2 class="anchored" data-anchor-id="how-this-started">How This Started</h2>
+<p>So this whole thing started back in 2019 with <a href="https://x.com/ehsanmok/status/1090499786174656512">this tweet thread</a> about using category theory to understand Rust’s lifetime system. I was thinking about lifetimes as categories, references as functors, that kind of thing.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>The Original 2019 Tweet Thread
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<blockquote class="twitter-tweet blockquote" data-conversation="none" data-theme="dark">
+<a href="https://twitter.com/ehsanmok/status/1090499786174656512"></a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>Can’t see the embed? <a href="https://x.com/ehsanmok/status/1090499786174656512">View the thread on X →</a></p>
+</div>
+</div>
+<p>I was working with Rust a lot and thinking about borrow checking and lifetime systems, and the categorical structure felt important. Also the origin goes back to my earlier blog on <a href="https://ehsanmkermani.com/posts/2019-03-16-variance-in-rust-an-intuitive-explanation/">Variance in Rust</a>. But later I started wondering: what if we could <em>geometrize</em> this? What if undefined behavior isn’t just a type system violation, but has actual <em>geometric structure</em>? Like, what if memory safety violations are <em>holes</em> in some space of program states?</p>
+<p>Fast forward to 2025, and I started playing around with the idea more seriously. I was using ChatGPT 5.1 to bounce ideas around, and it made a suggestion that ended up being crucial: <strong>use the Alexandroff topology on a poset of abstract program states</strong>. That insight was the key that made everything click. Once I had that, the rest of the framework started falling into place.</p>
+<hr>
+</section>
+<section id="the-basic-idea" class="level2">
+<h2 class="anchored" data-anchor-id="the-basic-idea">The Basic Idea</h2>
+<p>Here’s the pitch in plain English:</p>
+<p>Systems languages like Rust, C++, and Mojo try to give you low-level control while keeping you safe from things like use-after-free, iterator invalidation, and all the other ways you can shoot yourself in the foot with memory.</p>
+<p>The standard way to think about this is through type systems (Rust’s borrow checker), logical models (<a href="https://plv.mpi-sws.org/rustbelt/">RustBelt</a>), or operational semantics (<a href="https://plv.mpi-sws.org/rustbelt/stacked-borrows/">Stacked Borrows</a>). These are great, but they’re often language-specific and pretty complex.</p>
+<p>My approach is different. I’m treating program states as points in a geometric space, and undefined behavior as <em>topological holes</em> in that space. Specifically:</p>
+<p><strong>1. States form a partially ordered set (poset)</strong></p>
+<p>Think of each state as representing what your program knows about memory at some point. If state <code>w</code> can safely evolve into state <code>w'</code>, we say <code>w ≤ w'</code>. So the “safe extension” relation gives you a poset.</p>
+<p><strong>2. The Alexandroff topology</strong></p>
+<p>This was the key insight GPT 5.1 gave me. In the <a href="https://en.wikipedia.org/wiki/Alexandroff_topology">Alexandroff topology</a>, a set is “open” if it’s upward-closed: if a state is in the set, all safe extensions of it are also in the set. This perfectly captures the idea that safety is monotonic. Once you’re in a safe state, staying safe means continuing upward.</p>
+<p><strong>3. Build a simplicial complex</strong></p>
+<p>From the poset, you can build a simplicial complex. Vertices are states, edges are safe transitions, 2-simplices are pairs of operations that commute safely, and so on. This complex describes the <em>shape</em> of the safe state space.</p>
+<p><strong>4. Homology finds the holes</strong></p>
+<p>Here’s where it gets cool. If there’s a cycle in your state space that you can’t fill in (like trying to use a reference after it’s been invalidated), that shows up as nontrivial homology. Specifically, it’s a loop that doesn’t bound a 2-dimensional disk, which means you have a hole in <img src="https://latex.codecogs.com/png.latex?H_1"> (the first homology group).</p>
+<p>Undefined behavior <em>is</em> those holes.</p>
+<hr>
+</section>
+<section id="a-concrete-example" class="level2">
+<h2 class="anchored" data-anchor-id="a-concrete-example">A Concrete Example</h2>
+<p>Let’s do Rust. Consider this pattern (which thankfully doesn’t compile):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">let</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">mut</span> v <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">vec!</span>[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span>
+<span id="cb1-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">let</span> r <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span>v[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span>      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// borrow v</span></span>
+<span id="cb1-3">v<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>push(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span>          <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// realloc may move v (UB if r is used)</span></span>
+<span id="cb1-4"><span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"{}"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span>r)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">// use-after-free</span></span></code></pre></div></div>
+<p>In the paper, I model this as a state space with four states:</p>
+<ul>
+<li><code>w₀</code>: <code>v</code> exists</li>
+<li><code>w₁</code>: reference <code>r</code> to <code>v[0]</code> is created</li>
+<li><code>w₂</code>: <code>v</code> gets reallocated (invalidates <code>r</code>)</li>
+<li><code>w₃</code>: <code>r</code> is dereferenced (UB!)</li>
+</ul>
+<p>The problem is that there’s a cycle <code>w₁ → w₂</code> (reallocate while borrowed) and <code>w₂ → w₁</code> (somehow un-reallocate?) that doesn’t bound a 2-simplex. There’s no safe “commuting square” where you can do both operations in either order. This cycle is a generator of <img src="https://latex.codecogs.com/png.latex?H_1">, a 1-dimensional hole.</p>
+<p>Rust’s borrow checker <em>prevents this statically</em> by not letting you do <code>v.push(4)</code> while <code>r</code> is live. But in C++ or unsafe Rust, the hole is there. And you can detect it by computing homology.</p>
+<hr>
+</section>
+<section id="wait-lifetimes-are-a-category" class="level2">
+<h2 class="anchored" data-anchor-id="wait-lifetimes-are-a-category">Wait, Lifetimes Are a Category?</h2>
+<p>Yeah, this part is kind of fun. In addition to the topological view, the paper gives a categorical semantics for Rust’s lifetime system:</p>
+<ul>
+<li><strong>Lifetimes form a category</strong> where objects are lifetime parameters (<code>'a</code>, <code>'b</code>, etc.) and morphisms are outlives relations (<code>'a: 'b</code>).</li>
+<li><strong>Reference types are bifunctors</strong> from (Lifetimes × Types) to Types. So <code>&amp;'a T</code> is functorial in both the lifetime <code>'a</code> and the type <code>T</code>.</li>
+<li><strong>Reborrows are natural transformations</strong>. When you reborrow <code>&amp;'a T</code> to <code>&amp;'b T</code> with <code>'a: 'b</code>, that’s a natural transformation between bifunctors.</li>
+</ul>
+<p>This is pretty standard category theory (in the sense of Mac Lane’s <a href="https://link.springer.com/book/10.1007/978-1-4757-4721-8"><em>Categories for the Working Mathematician</em></a>), but I think it’s cool that Rust’s lifetime system actually <em>is</em> a functorial construction. It’s not just an analogy.</p>
+<hr>
+</section>
+<section id="c-and-mojo-too" class="level2">
+<h2 class="anchored" data-anchor-id="c-and-mojo-too">C++ and Mojo Too</h2>
+<p>The framework isn’t Rust-specific. In the paper I also work through:</p>
+<ul>
+<li><p><strong>C++</strong>: I build a toy example with raw pointers <em>and</em> iterator invalidation happening in the same function. The complex has <img src="https://latex.codecogs.com/png.latex?H_1%20%5Ccong%20%5Cmathbb%7BZ%7D%5E2">, meaning there are <em>two independent UB holes</em>. You can trigger one, the other, or both.</p></li>
+<li><p><strong>Mojo</strong>: Mojo has this cool system of <a href="https://docs.modular.com/mojo/manual/values/lifetimes"><em>origins</em></a> that parameterize lifetimes. I sketch how origins fit into the same geometric picture, and how you can use cohomology (specifically, sheaf cohomology on the poset of origins) to detect global inconsistencies.</p></li>
+</ul>
+<p>The details are in the paper. The point is that once you have the geometric layer, you can apply it to any language where you can define abstract states and safe transitions.</p>
+<hr>
+</section>
+<section id="can-you-actually-compute-this" class="level2">
+<h2 class="anchored" data-anchor-id="can-you-actually-compute-this">Can You Actually Compute This?</h2>
+<p>Short answer: yes, on small scopes.</p>
+<p>Homology is just linear algebra. If you have <img src="https://latex.codecogs.com/png.latex?N"> abstract states and <img src="https://latex.codecogs.com/png.latex?M"> transitions, you build a simplicial complex with <img src="https://latex.codecogs.com/png.latex?N"> vertices and at most <img src="https://latex.codecogs.com/png.latex?M"> edges, and computing <img src="https://latex.codecogs.com/png.latex?H_1"> reduces to finding the kernel and image of some matrices over <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BZ%7D">. For intraprocedural analysis (like checking a single function or loop), this is totally doable.</p>
+<p>The paper includes a high-level algorithm:</p>
+<ol type="1">
+<li>Extract abstract states and safe transitions from your program (using existing static analysis).</li>
+<li>Build the simplicial complex.</li>
+<li>Compute <img src="https://latex.codecogs.com/png.latex?H_1">.</li>
+<li>Report any nontrivial cycles as candidate UB patterns.</li>
+</ol>
+<p>This isn’t a replacement for the borrow checker or sanitizers. It’s a complementary technique. You’d run it on suspicious regions (like around <code>unsafe</code> blocks) to get a geometric sanity check.</p>
+<hr>
+</section>
+<section id="why-i-think-this-matters" class="level2">
+<h2 class="anchored" data-anchor-id="why-i-think-this-matters">Why I Think This Matters</h2>
+<p><strong>For language designers:</strong> Thinking about UB geometrically gives you design principles. If you can design your type system so that certain complexes are contractible (no holes), you’ve ruled out whole classes of bugs by construction.</p>
+<p><strong>For static analysis:</strong> You get algebraic invariants (homology groups) that are language-independent. Any tool that can extract abstract states can plug into this framework.</p>
+<p><strong>For programmers:</strong> It’s a mental model. When you write unsafe code, you’re navigating a space that has holes in it. The borrow checker is trying to keep you in the safe, contractible regions. Understanding that helps you reason about what’s going on.</p>
+<hr>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
+<p>I want to build a prototype. Take Rust MIR or some C++ intermediate representation, extract small state complexes around uses of <code>unsafe</code> or raw pointers, compute <img src="https://latex.codecogs.com/png.latex?H_1">, and see if it finds known bugs. If it does, that’s validation. If it finds new ones, that’s even better.</p>
+<p>There are also some deeper directions:</p>
+<ul>
+<li><strong>Concurrency</strong>: Extend the poset to include thread interleavings. Use directed topology or directed homology to detect data races as higher-dimensional holes.</li>
+<li><strong>Type system integration</strong>: Use homological properties as meta-invariants. Design type rules that guarantee contractibility.</li>
+<li><strong>Sheaf cohomology</strong>: Treat types and invariants as sheaves over the state poset and use cohomology to find global inconsistencies.</li>
+</ul>
+<p>But honestly, I’m just excited that the basic idea works. It’s been six years since that tweet, and turning a vague intuition into actual math felt really satisfying.</p>
+<hr>
+</section>
+<section id="final-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="final-thoughts">Final Thoughts</h2>
+<p>From a random tweet in 2019 to a finished paper in 2025, this has been a weird journey. The idea that you can think about memory safety bugs as <em>literal holes</em> in a topological space still feels kind of magical to me.</p>
+</section>
+<section id="a-note-on-publication" class="level2">
+<h2 class="anchored" data-anchor-id="a-note-on-publication">A Note on Publication</h2>
+<p>I tried to submit this to arXiv, but couldn’t get an endorsement. My old grad school advisors and colleagues aren’t eligible due to arXiv’s strict policies on endorser recency and paper count. The endorsement system makes sense for preventing spam, but it also creates a barrier for researchers who aren’t currently in academia or don’t have recent connections to active arXiv users. It’s a bit of a catch-22: you need endorsement to build a publication record, but you need a publication record (or the right connections) to get endorsed.</p>
+<p>So for now, the paper lives here. The web is a perfectly fine place for ideas to exist.</p>
+<p>Thanks for reading.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Programming Languages</category>
+  <category>Type Theory</category>
+  <category>Research</category>
+  <guid>https://ehsanmkermani.com/posts/2025-12-24-geometric-ub-framework/</guid>
+  <pubDate>Wed, 24 Dec 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Mojo GPU Puzzles Edition 1</title>
   <dc:creator>Ehsan M. Kermani</dc:creator>
@@ -6922,1041 +7141,6 @@ font-style: inherit;">}</span></span></code></pre></div></div>
   <category>Rust</category>
   <guid>https://ehsanmkermani.com/posts/2019-08-16-rust-std-study-series-pin/</guid>
   <pubDate>Fri, 16 Aug 2019 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Rust std study series: alloc</title>
-  <dc:creator>Ehsan M. Kermani</dc:creator>
-  <link>https://ehsanmkermani.com/posts/2019-07-03-rust-std-study-series-alloc/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p><img src="https://ehsanmkermani.com/posts/2019-07-03-rust-std-study-series-alloc/images/rustacean-flat-happy-2.png" class="img-fluid"></p>
-<p>Let’s get deep into <code>std::alloc</code>!</p>
-<section id="memory-allocator-101" class="level2">
-<h2 class="anchored" data-anchor-id="memory-allocator-101">Memory allocator 101</h2>
-<p>The very basic need for any program to compile and execute is having access to either physical memory or <a href="https://en.wikipedia.org/wiki/Virtual_memory">virtual memory</a>. An allocator is responsible for providing such an access. You can think of an allocator as a<em>service</em>, taking some sort of requests and either giving back a (pointer) to<em>block of memory</em>or some errors. In Rust, a request is a <code>Layout</code> i.e.&nbsp;some meta-data about how the memory we want is supposed to take up the space.</p>
-<p>A memory layout is made up of<em><code>size</code> (in bytes)</em><code>alignment</code> (in bytes and<strong>must be power of two</strong>): the CPU always<strong>reads memory</strong>at its<strong>word size</strong>(<strong>4 bytes</strong>on<em>32-bit</em>system or<strong>8 bytes</strong>on<em>64-bit</em>system). See <a href="https://stackoverflow.com/questions/381244/purpose-of-memory-alignment/381368#381368">what’s the purpose of memory alignment</a>.</p>
-<section id="stdalloclayout" class="level3">
-<h3 class="anchored" data-anchor-id="stdalloclayout">std::alloc::Layout</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>lang <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"alloc_layout"</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb1-2"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">struct</span> Layout <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb1-3">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// size of the requested block of memory, measured in bytes.</span></span>
-<span id="cb1-4">    size_<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">usize</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb1-5"></span>
-<span id="cb1-6">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// alignment of the requested block of memory, measured in bytes.</span></span>
-<span id="cb1-7">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// we ensure that this is always a power-of-two ...</span></span>
-<span id="cb1-8">    align_<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> NonZeroUsize<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb1-9"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<p>For example, to check the size and alignment of<strong>a</strong>type<strong>vs a</strong>value**, we can do (<a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2018&amp;gist=2f9b392eea87f302e1a16c3dbfaa20aa">playpen</a>)</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type alignment of i32 {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::align_of::</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">i32</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 4 bytes</span></span>
-<span id="cb2-2"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"val alignment 1i32 {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::</span>align_of_val(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1i32</span>))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 4 bytes</span></span>
-<span id="cb2-3"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type size i32 {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::size_of::</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">i32</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 4 bytes</span></span>
-<span id="cb2-4"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"val size 1i32 {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::</span>size_of_val(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1i32</span>))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 4 bytes</span></span>
-<span id="cb2-5"></span>
-<span id="cb2-6"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// empty struct</span></span>
-<span id="cb2-7"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">struct</span> A<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb2-8"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">let</span> val <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> A<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb2-9"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type alignment {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::align_of::</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>A<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 1 byte</span></span>
-<span id="cb2-10"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"val alignment {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::</span>align_of_val(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span>val))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 1 byte</span></span>
-<span id="cb2-11"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type size {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::size_of::</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>A<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 0 bytes</span></span>
-<span id="cb2-12"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"val size {}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::</span>size_of_val(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span>val))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; 0 bytes</span></span>
-<span id="cb2-13"></span>
-<span id="cb2-14"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// also with</span></span>
-<span id="cb2-15"><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">println!</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Layout of A: {:?}"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Layout::new::</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>A<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; Layout { size_: 0, align_: 1 }</span></span></code></pre></div></div>
-</section>
-<section id="are-there-any-relations-between-size-and-align" class="level3">
-<h3 class="anchored" data-anchor-id="are-there-any-relations-between-size-and-align">Are there any relations between size and align?</h3>
-<p>Looking into <code>std::alloc::from_size_align</code> indicates three requirements (invariants) that must be held when constructing a layout given size and alignment:<em><code>align</code> must be<strong>non-zero</strong></em><code>align</code> must be a<strong>power of two</strong><em><code>size</code> when</em>rounded up*to the<strong>nearest multiple</strong>of <code>align</code>,<strong>must not overflow</strong>(i.e., the rounded value must be less than <code>usize::MAX</code>) i.e.&nbsp;<img src="https://latex.codecogs.com/png.latex?%5Ctext%7Bsize%7D%20+%20%5Ctext%7Balign%7D%20-%201%20%5Cleq%20%5Ctext%7Busize::MAX%7D">.</p>
-<p>We can compute the the<em>round up size</em>with <img src="https://latex.codecogs.com/png.latex?(size%20+%20align%20-%201)%20%5C;%5C;%20%5C&amp;%20%5C;%5C;%20!(align%20-%201)."> For example, if we want to create a layout with size <img src="https://latex.codecogs.com/png.latex?6"> bytes and alignment <img src="https://latex.codecogs.com/png.latex?8"> bytes, then the round up size will be <img src="https://latex.codecogs.com/png.latex?8">, but for size of <img src="https://latex.codecogs.com/png.latex?10"> bytes and the same <img src="https://latex.codecogs.com/png.latex?8"> alignment, the round up size will be <img src="https://latex.codecogs.com/png.latex?16"> bytes. The difference between the rounded up size and the given size is the amount of padding needed for that alignment which are <img src="https://latex.codecogs.com/png.latex?2"> and <img src="https://latex.codecogs.com/png.latex?6,"> respectively. (<a href="https://play.rust-lang.org/?version=nightly&amp;mode=debug&amp;edition=2018&amp;gist=2778a3d76dcac3cbf2594d02258bad50">playpen</a>)</p>
-<p>We saw in the earlier example that we can create a layout for a type <code>T</code> using <code>Layout::new::&lt;T&gt;()</code>. Moreover, given a reference <code>&amp;T</code>, we can create the desirable layout with <code>std::alloc::for_value</code>. Basically, they are</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> Layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> new<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>() <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Self</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-3">        <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">let</span> (size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> align) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> (<span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::size_of::</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::align_of::</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb3-4">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// Note that the align is guaranteed by rustc to be a power of two and</span></span>
-<span id="cb3-5">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// the size+align combo is guaranteed to fit in our address space. As a</span></span>
-<span id="cb3-6">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// result use the unchecked constructor here to avoid inserting code</span></span>
-<span id="cb3-7">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// that panics if it isn't optimized well enough.</span></span>
-<span id="cb3-8">        <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">debug_assert!</span>(<span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Layout::</span>from_size_align(size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> align)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>is_ok())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb3-9">        <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-10">            <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Layout::</span>from_size_align_unchecked(size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> align)</span>
-<span id="cb3-11">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-12">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-13"></span>
-<span id="cb3-14">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> for_value<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">?</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Sized</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>(t<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span>T) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Self</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-15">        <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">let</span> (size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> align) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> (<span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::</span>size_of_val(t)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">mem::</span>align_of_val(t))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb3-16">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// See rationale in `new` for why this us using an unsafe variant below</span></span>
-<span id="cb3-17">        <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">debug_assert!</span>(<span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Layout::</span>from_size_align(size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> align)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>is_ok())<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb3-18">        <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-19">            <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Layout::</span>from_size_align_unchecked(size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> align)</span>
-<span id="cb3-20">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-21">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-22"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<p>So far we have covered the layout (request part of the allocator service). Let’s look closer into the main constituent of the service.</p>
-</section>
-</section>
-<section id="stdallocglobalalloc" class="level2">
-<h2 class="anchored" data-anchor-id="stdallocglobalalloc">std::alloc::GlobalAlloc</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">trait</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">GlobalAlloc</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb4-2">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// required methods</span></span>
-<span id="cb4-3">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> alloc(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb4-4">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> dealloc(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> ptr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb4-5">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// provided methods</span></span>
-<span id="cb4-6">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> alloc_zeroed(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">...</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb4-7">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> realloc(</span>
-<span id="cb4-8">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> </span>
-<span id="cb4-9">        ptr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> </span>
-<span id="cb4-10">        layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> </span>
-<span id="cb4-11">        new_size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">usize</span></span>
-<span id="cb4-12">    ) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">...</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb4-13"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<p>Implementing this trait for a type, must be followed by using the attribute <code>#[global_allocator]</code> so that we can register it as the<strong>global std allocator</strong>. For a given layout, the <code>alloc</code> method returns*a pointer<strong>to a* <em>block memory</em>or a null pointer in case of<em>Out-Of-Memory (OOM) or invalid layout</em>.</strong>The allocated block of memory may or may not be initialized**.</p>
-<p>Up to writing these notes, the experimental variant of <code>GlobalAlloc</code> trait is <code>std::alloc::Alloc</code> with more functionalities. Note that the default allocator provided by the OS is <code>std::alloc::System</code> which in case of <code>alloc</code> provides either a<strong>non-null</strong>pointer (to some block of memory) or some <code>AllocErr</code>. This is configured as</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb5-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">struct</span> System<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span></span>
-<span id="cb5-2"></span>
-<span id="cb5-3"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// The Alloc impl just forwards to the GlobalAlloc impl, which is in `std::sys::*::alloc`.</span></span>
-<span id="cb5-4"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>unstable<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">(</span>feature <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"allocator_api"</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> issue <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"32838"</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">)]</span></span>
-<span id="cb5-5"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Alloc</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> System <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb5-6">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>inline<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb5-7">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> alloc(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Result</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>NonNull<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;,</span> AllocErr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb5-8">        <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">NonNull::</span>new(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">GlobalAlloc</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">::</span>alloc(<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>ok_or(AllocErr)</span>
-<span id="cb5-9">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb5-10"></span>
-<span id="cb5-11">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>inline<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb5-12">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> alloc_zeroed(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Result</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>NonNull<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;,</span> AllocErr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb5-13">        <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">NonNull::</span>new(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">GlobalAlloc</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">::</span>alloc_zeroed(<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>ok_or(AllocErr)</span>
-<span id="cb5-14">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb5-15"></span>
-<span id="cb5-16">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>inline<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb5-17">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> dealloc(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> ptr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> NonNull<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb5-18">        <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">GlobalAlloc</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">::</span>dealloc(<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> ptr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>as_ptr()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout)</span>
-<span id="cb5-19">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb5-20"></span>
-<span id="cb5-21">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>inline<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb5-22">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> realloc(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb5-23">                      ptr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> NonNull<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;,</span></span>
-<span id="cb5-24">                      layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb5-25">                      new_size<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">usize</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Result</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>NonNull<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;,</span> AllocErr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb5-26">        <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">NonNull::</span>new(<span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">GlobalAlloc</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">::</span>realloc(<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> ptr<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>as_ptr()<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> new_size))<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>ok_or(AllocErr)</span>
-<span id="cb5-27">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb5-28"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<p>And for example on <a href="https://github.com/rust-lang/rust/blob/master/src/libstd/sys/unix/alloc.rs">unix</a>, the <code>System</code> allocator is defined using <code>libc::malloc</code> satisfying the condition below</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb6-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">GlobalAlloc</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> System <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-2">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>inline<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">]</span></span>
-<span id="cb6-3">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> alloc(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> Layout) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-4">        <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>align() <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;=</span> MIN_ALIGN <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;&amp;</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>align() <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;=</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>size() <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-5">            <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">libc::</span>malloc(layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>size()) <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">as</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">u8</span></span>
-<span id="cb6-6">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">else</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-7">            <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>cfg<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">(</span>target_os <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"macos"</span><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">)]</span></span>
-<span id="cb6-8">            <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-9">                <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> layout<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>align() <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> (<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;&lt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">31</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb6-10">                    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">return</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">ptr::</span>null_mut()</span>
-<span id="cb6-11">                <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb6-12">            <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb6-13">            aligned_malloc(<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span>layout) <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; more or less is: libc::memalign(layout.align(), layout.size()) as *mut u8</span></span>
-<span id="cb6-14">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb6-15">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb6-16">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">...</span></span></code></pre></div></div>
-<p>That’s it for now! we have covered most of the basics and important aspects of <code>std::alloc</code>.</p>
-
-
-</section>
-
- ]]></description>
-  <category>Rust</category>
-  <guid>https://ehsanmkermani.com/posts/2019-07-03-rust-std-study-series-alloc/</guid>
-  <pubDate>Wed, 03 Jul 2019 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
