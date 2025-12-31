@@ -400,6 +400,105 @@ font-style: inherit;">// use-after-free</span></span></code></pre></div></div>
   <pubDate>Tue, 21 Jan 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>createlang.rs: Six Years Later, It’s Done</title>
+  <dc:creator>Ehsan M. Kermani</dc:creator>
+  <link>https://ehsanmkermani.com/posts/2024-12-31-createlang-rs-complete/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="its-finally-done" class="level2">
+<h2 class="anchored" data-anchor-id="its-finally-done">It’s Finally Done</h2>
+<p>After almost six years, <a href="https://createlang.rs">createlang.rs</a> is complete. The book on creating your own programming language with Rust is finished. Not “mostly done” or “just needs polish.” Actually finished.</p>
+<p>I can barely believe I’m writing this.</p>
+<hr>
+</section>
+<section id="how-it-started" class="level2">
+<h2 class="anchored" data-anchor-id="how-it-started">How It Started</h2>
+<p>Back in 2020, I tweeted about the project:</p>
+<blockquote class="twitter-tweet blockquote" data-theme="dark">
+<a href="https://twitter.com/ehsanmok/status/1269990359175622656"></a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>Can’t see the embed? <a href="https://twitter.com/ehsanmok/status/1269990359175622656">View the tweet on X →</a></p>
+<p>At the time, I was excited. I had this vision of a comprehensive guide that would take someone from zero to building a real compiler in Rust. Not a toy language, but something with a proper parser, type system, and code generation.</p>
+<p>The early version got some attention, people seemed interested, and I thought: “Great! I’ll wrap this up in a few months.”</p>
+<p>Six years later, here we are.</p>
+<hr>
+</section>
+<section id="what-took-so-long" class="level2">
+<h2 class="anchored" data-anchor-id="what-took-so-long">What Took So Long?</h2>
+<p>Honestly? Everything.</p>
+<p><strong>Life happened.</strong> Jobs changed. Priorities shifted. I moved across the country. Some months I’d write every day, other months I wouldn’t touch it at all.</p>
+<p><strong>The scope kept growing.</strong> Every time I thought I was done, I’d realize there was another important concept I hadn’t covered. Lifetime semantics. Borrow checking. LLVM integration. Optimization passes. The list kept expanding.</p>
+<p><strong>I didn’t want to write a typical compiler book.</strong> You know the ones. 1000 pages about parser theory that put you to sleep by chapter 3. I wanted something practical, something you could actually follow and build with. That meant finding the right balance between theory and practice, which is harder than it sounds.</p>
+<p><strong>Perfectionism is real.</strong> I kept rewriting chapters. “This explanation isn’t clear enough.” “This example is too simple.” “This code could be better.” I probably rewrote the parser chapter five times.</p>
+<p><strong>Rust kept evolving.</strong> When I started, we didn’t have const generics. No async/await. The module system was different. Every Rust edition meant going back and updating examples.</p>
+<p>But you know what? All of that is okay. Because the book that exists now is so much better than what I envisioned in 2020.</p>
+<hr>
+</section>
+<section id="whats-actually-in-it" class="level2">
+<h2 class="anchored" data-anchor-id="whats-actually-in-it">What’s Actually In It</h2>
+<p>The book walks through building a complete programming language from scratch:</p>
+<p><strong>Part I: Foundations</strong> - Lexical analysis and tokenization - Parsing with recursive descent and Pratt parsing - Abstract syntax trees and intermediate representations</p>
+<p><strong>Part II: Type Systems</strong> - Type checking and inference - Polymorphism and generics - Lifetimes and ownership (the Rust way)</p>
+<p><strong>Part III: Code Generation</strong> - LLVM basics and IR generation - Optimization passes - Linking and producing executables</p>
+<p><strong>Part IV: Advanced Topics</strong> - Garbage collection and memory management - Concurrency primitives - Interop with C and other languages</p>
+<p>Every chapter has complete, working code. Not pseudo-code, not simplified examples. Real Rust code that compiles and runs. The full implementation is on <a href="https://github.com/ehsanmok/create-your-own-lang-with-rust">GitHub</a>, and it’s a legitimate compiler for a small but complete language.</p>
+<hr>
+</section>
+<section id="what-i-learned" class="level2">
+<h2 class="anchored" data-anchor-id="what-i-learned">What I Learned</h2>
+<p>Writing this book taught me more than I expected.</p>
+<p><strong>Writing forces clarity.</strong> When you have to explain something to someone else, you realize what you actually understand and what you just thought you understood. I learned Rust more deeply by teaching it.</p>
+<p><strong>Incremental progress works.</strong> Some weeks I only wrote 200 words. That’s fine. 200 words a week is 10,000 words a year. It adds up.</p>
+<p><strong>Done is better than perfect.</strong> At some point, you have to ship. There are probably typos in the book. Some explanations could be clearer. Some examples could be more elegant. But if I waited until it was perfect, I’d never release it.</p>
+<p><strong>Community matters.</strong> The people who read early drafts, opened issues on GitHub, asked questions on Discord, they kept me going. Every piece of feedback made the book better.</p>
+<hr>
+</section>
+<section id="why-rust" class="level2">
+<h2 class="anchored" data-anchor-id="why-rust">Why Rust?</h2>
+<p>Rust’s safety guarantees, performance, and modern tooling made it the obvious choice. But honestly, the bigger reason I kept at this was that I really don’t like having a half-baked project hanging over my head. You know the feeling? That nagging sense of something unfinished, something you started with excitement that’s just sitting there incomplete.</p>
+<p>Six years is a long time to carry that around. But now it’s done, and that feels good.</p>
+<hr>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s Next?</h2>
+<p>The book is done, but the project isn’t over.</p>
+<p>I want to add more examples. Maybe a chapter on implementing a small standard library. Perhaps a section on JIT compilation. There’s always more to explore.</p>
+<p>I’m also planning a series of blog posts diving deeper into specific topics from the book. Type inference algorithms. Register allocation. Optimization strategies. All the stuff that didn’t quite fit in the main narrative.</p>
+<p>And honestly? I’m just excited to see what people build with it. The whole point was to lower the barrier to creating languages. If even a few people use this to build something cool, that’s worth six years.</p>
+<hr>
+</section>
+<section id="a-note-on-mojo" class="level2">
+<h2 class="anchored" data-anchor-id="a-note-on-mojo">A Note on Mojo🔥</h2>
+<p>Speaking of creating languages, I should mention that I’m now part of the team at <a href="https://www.modular.com/">Modular</a>. Mojo is a new programming language for AI that combines Python’s usability with C-level performance. It’s a serious language design effort, and if you’re interested in systems programming, high-performance computing, or just how modern languages are built, check out the <a href="https://docs.modular.com/mojo/">Mojo documentation</a>.</p>
+<p>Honestly? If Mojo existed when I started this book, that would have been my choice. It’s much more powerful than Rust for the kind of low-level systems work compilers need, but also simpler. That’s the sweet spot. a language that gives you more power without the complexity overhead. But that’s the thing about language design, timing matters. In 2020, Rust was the right tool. Now we have even better options.</p>
+<p>We’re on the <a href="https://www.modular.com/blog/the-path-to-mojo-1-0">path to Mojo 1.0</a>, and it’s been incredible to see how the language has matured. The experience of writing this book definitely influenced how I think about language design. And working on Mojo has deepened my appreciation for the tradeoffs and decisions that go into creating a production language. It’s one thing to teach compiler concepts, another thing entirely to build a language that people will actually use in production.</p>
+<hr>
+</section>
+<section id="final-thoughts" class="level2">
+<h2 class="anchored" data-anchor-id="final-thoughts">Final Thoughts</h2>
+<p>Six years feels like a long time. But looking back, it doesn’t feel wasted. Every chapter I struggled with, every example I rewrote, every concept I had to learn properly, it all contributed to something I’m genuinely proud of.</p>
+<p>If you’re working on something that’s taking longer than expected, whether it’s a book, a project, or just learning something new, that’s okay. Progress isn’t always linear. Some things just take time.</p>
+<p>And when you’re done, whenever that is, it’ll feel worth it.</p>
+<p>The book is live at <a href="https://createlang.rs">createlang.rs</a>. The code is on <a href="https://github.com/ehsanmok/create-your-own-lang-with-rust">GitHub</a>. And if you have questions, find bugs, or just want to chat about compilers or language design, open an issue on the <a href="https://github.com/ehsanmok/create-your-own-lang-with-rust">GitHub repository</a>.</p>
+<p>Thanks for following along on this journey. Here’s to the next one.</p>
+<p>Happy New Year. 🎉</p>
+
+
+</section>
+
+ ]]></description>
+  <category>Rust</category>
+  <category>Programming Languages</category>
+  <category>Book</category>
+  <guid>https://ehsanmkermani.com/posts/2024-12-31-createlang-rs-complete/</guid>
+  <pubDate>Tue, 31 Dec 2024 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>Build a Continuous Chat Interface with Llama 3 and MAX Serve</title>
   <dc:creator>Ehsan M. Kermani</dc:creator>
   <link>https://ehsanmkermani.com/posts/2024-12-17-build-continuous-chat-interface-llama3/</link>
@@ -6614,533 +6713,6 @@ note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a
   <category>Rust</category>
   <guid>https://ehsanmkermani.com/posts/2020-06-08-create-your-own-programming-language-with-rust/</guid>
   <pubDate>Mon, 08 Jun 2020 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Rust std study series: Pin</title>
-  <dc:creator>Ehsan M. Kermani</dc:creator>
-  <link>https://ehsanmkermani.com/posts/2019-08-16-rust-std-study-series-pin/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p><img src="https://ehsanmkermani.com/posts/2019-08-16-rust-std-study-series-pin/images/rustacean-flat-happy-2.png" class="img-fluid"></p>
-<p>This time we dive into <code>std::pin</code> which has a dense documentation.</p>
-<blockquote class="blockquote">
-<p>Types that<strong>pin data</strong>to its location in<strong>memory</strong>.</p>
-<p>It is sometimes useful to have objects that are<strong>guaranteed to not move</strong>, in the sense that their<strong>placement in memory does not change</strong>, and can thus be relied upon. A prime example of such a scenario would be<strong>building self-referential structs</strong>, since moving an object with pointers to itself will invalidate them, which could cause undefined behavior.</p>
-<p>Rust std doc</p>
-</blockquote>
-<section id="pin-and-unpin" class="level2">
-<h2 class="anchored" data-anchor-id="pin-and-unpin">Pin and Unpin</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb1-1"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>fundamental<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">]</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// compiler thing</span></span>
-<span id="cb1-2"><span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>repr<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">(</span>transparent<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">)]</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; ensures same memory repr as P</span></span>
-<span id="cb1-3"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">struct</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb1-4">    pointer<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb1-5"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb1-6"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> auto <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">trait</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Unpin</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// marker trait</span></span></code></pre></div></div>
-<p>To construct a <code>Pin</code> safely via <code>Pin::new(pointer: P)</code>, we need to make sure that <code>P: Deref</code> (pointer-like) and <code>P::Target: Unpin</code>.</p>
-<p>Note that <code>Unpin</code> ensures</p>
-<blockquote class="blockquote">
-<p>Types which can be<strong>safely moved after being pinned</strong>.</p>
-<p>Since Rust itself has no notion of immovable types, and considers moves (e.g.&nbsp;through assignment or <a href="https://doc.rust-lang.org/std/mem/fn.replace.html"><code>mem::replace</code></a>) to always be safe, this trait cannot prevent types from moving by itself.<br>
-Instead it is used to<strong>prevent moves through the type system</strong>, by controlling the behavior of pointers <code>P</code> wrapped in the <a href="https://doc.rust-lang.org/std/pin/struct.Pin.html"><code>Pin&lt;P&gt;</code></a> wrapper, which “pin” the type in place by not allowing it to be moved out of them.</p>
-<p>Rust std doc</p>
-</blockquote>
-<p>Basically, the vast majority of types are “movable” i.e.&nbsp;<code>Unpin</code>, so for most cases,<strong><code>Pin&lt;Pointer&lt;T&gt;&gt;</code></strong>is exactly like<strong><code>Pointer&lt;T&gt;</code></strong>when<strong><code>T: Unpin</code></strong>. However, if the referent (referenced type <code>T</code>) is “immovable” i.e.&nbsp;<code>T: !Unpin</code>, then the pinned wrapper won’t let the underlying value to move.*Intuitively it’s like having**<code>&amp;mut</code>* <em>but with</em> <em><code>&amp;</code></em> <em>access safety and immovability invariant</em>. It is in fact, <code>Unpin</code> that controls how <code>Pin</code> to work.</p>
-<p>To iterate; <code>Pin&lt;P&gt;</code> ensures that the<strong>underlying data behind a pointer type</strong><code>P</code><strong>has a stable location in memory</strong>and<strong>its memory cannot be deallocated until it is dropped</strong>. So <code>Pin</code> pins the pointee (the data behind the pointer)<em>not the pointer itself</em>. Moreover,<a href="https://doc.rust-lang.org/std/pin/struct.Pin.html"><code>Pin&lt;P&gt;</code></a><strong>does not let clients actually obtain a</strong><code>Box&lt;T&gt;</code><strong>or</strong><code>&amp;mut T</code><strong>to the underlying pinned data</strong>, which implies that you<em>cannot</em>use operations such as <a href="https://doc.rust-lang.org/std/mem/fn.swap.html"><code>mem::swap</code></a>.</p>
-<p>Furthermore,</p>
-<blockquote class="blockquote">
-<p>For correctness, <a href="https://doc.rust-lang.org/std/pin/struct.Pin.html"><code>Pin&lt;P&gt;</code></a> relies on the <a href="https://doc.rust-lang.org/std/ops/trait.Deref.html"><code>Deref</code></a> and <a href="https://doc.rust-lang.org/std/ops/trait.DerefMut.html"><code>DerefMut</code></a> implementations to<strong>not move out of their</strong><code>self</code><strong>parameter</strong>, and to only ever return a pointer to pinned data when they are called on a pinned pointer.</p>
-<p>Rust std doc</p>
-</blockquote>
-<p>To implement <code>!Unpin</code> for a type directly, (up to this write up) we need nightly with <code>![feature(optin_builtin_traits)]</code>. The stable way is through the marker type <code>PhantomPinned</code> which already has <code>impl !Unpin for PhantomPinned {}</code></p>
-</section>
-<section id="closer-look" class="level2">
-<h2 class="anchored" data-anchor-id="closer-look">Closer look</h2>
-<p>We cannot create <code>Pin</code> for a <code>Pointer&lt;T&gt;</code> where <code>T: !Unpin</code> safely</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb2-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">struct</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb2-2">    pointer<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb2-3"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb2-4"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Deref</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> </span>
-<span id="cb2-5"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">where</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">P::</span>Target<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Unpin</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; underlying data is movable</span></span>
-<span id="cb2-6"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb2-7">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> new(pointer<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> P) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb2-8">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// Safety: the value pointed to is `Unpin`, and so has no requirements</span></span>
-<span id="cb2-9">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// around pinning.</span></span>
-<span id="cb2-10">        <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Pin::</span>new_unchecked(pointer) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb2-11">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb2-12"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb2-13"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Deref</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb2-14">   <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> new_unchecked(pointer<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> P) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb2-15">        Pin <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span> pointer <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb2-16">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb2-17"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<section id="so-how-to-pin-a-t-unpin-safely" class="level3">
-<h3 class="anchored" data-anchor-id="so-how-to-pin-a-t-unpin-safely">So how to pin a <code>T: !Unpin</code> safely?</h3>
-<p>We can use <code>Box::pin</code> (similarity with <code>Rc::pin</code> or <code>Arc::pin</code>) where</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb3-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-2">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">#[</span>inline<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">(</span>always<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">)]</span></span>
-<span id="cb3-3">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> pin(x<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> T) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-4">        (<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">box</span> x)<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>into()</span>
-<span id="cb3-5">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-6"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-7"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">?</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Sized</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">From</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;&gt;</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">for</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-8">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/// This conversion does not allocate on the heap and happens in place.</span></span>
-<span id="cb3-9">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> from(boxed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Self</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-10">        <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">::</span>into_pin(boxed)</span>
-<span id="cb3-11">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-12"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-13"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">?</span><span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Sized</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-14">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> into_pin(boxed<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span>) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-&gt;</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span><span class="dt" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Box</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>T<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb3-15">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// It's not possible to move or replace the insides of a `Pin&lt;Box&lt;T&gt;&gt;`</span></span>
-<span id="cb3-16">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// when `T: !Unpin`,  so it's safe to pin it directly without any</span></span>
-<span id="cb3-17">        <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// additional requirements.</span></span>
-<span id="cb3-18">        <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">unsafe</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">Pin::</span>new_unchecked(boxed) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-19">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb3-20"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<p>Some notable methods of <code>Pin</code> are<em><code>as_ref: &amp;Pin&lt;Pointer&lt;T&gt;&gt; ---&gt; Pin&lt;&amp;T&gt;</code></em><code>as_mut: &amp;mut Pin&lt;Pointer&lt;T&gt;&gt; ---&gt; Pin&lt;&amp;mut T&gt;</code><em><code>get_ref: Pin&lt;Pointer&lt;T&gt;&gt; ---&gt; &amp;T</code></em><code>get_mut: Pin&lt;Pointer&lt;T&gt;&gt; ---&gt; &amp;mut T</code> (given <code>T: Unpin</code>)</p>
-<p>There is also a <code>set</code> method which overwrites the pinned data and it might seem is invalidating the pinned construct but the subtle point is that before assigning the new value, the destructor of the old data is run so it’s ok.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode rust code-with-copy"><code class="sourceCode rust"><span id="cb4-1"><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">impl</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">DerefMut</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb4-2">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">pub</span> <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">fn</span> set(<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span><span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">mut</span> Pin<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;</span>P<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;,</span> value<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">P::</span>Target)</span>
-<span id="cb4-3">    <span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">where</span></span>
-<span id="cb4-4">        <span class="pp" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">P::</span>Target<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span> <span class="bu" style="color: null;
-background-color: null;
-font-style: inherit;">Sized</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">,</span></span>
-<span id="cb4-5">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">{</span></span>
-<span id="cb4-6">        <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span>(<span class="kw" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">self</span><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">.</span>pointer) <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">=</span> value<span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">;</span> <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">// --&gt; before assignment the pointee *self.pointer is dropped</span></span>
-<span id="cb4-7">    <span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span>
-<span id="cb4-8"><span class="op" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">}</span></span></code></pre></div></div>
-<p>So the whole point is, we can change the pointee <code>Pointer::Target</code> of a mutable pinned pointer but cannot get a <code>&amp;mut T</code> out of a <code>Pin&lt;Pointer&lt;T&gt;&gt;</code> (<code>Pointer::Target = T</code> in here) when <code>T: !Unpin</code>.</p>
-<p><code>Pin</code> has been introduced to resolve the issues around <code>Future</code> and <code>async/.await</code> (and more general, <code>Generator</code>). To get a better idea, I recommend looking into <code>async book pin section</code> to see, for example, how an <code>async</code> block is turned into structs (like closures) with potentially<em>self-referential mutable fields</em>and how <code>Pin</code> helps there.</p>
-<p>Hope we have entangled some of the complications for understanding what <code>Pin</code> is and what it does. For more details, checkout the complete documentation as well as more discussion on <a href="https://doc.rust-lang.org/std/pin/index.html#projections-and-structural-pinning">structural pinning and the safety issues around it</a>.</p>
-
-
-</section>
-</section>
-
- ]]></description>
-  <category>Rust</category>
-  <guid>https://ehsanmkermani.com/posts/2019-08-16-rust-std-study-series-pin/</guid>
-  <pubDate>Fri, 16 Aug 2019 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
