@@ -1,7 +1,7 @@
 ---
 title: "createlang.rs: Six Years Later, It's Done"
 author: "Ehsan M. Kermani"
-date: "2024-12-31"
+date: "2025-12-31"
 categories: [Rust, Programming Languages, Book]
 description: "After almost six years, my book on creating programming languages with Rust is finally complete. Here's what that journey looked like."
 ---
