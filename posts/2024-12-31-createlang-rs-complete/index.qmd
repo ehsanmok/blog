@@ -1,0 +1,142 @@
+---
+title: "createlang.rs: Six Years Later, It's Done"
+author: "Ehsan M. Kermani"
+date: "2024-12-31"
+categories: [Rust, Programming Languages, Book]
+description: "After almost six years, my book on creating programming languages with Rust is finally complete. Here's what that journey looked like."
+---
+
+## It's Finally Done
+
+After almost six years, [createlang.rs](https://createlang.rs) is complete. The book on creating your own programming language with Rust is finished. Not "mostly done" or "just needs polish." Actually finished.
+
+I can barely believe I'm writing this.
+
+---
+
+## How It Started
+
+Back in 2020, I tweeted about the project:
+
+```{=html}
+<blockquote class="twitter-tweet" data-theme="dark">
+<a href="https://twitter.com/ehsanmok/status/1269990359175622656"></a>
+</blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+
+Can't see the embed? [View the tweet on X →](https://twitter.com/ehsanmok/status/1269990359175622656)
+
+At the time, I was excited. I had this vision of a comprehensive guide that would take someone from zero to building a real compiler in Rust. Not a toy language, but something with a proper parser, type system, and code generation.
+
+The early version got some attention, people seemed interested, and I thought: "Great! I'll wrap this up in a few months."
+
+Six years later, here we are.
+
+---
+
+## What Took So Long?
+
+Honestly? Everything.
+
+**Life happened.** Jobs changed. Priorities shifted. I moved across the country. Some months I'd write every day, other months I wouldn't touch it at all.
+
+**The scope kept growing.** Every time I thought I was done, I'd realize there was another important concept I hadn't covered. Lifetime semantics. Borrow checking. LLVM integration. Optimization passes. The list kept expanding.
+
+**I didn't want to write a typical compiler book.** You know the ones. 1000 pages about parser theory that put you to sleep by chapter 3. I wanted something practical, something you could actually follow and build with. That meant finding the right balance between theory and practice, which is harder than it sounds.
+
+**Perfectionism is real.** I kept rewriting chapters. "This explanation isn't clear enough." "This example is too simple." "This code could be better." I probably rewrote the parser chapter five times.
+
+**Rust kept evolving.** When I started, we didn't have const generics. No async/await. The module system was different. Every Rust edition meant going back and updating examples.
+
+But you know what? All of that is okay. Because the book that exists now is so much better than what I envisioned in 2020.
+
+---
+
+## What's Actually In It
+
+The book walks through building a complete programming language from scratch:
+
+**Part I: Foundations**
+- Lexical analysis and tokenization
+- Parsing with recursive descent and Pratt parsing
+- Abstract syntax trees and intermediate representations
+
+**Part II: Type Systems**
+- Type checking and inference
+- Polymorphism and generics
+- Lifetimes and ownership (the Rust way)
+
+**Part III: Code Generation**
+- LLVM basics and IR generation
+- Optimization passes
+- Linking and producing executables
+
+**Part IV: Advanced Topics**
+- Garbage collection and memory management
+- Concurrency primitives
+- Interop with C and other languages
+
+Every chapter has complete, working code. Not pseudo-code, not simplified examples. Real Rust code that compiles and runs. The full implementation is on [GitHub](https://github.com/ehsanmok/create-your-own-lang-with-rust), and it's a legitimate compiler for a small but complete language.
+
+---
+
+## What I Learned
+
+Writing this book taught me more than I expected.
+
+**Writing forces clarity.** When you have to explain something to someone else, you realize what you actually understand and what you just thought you understood. I learned Rust more deeply by teaching it.
+
+**Incremental progress works.** Some weeks I only wrote 200 words. That's fine. 200 words a week is 10,000 words a year. It adds up.
+
+**Done is better than perfect.** At some point, you have to ship. There are probably typos in the book. Some explanations could be clearer. Some examples could be more elegant. But if I waited until it was perfect, I'd never release it.
+
+**Community matters.** The people who read early drafts, opened issues on GitHub, asked questions on Discord, they kept me going. Every piece of feedback made the book better.
+
+---
+
+## Why Rust?
+
+Rust's safety guarantees, performance, and modern tooling made it the obvious choice. But honestly, the bigger reason I kept at this was that I really don't like having a half-baked project hanging over my head. You know the feeling? That nagging sense of something unfinished, something you started with excitement that's just sitting there incomplete.
+
+Six years is a long time to carry that around. But now it's done, and that feels good.
+
+---
+
+## What's Next?
+
+The book is done, but the project isn't over.
+
+I want to add more examples. Maybe a chapter on implementing a small standard library. Perhaps a section on JIT compilation. There's always more to explore.
+
+I'm also planning a series of blog posts diving deeper into specific topics from the book. Type inference algorithms. Register allocation. Optimization strategies. All the stuff that didn't quite fit in the main narrative.
+
+And honestly? I'm just excited to see what people build with it. The whole point was to lower the barrier to creating languages. If even a few people use this to build something cool, that's worth six years.
+
+---
+
+## A Note on Mojo🔥
+
+Speaking of creating languages, I should mention that I'm now part of the team at [Modular](https://www.modular.com/). Mojo is a new programming language for AI that combines Python's usability with C-level performance. It's a serious language design effort, and if you're interested in systems programming, high-performance computing, or just how modern languages are built, check out the [Mojo documentation](https://docs.modular.com/mojo/).
+
+Honestly? If Mojo existed when I started this book, that would have been my choice. It's much more powerful than Rust for the kind of low-level systems work compilers need, but also simpler. That's the sweet spot. a language that gives you more power without the complexity overhead. But that's the thing about language design, timing matters. In 2020, Rust was the right tool. Now we have even better options.
+
+We're on the [path to Mojo 1.0](https://www.modular.com/blog/the-path-to-mojo-1-0), and it's been incredible to see how the language has matured. The experience of writing this book definitely influenced how I think about language design. And working on Mojo has deepened my appreciation for the tradeoffs and decisions that go into creating a production language. It's one thing to teach compiler concepts, another thing entirely to build a language that people will actually use in production.
+
+
+---
+
+## Final Thoughts
+
+Six years feels like a long time. But looking back, it doesn't feel wasted. Every chapter I struggled with, every example I rewrote, every concept I had to learn properly, it all contributed to something I'm genuinely proud of.
+
+If you're working on something that's taking longer than expected, whether it's a book, a project, or just learning something new, that's okay. Progress isn't always linear. Some things just take time.
+
+And when you're done, whenever that is, it'll feel worth it.
+
+The book is live at [createlang.rs](https://createlang.rs). The code is on [GitHub](https://github.com/ehsanmok/create-your-own-lang-with-rust). And if you have questions, find bugs, or just want to chat about compilers or language design, open an issue on the [GitHub repository](https://github.com/ehsanmok/create-your-own-lang-with-rust).
+
+Thanks for following along on this journey. Here's to the next one.
+
+Happy New Year. 🎉
+
