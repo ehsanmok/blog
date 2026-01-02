@@ -9,7 +9,7 @@
 <meta name="author" content="Ehsan M. Kermani">
 <meta name="dcterms.date" content="2012-11-30">
 
-<title>Classification of Vector Bundles on Elliptic curves – Ehsan’s Blog</title>
+<title>Classification of Vector Bundles on Elliptic Curves – Ehsan’s Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -364,8 +364,15 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#case-1-vector-bundles-of-degree-zero-d0" id="toc-case-1-vector-bundles-of-degree-zero-d0" class="nav-link active" data-scroll-target="#case-1-vector-bundles-of-degree-zero-d0">Case 1: Vector bundles of degree zero (<span class="math inline">\(d=0\)</span>)</a></li>
+  <li><a href="#case-2-vector-bundles-of-non-negative-degree-d-geq-0-general-case" id="toc-case-2-vector-bundles-of-non-negative-degree-d-geq-0-general-case" class="nav-link" data-scroll-target="#case-2-vector-bundles-of-non-negative-degree-d-geq-0-general-case">Case 2: Vector bundles of non-negative degree (<span class="math inline">\(d \geq 0\)</span>, general case)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -373,7 +380,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Classification of Vector Bundles on Elliptic curves</h1>
+<h1 class="title">Classification of Vector Bundles on Elliptic Curves</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Algebraic Geometry</div>
   </div>
@@ -405,17 +412,73 @@ window.Quarto = {
 </header>
 
 
-<p>I’m supposed to give a talk on this subject for one of my courses, so I consider this post as a “pre-exposition.”&nbsp;I learned from and heavily used the great exposition “<em>Vector bundles on curves</em>” by<em>Montserrat Teixidor I Bigas</em>in this post. I wrote up the pre-requisites&nbsp;<a href="http://wp.me/p2zmPY-55">here</a>. In 1957,<em>Atiyah</em>in this famous paper “<strong>Vector bundles over an elliptic curve</strong>” classified indecomposable vector bundles of arbitrary rank and degree. Briefly, every vector bundle (locally free sheaf) is decomposed uniquely (up to the order) to the direct sum of indecomposable vector bundles and<em>the set of isomorphism classes of indecomposable vector bundles of a fixed rank and degree is isomorphic to the Jacobian of the curve which the latter is isomorphic to the curve itself.</em>The isomorphisms are<em>canonical</em>for vector bundles of degree zero and for higher degree, they<em>depend on the choice</em>of a<em>line bundle of degree one</em>(a base point on the curve) &nbsp;[“<em>Vector bundles on curves” by Montserrat Teixidor I Bigas, section 4.</em>] An elliptic curve <span class="math inline">\(C\)</span> is a smooth projective curve of genus one over an algebraically closed field <span class="math inline">\(k.\)</span> One may assume that <span class="math inline">\(\text{char}(k)=0.\)</span> Throughout, the words vector bundle <span class="math inline">\(E\)</span> and locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> are used interchangeably. Denote by <span class="math inline">\(U(r,d)\)</span> the set of isomorphism classes of indecomposable vector bundles of rank <span class="math inline">\(r\)</span> and degree <span class="math inline">\(d\)</span> where the degree of a vector bundle <span class="math inline">\(E\)</span> of rank <span class="math inline">\(r\)</span> is defined as the degree of the associated locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> which is</p>
-<p><span class="math inline">\(\deg(\mathcal{E})= \chi (\mathcal{E})-r \chi (\mathcal{O})=\chi (\mathcal{E})-r(1-g).\)</span></p>
-<p>One can also show that <span class="math inline">\(\deg(\mathcal{E})\)</span> is equal to the degree of its<em>determinant</em>.<strong>Case 1</strong>: Vector bundles of degree zero <span class="math inline">\(d=0.\)</span> For every positive integer <span class="math inline">\(r\)</span> there exists a unique (self-dual) indecomposable vector bundle <span class="math inline">\(\overline{E}\_{r,0}\)</span> of rank <span class="math inline">\(r\)</span> and degree zero with only one section. It turns out that any indecomposable vector bundle of rank <span class="math inline">\(r\)</span> and degree zero is isomorphic to&nbsp;<span class="math inline">\(\overline{E}\_{r,0} \otimes L\)</span> for a unique line bundle <span class="math inline">\(L\)</span> of degree zero. Therefore, the set (moduli space) of indecomposable vector bundles of degree zero on <span class="math inline">\(C,\)</span> i.e.&nbsp;<span class="math inline">\(U(r,0)\)</span> is (canonically) isomorphic to the moduli space of degree zero line bundles on <span class="math inline">\(C\)</span> which in turn by definition is the <a href="http://en.wikipedia.org/wiki/Jacobian_variety">Jacobian</a> of <span class="math inline">\(C.\)</span><strong>Case 2</strong>: Vector bundles of non-negative degree <span class="math inline">\(d \geq 0,\)</span> (general case) In general, let <span class="math inline">\(L\)</span> be a fixed line bundle of<em>degree one</em>, (which corresponds to fixing a base point) on <span class="math inline">\(C\)</span> then there is an isomorphism <span class="math inline">\(U(r,d) \tilde{\to} U(r,d+rk)\)</span> sending <span class="math inline">\(E \mapsto E \otimes L^k.\)</span> Note that <span class="math inline">\(\deg(E \otimes L^k)=\text{rk} (L^k) \deg (E)+\text{rk} (E) \deg(L^k)=d+rk.\)</span> If <span class="math inline">\(r&gt;0\)</span> there is an isomorphism <span class="math inline">\(U(r,d) \tilde{\to} U(r+d,d)\)</span> sending <span class="math inline">\(E\)</span> to <span class="math inline">\(E'\)</span> where <span class="math inline">\(E'\)</span> is given by the following extension with&nbsp;<span class="math inline">\(\mathcal{O}^d,\)</span></p>
-<p><span class="math inline">\(0 \longrightarrow \mathcal{O}^d \longrightarrow E' \longrightarrow E \longrightarrow 0\)</span></p>
-<p>By these two operations, we can assume that <span class="math inline">\(d \geq 0\)</span> and <span class="math inline">\(r&gt;0.\)</span> Moreover, if <span class="math inline">\(d \geq r\)</span> we will have <span class="math inline">\(U(r,d) \cong U(r,r-d)\)</span> and if <span class="math inline">\(d&lt;r\)</span> then <span class="math inline">\(U(r,d) \cong U(r-d,d).\)</span> Note that non of these operations changes <span class="math inline">\(h=\gcd(r,d).\)</span> Thus, we can construct a sequence of isomorphisms <span class="math inline">\(U(r\_i,d\_i) \cong U(r\_{i+1}, d\_{i+1})\)</span> with <span class="math inline">\(r\_i&gt;0, \; d\_i \geq 0\)</span> s.t. <span class="math inline">\(\gcd(r\_i,d\_i)=\gcd(r\_{i+1},d\_{i+1})\)</span> and <span class="math inline">\(r\_i+d\_i&gt; r\_{i+1}+d\_{i+1}.\)</span> This is the sequence of positive numbers, so it will terminate when <span class="math inline">\(r\_i=h\)</span> and <span class="math inline">\(d\_i=0.\)</span> Hence, we have&nbsp;established the isomorphism</p>
-<p><span class="math inline">\(U(r,d) \cong U(h,0)\)</span></p>
-<p>and by<em>case 1</em>, <span class="math inline">\(U(h,0)\)</span> is isomorphic to the<em>Jacobian</em>of <span class="math inline">\(C\)</span> (and is isomorphic to the curve itself.) That being said, the above isomorphism is<em>completely determined</em>up to the choice of a line bundle <span class="math inline">\(L\)</span> of<em>degree one</em>. So far, we have achieved what we wanted. Let’s now, try to dig more. Denote by&nbsp;<span class="math inline">\(E^L\_{r,d}\)</span> the element in <span class="math inline">\(U(r,d)\)</span> corresponding to <span class="math inline">\(\overline{E}\_{h,0}\)</span> in <span class="math inline">\(U(h,0).\)</span> &gt;<strong>Proposition 1</strong>: a) Every vector bundle <span class="math inline">\(E\)</span> of rank <span class="math inline">\(r\)</span> and degree <span class="math inline">\(d\)</span> can be written as <span class="math inline">\(E^L\_{r,d} \otimes L'\)</span> for some line bundle <span class="math inline">\(L'\)</span> of degree zero. &gt; &gt; b) If <span class="math inline">\(\gcd(r,d)=1,\)</span> then <span class="math inline">\(E^L\_{r,d} \otimes (E^L\_{r,d})^\*\cong \bigoplus^{r^2}\_{i=1} L\_i\)</span> where <span class="math inline">\(L\_i\)</span> run over the set of line bundles of order (in the Picard group) <span class="math inline">\(r.\)</span> &gt; &gt; c) If <span class="math inline">\(r \geq s,\)</span> then <span class="math inline">\(\overline{E}\_{r,0} \otimes \overline{E}\_{s,0} \cong \overline{E}\_{r-s+1,0} \oplus \overline{E}\_{r-s+3,0} \oplus \cdots \oplus \overline{E}\_{r+s-3} \oplus \overline{E}\_{r+s-1,0}.\)</span> &gt; &gt; d) If <span class="math inline">\(gcd(r,d)=1,\)</span> then <span class="math inline">\(E^L\_{r,d} \otimes \overline{E}\_{h,0}=E^L\_{rh,dh}.\)</span> &gt; &gt; e) If <span class="math inline">\(\gcd(r,r')=\gcd(r,d)=\gcd(r',d')=1,\)</span> then <span class="math inline">\(E^L\_{r,d} \otimes E^L\_{r',d'}=E^L\_{rr',rd'+r'd}.\)</span></p>
-<p>Here is some results involving <a href="http://en.wikipedia.org/wiki/Stable_vector_bundle">stability and semi-stability</a> of vector bundles on <span class="math inline">\(C.\)</span> &gt;<strong>Proposition 2</strong>: a) An indecomposable vector bundle of degree zero is semi-stable not stable. &gt; &gt; b) Indecomposable vector bundles are semi-stable and they are stable if and only if <span class="math inline">\(\gcd(r,d)=1.\)</span></p>
-<p>For detailed and complete description of vector bundles on an elliptic curve, especially &nbsp;when the ground field is of <span class="math inline">\(\text{char}(k)=p,\)</span> look at Atiyah’s original paper.</p>
+<p>I’m supposed to give a talk on this subject for one of my courses, so I consider this post as a “pre-exposition.” I learned from and heavily used the great exposition “<em>Vector bundles on curves</em>” by <em>Montserrat Teixidor I Bigas</em> in this post. I wrote up the pre-requisites <a href="http://wp.me/p2zmPY-55">here</a>.</p>
+<p>In 1957, <em>Atiyah</em> in his famous paper “<strong>Vector bundles over an elliptic curve</strong>” classified indecomposable vector bundles of arbitrary rank and degree. Briefly, every vector bundle (locally free sheaf) is decomposed uniquely (up to the order) to the direct sum of indecomposable vector bundles and <em>the set of isomorphism classes of indecomposable vector bundles of a fixed rank and degree is isomorphic to the Jacobian of the curve which the latter is isomorphic to the curve itself.</em></p>
+<p>The isomorphisms are <em>canonical</em> for vector bundles of degree zero and for higher degree, they <em>depend on the choice</em> of a <em>line bundle of degree one</em> (a base point on the curve). [<em>“Vector bundles on curves” by Montserrat Teixidor I Bigas, section 4.</em>]</p>
+<p>An elliptic curve <span class="math inline">\(C\)</span> is a smooth projective curve of genus one over an algebraically closed field <span class="math inline">\(k.\)</span> One may assume that <span class="math inline">\(\text{char}(k)=0.\)</span> Throughout, the words vector bundle <span class="math inline">\(E\)</span> and locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> are used interchangeably.</p>
+<p>Denote by <span class="math inline">\(U(r,d)\)</span> the set of isomorphism classes of indecomposable vector bundles of rank <span class="math inline">\(r\)</span> and degree <span class="math inline">\(d\)</span> where the degree of a vector bundle <span class="math inline">\(E\)</span> of rank <span class="math inline">\(r\)</span> is defined as the degree of the associated locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> which is</p>
+<p><span class="math display">\[\deg(\mathcal{E})= \chi (\mathcal{E})-r \chi (\mathcal{O})=\chi (\mathcal{E})-r(1-g).\]</span></p>
+<p>One can also show that <span class="math inline">\(\deg(\mathcal{E})\)</span> is equal to the degree of its <em>determinant</em>.</p>
+<hr>
+<section id="case-1-vector-bundles-of-degree-zero-d0" class="level2">
+<h2 class="anchored" data-anchor-id="case-1-vector-bundles-of-degree-zero-d0">Case 1: Vector bundles of degree zero (<span class="math inline">\(d=0\)</span>)</h2>
+<p>For every positive integer <span class="math inline">\(r\)</span> there exists a unique (self-dual) indecomposable vector bundle <span class="math inline">\(\overline{E}_{r,0}\)</span> of rank <span class="math inline">\(r\)</span> and degree zero with only one section. It turns out that any indecomposable vector bundle of rank <span class="math inline">\(r\)</span> and degree zero is isomorphic to <span class="math inline">\(\overline{E}_{r,0} \otimes L\)</span> for a unique line bundle <span class="math inline">\(L\)</span> of degree zero.</p>
+<p>Therefore, the set (moduli space) of indecomposable vector bundles of degree zero on <span class="math inline">\(C,\)</span> i.e.&nbsp;<span class="math inline">\(U(r,0)\)</span> is (canonically) isomorphic to the moduli space of degree zero line bundles on <span class="math inline">\(C\)</span> which in turn by definition is the <a href="http://en.wikipedia.org/wiki/Jacobian_variety">Jacobian</a> of <span class="math inline">\(C.\)</span></p>
+<hr>
+</section>
+<section id="case-2-vector-bundles-of-non-negative-degree-d-geq-0-general-case" class="level2">
+<h2 class="anchored" data-anchor-id="case-2-vector-bundles-of-non-negative-degree-d-geq-0-general-case">Case 2: Vector bundles of non-negative degree (<span class="math inline">\(d \geq 0\)</span>, general case)</h2>
+<p>In general, let <span class="math inline">\(L\)</span> be a fixed line bundle of <em>degree one</em> (which corresponds to fixing a base point) on <span class="math inline">\(C\)</span> then there is an isomorphism <span class="math inline">\(U(r,d) \xrightarrow{\sim} U(r,d+rk)\)</span> sending <span class="math inline">\(E \mapsto E \otimes L^k.\)</span> Note that <span class="math inline">\(\deg(E \otimes L^k)=\text{rk} (L^k) \deg (E)+\text{rk} (E) \deg(L^k)=d+rk.\)</span></p>
+<p>If <span class="math inline">\(r&gt;0\)</span> there is an isomorphism <span class="math inline">\(U(r,d) \xrightarrow{\sim} U(r+d,d)\)</span> sending <span class="math inline">\(E\)</span> to <span class="math inline">\(E'\)</span> where <span class="math inline">\(E'\)</span> is given by the following extension with <span class="math inline">\(\mathcal{O}^d,\)</span></p>
+<p><span class="math display">\[0 \longrightarrow \mathcal{O}^d \longrightarrow E' \longrightarrow E \longrightarrow 0\]</span></p>
+<p>By these two operations, we can assume that <span class="math inline">\(d \geq 0\)</span> and <span class="math inline">\(r&gt;0.\)</span> Moreover, if <span class="math inline">\(d \geq r\)</span> we will have <span class="math inline">\(U(r,d) \cong U(r,r-d)\)</span> and if <span class="math inline">\(d&lt;r\)</span> then <span class="math inline">\(U(r,d) \cong U(r-d,d).\)</span> Note that none of these operations changes <span class="math inline">\(h=\gcd(r,d).\)</span></p>
+<p>Thus, we can construct a sequence of isomorphisms <span class="math inline">\(U(r_i,d_i) \cong U(r_{i+1}, d_{i+1})\)</span> with <span class="math inline">\(r_i&gt;0, \; d_i \geq 0\)</span> s.t. <span class="math inline">\(\gcd(r_i,d_i)=\gcd(r_{i+1},d_{i+1})\)</span> and <span class="math inline">\(r_i+d_i&gt; r_{i+1}+d_{i+1}.\)</span> This is the sequence of positive numbers, so it will terminate when <span class="math inline">\(r_i=h\)</span> and <span class="math inline">\(d_i=0.\)</span> Hence, we have established the isomorphism</p>
+<p><span class="math display">\[U(r,d) \cong U(h,0)\]</span></p>
+<p>and by <em>Case 1</em>, <span class="math inline">\(U(h,0)\)</span> is isomorphic to the <em>Jacobian</em> of <span class="math inline">\(C\)</span> (and is isomorphic to the curve itself.)</p>
+<p>That being said, the above isomorphism is <em>completely determined</em> up to the choice of a line bundle <span class="math inline">\(L\)</span> of <em>degree one</em>.</p>
+<p>So far, we have achieved what we wanted. Let’s now try to dig more. Denote by <span class="math inline">\(E^L_{r,d}\)</span> the element in <span class="math inline">\(U(r,d)\)</span> corresponding to <span class="math inline">\(\overline{E}_{h,0}\)</span> in <span class="math inline">\(U(h,0).\)</span></p>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Proposition 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="a">
+<li><p>Every vector bundle <span class="math inline">\(E\)</span> of rank <span class="math inline">\(r\)</span> and degree <span class="math inline">\(d\)</span> can be written as <span class="math inline">\(E^L_{r,d} \otimes L'\)</span> for some line bundle <span class="math inline">\(L'\)</span> of degree zero.</p></li>
+<li><p>If <span class="math inline">\(\gcd(r,d)=1,\)</span> then <span class="math inline">\(E^L_{r,d} \otimes (E^L_{r,d})^*\cong \bigoplus^{r^2}_{i=1} L_i\)</span> where <span class="math inline">\(L_i\)</span> run over the set of line bundles of order (in the Picard group) <span class="math inline">\(r.\)</span></p></li>
+<li><p>If <span class="math inline">\(r \geq s,\)</span> then <span class="math inline">\(\overline{E}_{r,0} \otimes \overline{E}_{s,0} \cong \overline{E}_{r-s+1,0} \oplus \overline{E}_{r-s+3,0} \oplus \cdots \oplus \overline{E}_{r+s-3,0} \oplus \overline{E}_{r+s-1,0}.\)</span></p></li>
+<li><p>If <span class="math inline">\(\gcd(r,d)=1,\)</span> then <span class="math inline">\(E^L_{r,d} \otimes \overline{E}_{h,0}=E^L_{rh,dh}.\)</span></p></li>
+<li><p>If <span class="math inline">\(\gcd(r,r')=\gcd(r,d)=\gcd(r',d')=1,\)</span> then <span class="math inline">\(E^L_{r,d} \otimes E^L_{r',d'}=E^L_{rr',rd'+r'd}.\)</span></p></li>
+</ol>
+</div>
+</div>
+<hr>
+<p>Here are some results involving <a href="http://en.wikipedia.org/wiki/Stable_vector_bundle">stability and semi-stability</a> of vector bundles on <span class="math inline">\(C.\)</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Proposition 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="a">
+<li><p>An indecomposable vector bundle of degree zero is semi-stable but not stable.</p></li>
+<li><p>Indecomposable vector bundles are semi-stable and they are stable if and only if <span class="math inline">\(\gcd(r,d)=1.\)</span></p></li>
+</ol>
+</div>
+</div>
+<p>For detailed and complete description of vector bundles on an elliptic curve, especially when the ground field is of <span class="math inline">\(\text{char}(k)=p,\)</span> look at Atiyah’s original paper.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

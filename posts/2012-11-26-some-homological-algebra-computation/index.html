@@ -405,33 +405,80 @@ window.Quarto = {
 </header>
 
 
-<p>In this post, I’m going to write down the detailed proofs of some of the exercises in Rotman’s Homological Algebra. They were asked in ML and then answered by me. &gt;<strong>1</strong>. Let <span class="math inline">\(A\)</span> be a torsion abelian group. Then <span class="math inline">\(\text{Ext}^1\_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}\_\mathbb{Z}(A,S^1)\)</span>, where <span class="math inline">\(S^1\)</span> is the unit circle.</p>
-<p>One point is that the structure of the <a href="http://en.wikipedia.org/wiki/Circle_group#Group_structure">circle group</a> is <span class="math inline">\(\mathbb{Q}/\mathbb{Z} \oplus \mathbb{R}.\)</span> Now, since <span class="math inline">\(A\)</span> is torsion, then <span class="math inline">\(\text{Hom}(A,\mathbb{R})=0.\)</span> Therefore, it is enough to show that <span class="math inline">\(\text{Ext}^1\_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}\_\mathbb{Z}(A,\mathbb{Q}/\mathbb{Z}).\)</span> We know that <span class="math inline">\(\text{Ext}(A,-)\)</span> functor is the right derived functor of the<em>left</em>exact (covariant) functor <span class="math inline">\(\text{Hom}(A,-).\)</span> Consider the following exact sequence of abelian groups (injective resolution)</p>
-<p><span class="math inline">\(0 \longrightarrow \mathbb{Z} \longrightarrow \mathbb{Q} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0\)</span></p>
-<p>where obviously, the second arrow is inclusion and the third one is the projection. Applying our left exact (covariant) functor <span class="math inline">\(\text{Hom}(A, -)\)</span> to the above exact sequence, we will obtain the following long exact sequence</p>
-<p>$0 (A,) (A,) (A,/) ^1(A, ) $</p>
-<p>Notice that, <span class="math inline">\(\mathbb{Q}\)</span> and <span class="math inline">\(\mathbb{Q}/\mathbb{Z}\)</span> are <a href="http://en.wikipedia.org/wiki/Divisible_group">divisible group</a>s, hence are injective <span class="math inline">\(\mathbb{Z}\)</span>-modules, thus, <span class="math inline">\(\text{Ext}^i(A, \mathbb{Q})=\text{Ext}^i(A, \mathbb{Q}/\mathbb{Z})=0\)</span> for <span class="math inline">\(i&gt;0.\)</span> Similarly, since <span class="math inline">\(A\)</span> is torsion then <span class="math inline">\(\text{Hom}(A,\mathbb{Z})=\text{Hom}(A,\mathbb{Q})=0.\)</span> Hence,</p>
-<p><span class="math inline">\(\text{Ext}^1(A, \mathbb{Z}) \cong \text{Hom}(A,\mathbb{Q}/\mathbb{Z})\)</span></p>
-<p>as desired. &gt;<strong>2</strong>. Let <span class="math inline">\(A, B\)</span> be finite abelian groups. Prove that <span class="math inline">\(\text{Ext}^1\_\mathbb{Z} (A,B) \cong A \otimes\_\mathbb{Z} B.\)</span></p>
-<p>By the <a href="http://en.wikipedia.org/wiki/Finitely-generated_abelian_group#Classification">classification of finitely generated abelian groups</a>, we can assume that <span class="math inline">\(A \cong \mathbb{Z}/q\_1 \oplus \mathbb{Z}/q\_2 \oplus \cdots \oplus \mathbb{Z}/q\_k\)</span> and <span class="math inline">\(B\cong \mathbb{Z}/p\_1 \oplus \mathbb{Z}/p\_2 \oplus \cdots \oplus \mathbb{Z}/p\_l\)</span> where <span class="math inline">\(q\_i, p\_j\)</span> are (not necessarily distinct) prime numbers.<strong>Lemma</strong>: Let <span class="math inline">\(A\)</span> be a finite abelian group, then</p>
-<p><span class="math inline">\(\text{Ext}^1(A, \mathbb{Z}/m) \cong \frac{\text{Hom}(A, \mathbb{Q}/\mathbb{Z})}{m \text{Hom}(A, \mathbb{Q}/\mathbb{Z})}.\)</span><em>Proof of the lemma</em>: Consider the following injective resolution for <span class="math inline">\(\mathbb{Z}/m\)</span></p>
-<p><span class="math inline">\(0 \longrightarrow \mathbb{Z}/m \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0\)</span></p>
-<p>where the second arrow is multiplication by <span class="math inline">\(1/m\)</span> and the third one is multiplication by <span class="math inline">\(m.\)</span> Applying <span class="math inline">\(\text{Hom}(A, -)\)</span> to the above short exact sequence, we will get</p>
-<p><span class="math inline">\(0 \longrightarrow \text{Hom}(A, \mathbb{Z}/m) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Ext}^1(A, \mathbb{Z}/m) \to 0\)</span></p>
-<p>Note that, injectivity of <span class="math inline">\(\mathbb{Q}/\mathbb{Z},\)</span> implies that <span class="math inline">\(\text{Ext}^i(A,\mathbb{Q}/\mathbb{Z})=0\)</span> for <span class="math inline">\(i&gt;0.\)</span> Hence, the required isomorphism. (Notice that the third arrow is the induced multiplication by <span class="math inline">\(m\)</span> from our resolution.) In particular, setting <span class="math inline">\(A=\mathbb{Z}/n\)</span> in the<em>lemma</em>and<strong>using the result of the question 1)</strong>, we get</p>
-<p><span class="math inline">\(\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \frac{\text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})}{m \text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})} \cong \frac{\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})}{m \text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})} \cong \frac{ \mathbb{Z}/n}{m \mathbb{Z}/n} \cong \mathbb{Z}/d\)</span></p>
+<p>In this post, I’m going to write down the detailed proofs of some of the exercises in Rotman’s Homological Algebra. They were asked in ML and then answered by me.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problem 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(A\)</span> be a torsion abelian group. Then <span class="math inline">\(\text{Ext}^1_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}_\mathbb{Z}(A,S^1)\)</span>, where <span class="math inline">\(S^1\)</span> is the unit circle.</p>
+</div>
+</div>
+<p>One point is that the structure of the <a href="http://en.wikipedia.org/wiki/Circle_group#Group_structure">circle group</a> is <span class="math inline">\(\mathbb{Q}/\mathbb{Z} \oplus \mathbb{R}.\)</span> Now, since <span class="math inline">\(A\)</span> is torsion, then <span class="math inline">\(\text{Hom}(A,\mathbb{R})=0.\)</span> Therefore, it is enough to show that <span class="math inline">\(\text{Ext}^1_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}_\mathbb{Z}(A,\mathbb{Q}/\mathbb{Z}).\)</span></p>
+<p>We know that <span class="math inline">\(\text{Ext}(A,-)\)</span> functor is the right derived functor of the <em>left</em> exact (covariant) functor <span class="math inline">\(\text{Hom}(A,-).\)</span> Consider the following exact sequence of abelian groups (injective resolution)</p>
+<p><span class="math display">\[0 \longrightarrow \mathbb{Z} \longrightarrow \mathbb{Q} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0\]</span></p>
+<p>where obviously, the second arrow is inclusion and the third one is the projection.</p>
+<p>Applying our left exact (covariant) functor <span class="math inline">\(\text{Hom}(A, -)\)</span> to the above exact sequence, we will obtain the following long exact sequence</p>
+<p><span class="math display">\[0 \longrightarrow \text{Hom}(A,\mathbb{Z}) \longrightarrow \text{Hom}(A,\mathbb{Q}) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Ext}^1(A, \mathbb{Z}) \longrightarrow 0\]</span></p>
+<p>Notice that, <span class="math inline">\(\mathbb{Q}\)</span> and <span class="math inline">\(\mathbb{Q}/\mathbb{Z}\)</span> are <a href="http://en.wikipedia.org/wiki/Divisible_group">divisible groups</a>, hence are injective <span class="math inline">\(\mathbb{Z}\)</span>-modules, thus, <span class="math inline">\(\text{Ext}^i(A, \mathbb{Q})=\text{Ext}^i(A, \mathbb{Q}/\mathbb{Z})=0\)</span> for <span class="math inline">\(i&gt;0.\)</span></p>
+<p>Similarly, since <span class="math inline">\(A\)</span> is torsion then <span class="math inline">\(\text{Hom}(A,\mathbb{Z})=\text{Hom}(A,\mathbb{Q})=0.\)</span> Hence,</p>
+<p><span class="math display">\[\text{Ext}^1(A, \mathbb{Z}) \cong \text{Hom}(A,\mathbb{Q}/\mathbb{Z})\]</span></p>
+<p>as desired.</p>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problem 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(A, B\)</span> be finite abelian groups. Prove that <span class="math inline">\(\text{Ext}^1_\mathbb{Z} (A,B) \cong A \otimes_\mathbb{Z} B.\)</span></p>
+</div>
+</div>
+<p>By the <a href="http://en.wikipedia.org/wiki/Finitely-generated_abelian_group#Classification">classification of finitely generated abelian groups</a>, we can assume that <span class="math inline">\(A \cong \mathbb{Z}/q_1 \oplus \mathbb{Z}/q_2 \oplus \cdots \oplus \mathbb{Z}/q_k\)</span> and <span class="math inline">\(B\cong \mathbb{Z}/p_1 \oplus \mathbb{Z}/p_2 \oplus \cdots \oplus \mathbb{Z}/p_l\)</span> where <span class="math inline">\(q_i, p_j\)</span> are (not necessarily distinct) prime numbers.</p>
+<p><strong>Lemma</strong>: Let <span class="math inline">\(A\)</span> be a finite abelian group, then</p>
+<p><span class="math display">\[\text{Ext}^1(A, \mathbb{Z}/m) \cong \frac{\text{Hom}(A, \mathbb{Q}/\mathbb{Z})}{m \cdot \text{Hom}(A, \mathbb{Q}/\mathbb{Z})}.\]</span></p>
+<p><em>Proof of the lemma</em>: Consider the following injective resolution for <span class="math inline">\(\mathbb{Z}/m\)</span></p>
+<p><span class="math display">\[0 \longrightarrow \mathbb{Z}/m \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0\]</span></p>
+<p>where the second arrow is multiplication by <span class="math inline">\(1/m\)</span> and the third one is multiplication by <span class="math inline">\(m.\)</span></p>
+<p>Applying <span class="math inline">\(\text{Hom}(A, -)\)</span> to the above short exact sequence, we will get</p>
+<p><span class="math display">\[0 \longrightarrow \text{Hom}(A, \mathbb{Z}/m) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Ext}^1(A, \mathbb{Z}/m) \to 0\]</span></p>
+<p>Note that, injectivity of <span class="math inline">\(\mathbb{Q}/\mathbb{Z},\)</span> implies that <span class="math inline">\(\text{Ext}^i(A,\mathbb{Q}/\mathbb{Z})=0\)</span> for <span class="math inline">\(i&gt;0.\)</span> Hence, the required isomorphism. (Notice that the third arrow is the induced multiplication by <span class="math inline">\(m\)</span> from our resolution.)</p>
+<p>In particular, setting <span class="math inline">\(A=\mathbb{Z}/n\)</span> in the <em>lemma</em> and <strong>using the result of Problem 1</strong>, we get</p>
+<p><span class="math display">\[\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \frac{\text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})}{m \cdot \text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})} \cong \frac{\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})}{m \cdot \text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})} \cong \frac{ \mathbb{Z}/n}{m \cdot \mathbb{Z}/n} \cong \mathbb{Z}/d\]</span></p>
 <p>Note that, <span class="math inline">\(\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}) \cong \mathbb{Z}/n\)</span> and <span class="math inline">\(\mathbb{Z}/d \cong \mathbb{Z}/n \otimes \mathbb{Z}/m\)</span> where <span class="math inline">\(d=\gcd(n,m).\)</span> Therefore,</p>
-<p><span class="math inline">\(\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \mathbb{Z}/n \otimes \mathbb{Z}/m \;\;\;\; (\star)\)</span></p>
-<p>Utilizing the <a href="http://en.wikipedia.org/wiki/Ext_functor#Further_properties_of_Ext">commutativity</a> of <span class="math inline">\(\text{Ext}\)</span> and tensor product with (finite) direct sum, and <span class="math inline">\(( \star),\)</span> we obtain the required isomorphism,</p>
-<p><span class="math inline">\(\text{Ext}^1(A,B)=\text{Ext}^1(\mathbb{Z}/q\_1 \oplus \mathbb{Z}/q\_2 \oplus \cdots \oplus \mathbb{Z}/q\_k, \mathbb{Z}/p\_1 \oplus \mathbb{Z}/p\_2 \oplus \cdots \oplus \mathbb{Z}/p\_l) \cong \bigoplus\_{i,j} \text{Ext}^1(\mathbb{Z}/q\_i, \mathbb{Z}/p\_j) \cong \bigoplus\_{i,j} (\mathbb{Z}/q\_i \otimes \mathbb{Z}/p\_j) \cong (\mathbb{Z}/q\_1 \oplus \mathbb{Z}/q\_2 \oplus \cdots \oplus \mathbb{Z}/q\_k) \otimes (\mathbb{Z}/p\_1 \oplus \mathbb{Z}/p\_2 \oplus \cdots \oplus \mathbb{Z}/p\_l) \cong A \otimes B.\)</span></p>
-<blockquote class="blockquote">
-<p><strong>3</strong>. Let <span class="math inline">\(\_RF\)</span> be a flat left <span class="math inline">\(R\)</span>-module and <span class="math inline">\(P\)</span> be its projective covering, i.e.&nbsp;there is some <span class="math inline">\(R\)</span>-module epimorphism <span class="math inline">\(p: P \rightarrow F\)</span>. Prove that if <span class="math inline">\(P\)</span> is flat, then <span class="math inline">\(\text{Ker}(p)\)</span> is flat.</p>
-</blockquote>
-<p>Rotman’s definition of projective cover of a module <span class="math inline">\(F\)</span> is indeed, an ordered pair <span class="math inline">\((P, p),\)</span> where <span class="math inline">\(P\)</span> is projective and <span class="math inline">\(p:P \to F\)</span> is a surjective morphism with <span class="math inline">\(\text{ker}(p)\)</span> a superfluous submodule of <span class="math inline">\(P.\)</span> I will use the following <a href="http://en.wikipedia.org/wiki/Flat_module#Homological_algebra">homological characterization</a> for (left) flat <span class="math inline">\(R\)</span>-modules,</p>
-<p><span class="math inline">\(\text{Tor}^R\_n(-,M)=0 \;\; \text{for all} \;\; n \geq 1 \iff \_RM \;\; \text{is a flat left} \; R\text{-module}\)</span></p>
-<p>By assumption, <span class="math inline">\(0 \longrightarrow M \hookrightarrow P \longrightarrow F \longrightarrow 0\)</span> is a short exact sequence of left <span class="math inline">\(R\)</span>-modules, where <span class="math inline">\(M:=\text{ker}(p).\)</span> Let <span class="math inline">\(A\)</span> be a arbitrary right <span class="math inline">\(R\)</span>-module, then after applying the<em>right</em>exact functor <span class="math inline">\(A \otimes\_R -\)</span> to the above exact sequence, we will have</p>
-<p><span class="math inline">\(0 \to \text{Tor}^R\_1(A,M) \to \text{Tor}^R\_1(P,M) \to \text{Tor}^R\_1(F,M) \to A \otimes\_R M \to A \otimes\_R P \to A \otimes\_R F \to 0\)</span></p>
-<p>By the characterization, <span class="math inline">\(\text{Tor}^R\_n(-,P)=\text{Tor}^R\_n(-,F)=0\)</span> for <span class="math inline">\(n\geq 1,\)</span> therefore, <span class="math inline">\(\text{Tor}^R\_1(A,M)=0,\)</span> as well as <span class="math inline">\(\text{Tor}^R\_n(-,M)\)</span> for <span class="math inline">\(n\geq 1.\)</span> Hence, <span class="math inline">\(\_RM\)</span> is a flat module.</p>
+<p><span class="math display">\[\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \mathbb{Z}/n \otimes \mathbb{Z}/m \quad (\star)\]</span></p>
+<p>Utilizing the <a href="http://en.wikipedia.org/wiki/Ext_functor#Further_properties_of_Ext">commutativity</a> of <span class="math inline">\(\text{Ext}\)</span> and tensor product with (finite) direct sum, and <span class="math inline">\((\star),\)</span> we obtain the required isomorphism,</p>
+<p><span class="math display">\[\text{Ext}^1(A,B) \cong \bigoplus_{i,j} \text{Ext}^1(\mathbb{Z}/q_i, \mathbb{Z}/p_j) \cong \bigoplus_{i,j} (\mathbb{Z}/q_i \otimes \mathbb{Z}/p_j) \cong A \otimes B.\]</span></p>
+<hr>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problem 3
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(_RF\)</span> be a flat left <span class="math inline">\(R\)</span>-module and <span class="math inline">\(P\)</span> be its projective covering, i.e.&nbsp;there is some <span class="math inline">\(R\)</span>-module epimorphism <span class="math inline">\(p: P \rightarrow F\)</span>. Prove that if <span class="math inline">\(P\)</span> is flat, then <span class="math inline">\(\text{Ker}(p)\)</span> is flat.</p>
+</div>
+</div>
+<p>Rotman’s definition of projective cover of a module <span class="math inline">\(F\)</span> is indeed, an ordered pair <span class="math inline">\((P, p),\)</span> where <span class="math inline">\(P\)</span> is projective and <span class="math inline">\(p:P \to F\)</span> is a surjective morphism with <span class="math inline">\(\text{ker}(p)\)</span> a superfluous submodule of <span class="math inline">\(P.\)</span></p>
+<p>I will use the following <a href="http://en.wikipedia.org/wiki/Flat_module#Homological_algebra">homological characterization</a> for (left) flat <span class="math inline">\(R\)</span>-modules,</p>
+<p><span class="math display">\[\text{Tor}^R_n(-,M)=0 \;\; \text{for all} \;\; n \geq 1 \iff {}_RM \;\; \text{is a flat left } R\text{-module}\]</span></p>
+<p>By assumption, <span class="math inline">\(0 \longrightarrow M \hookrightarrow P \longrightarrow F \longrightarrow 0\)</span> is a short exact sequence of left <span class="math inline">\(R\)</span>-modules, where <span class="math inline">\(M:=\text{ker}(p).\)</span></p>
+<p>Let <span class="math inline">\(A\)</span> be an arbitrary right <span class="math inline">\(R\)</span>-module, then after applying the <em>right</em> exact functor <span class="math inline">\(A \otimes_R -\)</span> to the above exact sequence, we will have</p>
+<p><span class="math display">\[0 \to \text{Tor}^R_1(A,M) \to \text{Tor}^R_1(A,P) \to \text{Tor}^R_1(A,F) \to A \otimes_R M \to A \otimes_R P \to A \otimes_R F \to 0\]</span></p>
+<p>By the characterization, <span class="math inline">\(\text{Tor}^R_n(-,P)=\text{Tor}^R_n(-,F)=0\)</span> for <span class="math inline">\(n\geq 1,\)</span> therefore, <span class="math inline">\(\text{Tor}^R_1(A,M)=0,\)</span> as well as <span class="math inline">\(\text{Tor}^R_n(-,M)\)</span> for <span class="math inline">\(n\geq 1.\)</span> Hence, <span class="math inline">\(_RM\)</span> is a flat module.</p>
 
 
 

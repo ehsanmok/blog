@@ -364,8 +364,18 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#locally-free-sheaves-and-vector-bundles" id="toc-locally-free-sheaves-and-vector-bundles" class="nav-link active" data-scroll-target="#locally-free-sheaves-and-vector-bundles">Locally Free Sheaves and Vector Bundles</a></li>
+  <li><a href="#divisors" id="toc-divisors" class="nav-link" data-scroll-target="#divisors">Divisors</a></li>
+  <li><a href="#line-bundles-locally-free-sheaves-of-rank-one-and-divisors" id="toc-line-bundles-locally-free-sheaves-of-rank-one-and-divisors" class="nav-link" data-scroll-target="#line-bundles-locally-free-sheaves-of-rank-one-and-divisors">Line Bundles (locally free sheaves of rank one) and Divisors</a></li>
+  <li><a href="#riemann-roch-theorem" id="toc-riemann-roch-theorem" class="nav-link" data-scroll-target="#riemann-roch-theorem">Riemann-Roch Theorem</a></li>
+  <li><a href="#atiyahs-theorem" id="toc-atiyahs-theorem" class="nav-link" data-scroll-target="#atiyahs-theorem">Atiyah’s Theorem</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -405,26 +415,98 @@ window.Quarto = {
 </header>
 
 
-<p>In this post, I’ll be&nbsp;summarizing the basics of the correspondence between vector bundles, locally free sheaves and divisors on a smooth curve (defined over an algebraically closed field <span class="math inline">\(k\)</span> of characteristic zero) together with some of their individual properties.<strong>Locally free sheaves and Vector bundles:</strong>&gt;<strong>Proposition 1</strong>: a)&nbsp;A coherent sheaf <span class="math inline">\(\mathcal{E}\)</span> on a curve <span class="math inline">\(C\)</span> is locally free <span class="math inline">\(\iff\)</span> the fibers (stalks)&nbsp;<span class="math inline">\(\mathcal{E}\_p\)</span> are free at every point <span class="math inline">\(p \in C.\)</span> &nbsp;(note that the statement is local.) &gt; b) A subsheaf of a locally free sheaf is locally free. (Use the fact that local rings of a (smooth) curve are DVR, hence PID and a submodule of a finitely generated free is free) &gt; c) A non-zero map from a rank one locally free sheaf to a locally free sheaf is injective. (If there is a non-zero kernel, by b) it is locally free of rank one, then the cokernel will be a torsion sheaf injecting to a locally free sheaf!) &gt; d) Let&nbsp;<span class="math inline">\(\mathcal{E}\)</span> be a locally free sheaf of rank <span class="math inline">\(r\)</span> and <span class="math inline">\(\mathcal{E}'\)</span> a subsheaf of rank <span class="math inline">\(r'.\)</span> There exists a subsheaf <span class="math inline">\(\mathcal{E}''\)</span> or rank <span class="math inline">\(r''\)</span> containing&nbsp;<span class="math inline">\(\mathcal{E}'\)</span> s.t. <span class="math inline">\(\mathcal{E}/\mathcal{E}''\)</span> is locally free. In particular, if&nbsp;<span class="math inline">\(\mathcal{E}'\)</span> is the maximal (w.r.t inclusion) the quotient is already locally free. (Think how to kill the torsion!)<strong>Theorem</strong>: There is a natural one-to-one correspondence between vector bundles (or rank <span class="math inline">\(r\)</span>) and locally free sheaves (of rank <span class="math inline">\(r\)</span>) on <span class="math inline">\(C.\)</span><em>Idea</em>: Given a vector bundle, the sheaf of sections is the corresponding sheaf. The converse is a little tricky. Given a locally free sheaf&nbsp;<span class="math inline">\(\mathcal{E},\)</span> one can define a vector bundle as follows</p>
-<p><span class="math inline">\(E:= \{ (p,t)|\; p \in C, \;\; t \in \mathcal{E}\_p/{\mathfrak{m}\_p \mathcal{E}\_p} \}\)</span></p>
-<p>where <span class="math inline">\(\mathfrak{m}\_p\)</span> is the unique maximal ideal of the local ring <span class="math inline">\(\mathcal{O}\_p.\)</span><em>Remark</em>: Subsheaves of a locally free sheaf do not necessarily correspond to the subbundles of its associated bundle. The point is that, injectivity of the map of locally free sheaves may fail to be injective when it is reduced modulo the maximal ideal of some point.<em>Lemma 1</em>: A non-trivial global section of a vector bundle <span class="math inline">\(E\)</span> correspond to a non-zero map of sheaves&nbsp;<span class="math inline">\(\mathcal{O} \to \mathcal{E}\)</span> where&nbsp;<span class="math inline">\(\mathcal{E}\)</span> is the sheaf associated to <span class="math inline">\(E.\)</span><strong>Divisors:</strong>A<em>Weil</em>divisor on <span class="math inline">\(C\)</span> is a finite formal sum of points with integral multiplicities. If <span class="math inline">\(f\)</span> is a rational function on <span class="math inline">\(C\)</span> the divisor corresponding to <span class="math inline">\(f\)</span> is defined as <span class="math inline">\((f)=\sum \text{ord}\_p(f) p.\)</span> A<em>Cartier</em>divisor on <span class="math inline">\(C\)</span> is given by a covering <span class="math inline">\(U\_i\)</span> of <span class="math inline">\(C\)</span> together with functions <span class="math inline">\(f\_i \in \mathcal{O}(U\_i)\)</span> s.t. <span class="math inline">\(f\_i/f\_j\)</span> are &nbsp;invertible on <span class="math inline">\(U\_i \cap U\_j.\)</span>&nbsp;A principal divisor is given by the cover consisting of <span class="math inline">\(C\)</span> alone and a function on <span class="math inline">\(C\)</span> (global section of <span class="math inline">\(\mathcal{O}\_C.\)</span>) Given a Cartier divisor, one can associate a Weil divisor to it by considering on each open set <span class="math inline">\(U\_i\)</span> the zeros minus the poles of <span class="math inline">\((f\_i)\)</span> and this is well-defined, since <span class="math inline">\(f\_i/f\_j\)</span> is invertible on <span class="math inline">\(U\_i \cap U\_j.\)</span> Conversely, given a Weil divisor <span class="math inline">\(D,\)</span> one can construct a Cartier divisor by choosing open sets that contain at most one of the point on the support of <span class="math inline">\(D\)</span> and functions that vanish at these points with the assigned multiplicities. Therefore, these two seemingly different notions are<strong>equivalent</strong>over a smooth curve <span class="math inline">\(C.\)</span><strong>Line Bundles (locally free sheaves of rank one) and Divisors:</strong>Given a Cartier divisor, one can define a locally free sheaf of rank one by taking the trivial sheaf <span class="math inline">\(\mathcal{O}(U\_i)\)</span> and gluing them by the isomorphisms <span class="math inline">\(f\_i/f\_j\)</span> on <span class="math inline">\(U\_i \cap U\_j.\)</span> Conversely, given an invertible sheaf and a trivialization <span class="math inline">\(\{ U\_i, f\_{i,j} \},\)</span> one can define a Cartier divisor as follows; &nbsp;take an arbirtary open set, say <span class="math inline">\(U\_0\)</span> and define a Cartier divisor with <span class="math inline">\((U\_i,f\_{i,o}),\)</span> as <span class="math inline">\(f\_{j,o}=f^{-1}\_{0,j}\)</span> and <span class="math inline">\(f\_{0,j}f\_{i,0}=f\_{i,j}\)</span> which is a unit on <span class="math inline">\(U\_i \cap U\_j.\)</span><strong>Definition:</strong>Let <span class="math inline">\(D=\sum n\_p p\)</span> be an effective divisor. Define the sheaf <span class="math inline">\(\mathcal{F}\)</span> on the support of <span class="math inline">\(D\)</span> by <span class="math inline">\(\mathcal{F}\_p=k^{n\_p}.\)</span> Now, define the skyscraper sheaf <span class="math inline">\(k\_D\)</span> as the extension by zero outside of <span class="math inline">\(D.\)</span><em>Lemma 2</em>: A line bundle <span class="math inline">\(\mathcal{L}\)</span> corresponds to an effective divisor <span class="math inline">\(D\)</span> if and only if <span class="math inline">\(\mathcal{L}\)</span> has a non-zero global section (by<em>lemma 1</em>, there is a non-zero map of sheaves <span class="math inline">\(\mathcal{O} \to \mathcal{L}\)</span> which is&nbsp;injective by<em>Proposition 1, b)</em>) In this case, one has the following short exact sequence of sheaves</p>
-<p><span class="math inline">\(0 \longrightarrow \mathcal{O} \longrightarrow \mathcal{L} \longrightarrow k\_D \longrightarrow 0\)</span></p>
-<p>one then write <span class="math inline">\(\mathcal{L}=\mathcal{O}(D).\)</span><strong>Riemann-Roch Theorem:</strong>If <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf (line bundle), then the Euler-Poincare characteristic can be computed as</p>
-<p><span class="math inline">\(\chi(\mathcal{L})=\deg(\mathcal{L})+\chi(\mathcal{O})=\deg(\mathcal{L})+1-g\)</span></p>
-<p>where <span class="math inline">\(g=h^1(\mathcal{O})\)</span> is the genus of the curve.<em>Proof</em>: First, assume that <span class="math inline">\(\mathcal{L}\)</span> corresponds to an effective divisor <span class="math inline">\(D,\)</span> then by lemma 2, there is a short exact sequence, thus the associated long exact sequence gives rise to <span class="math inline">\(\chi(\mathcal{O}(D))= \chi (\mathcal{O})+ \chi (k\_D).\)</span> Since <span class="math inline">\(k\_D\)</span> is a skyscraper sheaf, its support is a zero-dimensional set, hence <span class="math inline">\(h^1(k\_D)=0, \chi(k\_D)=h^0(k\_D)=\deg D\)</span> so the result. In the general case, assume that <span class="math inline">\(\mathcal{L}\)</span> corresponds to <span class="math inline">\(D-D'\)</span> with both <span class="math inline">\(D,D'\)</span> effective. Then <span class="math inline">\(\mathcal{O}(D-D')=\mathcal{O}(D) \otimes \mathcal{O}(-D')\)</span> where <span class="math inline">\(\mathcal{O}(-D')=\mathcal{O}(D')^\*.\)</span> Indeed, <span class="math inline">\(\mathcal{O}(-D')\)</span> is a locally free sheaf so is flat and tensoring the above short exact sequence with <span class="math inline">\(\mathcal{O}(-D')\)</span> one obtains</p>
-<p><span class="math inline">\(0\longrightarrow \mathcal{O}(-D') \longrightarrow \mathcal{L} \longrightarrow k\_D \otimes \mathcal{O}(-D') \longrightarrow 0\)</span></p>
-<p>Therefore,&nbsp;<span class="math inline">\(\chi(\mathcal{L})= \chi (\mathcal{O}(-D'))+ \chi(k\_D \otimes \mathcal{O}(-D')).\)</span> On the other hand, replacing <span class="math inline">\(D\)</span> by <span class="math inline">\(D'\)</span> in the above sequence and tensoring with <span class="math inline">\(\mathcal{O}(-D')\)</span> and do the same thing as above leads to the desired&nbsp;formula.<em>Lemma 3</em>: Given a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> there exists a short exact sequence of sheaves</p>
-<p><span class="math inline">\(0 \longrightarrow \mathcal{L} \longrightarrow \mathcal{E} \longrightarrow \mathcal{E}' \longrightarrow 0\)</span></p>
-<p>where <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf and <span class="math inline">\(\mathcal{E}'\)</span> a locally free sheaf of rank <span class="math inline">\(r-1.\)</span> Using<em>lemma 3</em>and induction, one can prove the following formula for the calculation of <span class="math inline">\(\deg(\mathcal{E}\_1 \otimes \mathcal{E}\_2)\)</span> where <span class="math inline">\(\mathcal{E}\_1, \mathcal{E}\_2\)</span> are locally free sheaves of rank <span class="math inline">\(r\_1, r\_2\)</span> respectively.</p>
-<p><span class="math inline">\(\deg(\mathcal{E}\_1 \otimes \mathcal{E}\_2)=r\_1 \deg(\mathcal{E}\_2) + r\_2 \deg(\mathcal{E}\_1)\)</span></p>
+<p>In this post, I’ll be summarizing the basics of the correspondence between vector bundles, locally free sheaves and divisors on a smooth curve (defined over an algebraically closed field <span class="math inline">\(k\)</span> of characteristic zero) together with some of their individual properties.</p>
+<hr>
+<section id="locally-free-sheaves-and-vector-bundles" class="level2">
+<h2 class="anchored" data-anchor-id="locally-free-sheaves-and-vector-bundles">Locally Free Sheaves and Vector Bundles</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Proposition 1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="a">
+<li><p>A coherent sheaf <span class="math inline">\(\mathcal{E}\)</span> on a curve <span class="math inline">\(C\)</span> is locally free <span class="math inline">\(\iff\)</span> the fibers (stalks) <span class="math inline">\(\mathcal{E}_p\)</span> are free at every point <span class="math inline">\(p \in C.\)</span> (Note that the statement is local.)</p></li>
+<li><p>A subsheaf of a locally free sheaf is locally free. (Use the fact that local rings of a smooth curve are DVR, hence PID and a submodule of a finitely generated free module is free.)</p></li>
+<li><p>A non-zero map from a rank one locally free sheaf to a locally free sheaf is injective. (If there is a non-zero kernel, by (b) it is locally free of rank one, then the cokernel will be a torsion sheaf injecting to a locally free sheaf!)</p></li>
+<li><p>Let <span class="math inline">\(\mathcal{E}\)</span> be a locally free sheaf of rank <span class="math inline">\(r\)</span> and <span class="math inline">\(\mathcal{E}'\)</span> a subsheaf of rank <span class="math inline">\(r'.\)</span> There exists a subsheaf <span class="math inline">\(\mathcal{E}''\)</span> of rank <span class="math inline">\(r''\)</span> containing <span class="math inline">\(\mathcal{E}'\)</span> s.t. <span class="math inline">\(\mathcal{E}/\mathcal{E}''\)</span> is locally free. In particular, if <span class="math inline">\(\mathcal{E}'\)</span> is maximal (w.r.t inclusion) the quotient is already locally free. (Think how to kill the torsion!)</p></li>
+</ol>
+</div>
+</div>
+<p><strong>Theorem</strong>: There is a natural one-to-one correspondence between vector bundles (of rank <span class="math inline">\(r\)</span>) and locally free sheaves (of rank <span class="math inline">\(r\)</span>) on <span class="math inline">\(C.\)</span></p>
+<p><em>Idea</em>: Given a vector bundle, the sheaf of sections is the corresponding sheaf. The converse is a little tricky. Given a locally free sheaf <span class="math inline">\(\mathcal{E},\)</span> one can define a vector bundle as follows</p>
+<p><span class="math display">\[E:= \{ (p,t)\mid p \in C, \;\; t \in \mathcal{E}_p/{\mathfrak{m}_p \mathcal{E}_p} \}\]</span></p>
+<p>where <span class="math inline">\(\mathfrak{m}_p\)</span> is the unique maximal ideal of the local ring <span class="math inline">\(\mathcal{O}_p.\)</span></p>
+<p><em>Remark</em>: Subsheaves of a locally free sheaf do not necessarily correspond to the subbundles of its associated bundle. The point is that injectivity of the map of locally free sheaves may fail to be injective when it is reduced modulo the maximal ideal of some point.</p>
+<p><em>Lemma 1</em>: A non-trivial global section of a vector bundle <span class="math inline">\(E\)</span> corresponds to a non-zero map of sheaves <span class="math inline">\(\mathcal{O} \to \mathcal{E}\)</span> where <span class="math inline">\(\mathcal{E}\)</span> is the sheaf associated to <span class="math inline">\(E.\)</span></p>
+<hr>
+</section>
+<section id="divisors" class="level2">
+<h2 class="anchored" data-anchor-id="divisors">Divisors</h2>
+<p>A <em>Weil</em> divisor on <span class="math inline">\(C\)</span> is a finite formal sum of points with integral multiplicities. If <span class="math inline">\(f\)</span> is a rational function on <span class="math inline">\(C\)</span> the divisor corresponding to <span class="math inline">\(f\)</span> is defined as <span class="math inline">\((f)=\sum \text{ord}_p(f) \cdot p.\)</span></p>
+<p>A <em>Cartier</em> divisor on <span class="math inline">\(C\)</span> is given by a covering <span class="math inline">\(U_i\)</span> of <span class="math inline">\(C\)</span> together with functions <span class="math inline">\(f_i \in \mathcal{O}(U_i)\)</span> s.t. <span class="math inline">\(f_i/f_j\)</span> are invertible on <span class="math inline">\(U_i \cap U_j.\)</span> A principal divisor is given by the cover consisting of <span class="math inline">\(C\)</span> alone and a function on <span class="math inline">\(C\)</span> (global section of <span class="math inline">\(\mathcal{O}_C\)</span>).</p>
+<p>Given a Cartier divisor, one can associate a Weil divisor to it by considering on each open set <span class="math inline">\(U_i\)</span> the zeros minus the poles of <span class="math inline">\((f_i)\)</span> and this is well-defined, since <span class="math inline">\(f_i/f_j\)</span> is invertible on <span class="math inline">\(U_i \cap U_j.\)</span> Conversely, given a Weil divisor <span class="math inline">\(D,\)</span> one can construct a Cartier divisor by choosing open sets that contain at most one of the points on the support of <span class="math inline">\(D\)</span> and functions that vanish at these points with the assigned multiplicities.</p>
+<p>Therefore, these two seemingly different notions are <strong>equivalent</strong> over a smooth curve <span class="math inline">\(C.\)</span></p>
+<hr>
+</section>
+<section id="line-bundles-locally-free-sheaves-of-rank-one-and-divisors" class="level2">
+<h2 class="anchored" data-anchor-id="line-bundles-locally-free-sheaves-of-rank-one-and-divisors">Line Bundles (locally free sheaves of rank one) and Divisors</h2>
+<p>Given a Cartier divisor, one can define a locally free sheaf of rank one by taking the trivial sheaf <span class="math inline">\(\mathcal{O}(U_i)\)</span> and gluing them by the isomorphisms <span class="math inline">\(f_i/f_j\)</span> on <span class="math inline">\(U_i \cap U_j.\)</span></p>
+<p>Conversely, given an invertible sheaf and a trivialization <span class="math inline">\(\{ U_i, f_{i,j} \},\)</span> one can define a Cartier divisor as follows: take an arbitrary open set, say <span class="math inline">\(U_0\)</span> and define a Cartier divisor with <span class="math inline">\((U_i,f_{i,0}),\)</span> as <span class="math inline">\(f_{j,0}=f^{-1}_{0,j}\)</span> and <span class="math inline">\(f_{0,j}f_{i,0}=f_{i,j}\)</span> which is a unit on <span class="math inline">\(U_i \cap U_j.\)</span></p>
+<p><strong>Definition:</strong> Let <span class="math inline">\(D=\sum n_p p\)</span> be an effective divisor. Define the sheaf <span class="math inline">\(\mathcal{F}\)</span> on the support of <span class="math inline">\(D\)</span> by <span class="math inline">\(\mathcal{F}_p=k^{n_p}.\)</span> Now, define the skyscraper sheaf <span class="math inline">\(k_D\)</span> as the extension by zero outside of <span class="math inline">\(D.\)</span></p>
+<p><em>Lemma 2</em>: A line bundle <span class="math inline">\(\mathcal{L}\)</span> corresponds to an effective divisor <span class="math inline">\(D\)</span> if and only if <span class="math inline">\(\mathcal{L}\)</span> has a non-zero global section (by <em>Lemma 1</em>, there is a non-zero map of sheaves <span class="math inline">\(\mathcal{O} \to \mathcal{L}\)</span> which is injective by <em>Proposition 1(c)</em>). In this case, one has the following short exact sequence of sheaves</p>
+<p><span class="math display">\[0 \longrightarrow \mathcal{O} \longrightarrow \mathcal{L} \longrightarrow k_D \longrightarrow 0\]</span></p>
+<p>One then writes <span class="math inline">\(\mathcal{L}=\mathcal{O}(D).\)</span></p>
+<hr>
+</section>
+<section id="riemann-roch-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="riemann-roch-theorem">Riemann-Roch Theorem</h2>
+<p>If <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf (line bundle), then the Euler-Poincaré characteristic can be computed as</p>
+<p><span class="math display">\[\chi(\mathcal{L})=\deg(\mathcal{L})+\chi(\mathcal{O})=\deg(\mathcal{L})+1-g\]</span></p>
+<p>where <span class="math inline">\(g=h^1(\mathcal{O})\)</span> is the genus of the curve.</p>
+<p><em>Proof</em>: First, assume that <span class="math inline">\(\mathcal{L}\)</span> corresponds to an effective divisor <span class="math inline">\(D,\)</span> then by Lemma 2, there is a short exact sequence, thus the associated long exact sequence gives rise to <span class="math inline">\(\chi(\mathcal{O}(D))= \chi (\mathcal{O})+ \chi (k_D).\)</span> Since <span class="math inline">\(k_D\)</span> is a skyscraper sheaf, its support is a zero-dimensional set, hence <span class="math inline">\(h^1(k_D)=0\)</span> and <span class="math inline">\(\chi(k_D)=h^0(k_D)=\deg D,\)</span> so the result follows.</p>
+<p>In the general case, assume that <span class="math inline">\(\mathcal{L}\)</span> corresponds to <span class="math inline">\(D-D'\)</span> with both <span class="math inline">\(D,D'\)</span> effective. Then <span class="math inline">\(\mathcal{O}(D-D')=\mathcal{O}(D) \otimes \mathcal{O}(-D')\)</span> where <span class="math inline">\(\mathcal{O}(-D')=\mathcal{O}(D')^*.\)</span> Indeed, <span class="math inline">\(\mathcal{O}(-D')\)</span> is a locally free sheaf so is flat and tensoring the above short exact sequence with <span class="math inline">\(\mathcal{O}(-D')\)</span> one obtains</p>
+<p><span class="math display">\[0\longrightarrow \mathcal{O}(-D') \longrightarrow \mathcal{L} \longrightarrow k_D \otimes \mathcal{O}(-D') \longrightarrow 0\]</span></p>
+<p>Therefore, <span class="math inline">\(\chi(\mathcal{L})= \chi (\mathcal{O}(-D'))+ \chi(k_D \otimes \mathcal{O}(-D')).\)</span> On the other hand, replacing <span class="math inline">\(D\)</span> by <span class="math inline">\(D'\)</span> in the above sequence and tensoring with <span class="math inline">\(\mathcal{O}(-D')\)</span> and doing the same thing as above leads to the desired formula.</p>
+<hr>
+<p><em>Lemma 3</em>: Given a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> there exists a short exact sequence of sheaves</p>
+<p><span class="math display">\[0 \longrightarrow \mathcal{L} \longrightarrow \mathcal{E} \longrightarrow \mathcal{E}' \longrightarrow 0\]</span></p>
+<p>where <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf and <span class="math inline">\(\mathcal{E}'\)</span> a locally free sheaf of rank <span class="math inline">\(r-1.\)</span></p>
+<p>Using <em>Lemma 3</em> and induction, one can prove the following formula for the calculation of <span class="math inline">\(\deg(\mathcal{E}_1 \otimes \mathcal{E}_2)\)</span> where <span class="math inline">\(\mathcal{E}_1, \mathcal{E}_2\)</span> are locally free sheaves of rank <span class="math inline">\(r_1, r_2\)</span> respectively.</p>
+<p><span class="math display">\[\deg(\mathcal{E}_1 \otimes \mathcal{E}_2)=r_1 \deg(\mathcal{E}_2) + r_2 \deg(\mathcal{E}_1)\]</span></p>
 <p>where the degree of a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> is defined by</p>
-<p><span class="math inline">\(\deg(\mathcal{E})=\chi(\mathcal{E})-r \chi (\mathcal{O})\)</span><strong>Definition:</strong>A sheaf <span class="math inline">\(\mathcal{F}\)</span> is said to be generated by global sections if the natural map</p>
-<p><span class="math inline">\(H^0(\mathcal{F}) \otimes \mathcal{O} \longrightarrow \mathcal{F}\)</span></p>
-<p>is onto. &gt;<strong>Proposition 2</strong>: If <span class="math inline">\(\mathcal{E}\)</span> is a locally free sheaf on <span class="math inline">\(C,\)</span> there exists a positive divisor <span class="math inline">\(D\)</span> on <span class="math inline">\(C\)</span> s.t. <span class="math inline">\(\mathcal{E}(D):=\mathcal{E} \otimes \mathcal{O}(D)\)</span> is generated by global sections.<strong>Atiyah’s theorem:</strong>Given a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> generated by global sections, there exists an exact sequence</p>
-<p><span class="math inline">\(0 \longrightarrow \mathcal{O}^{r-1} \longrightarrow \mathcal{E} \longrightarrow \mathcal{L} \longrightarrow 0\)</span></p>
+<p><span class="math display">\[\deg(\mathcal{E})=\chi(\mathcal{E})-r \chi (\mathcal{O})\]</span></p>
+<hr>
+<p><strong>Definition:</strong> A sheaf <span class="math inline">\(\mathcal{F}\)</span> is said to be <em>generated by global sections</em> if the natural map</p>
+<p><span class="math display">\[H^0(\mathcal{F}) \otimes \mathcal{O} \longrightarrow \mathcal{F}\]</span></p>
+<p>is onto.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Proposition 2
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If <span class="math inline">\(\mathcal{E}\)</span> is a locally free sheaf on <span class="math inline">\(C,\)</span> there exists a positive divisor <span class="math inline">\(D\)</span> on <span class="math inline">\(C\)</span> s.t. <span class="math inline">\(\mathcal{E}(D):=\mathcal{E} \otimes \mathcal{O}(D)\)</span> is generated by global sections.</p>
+</div>
+</div>
+<hr>
+</section>
+<section id="atiyahs-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="atiyahs-theorem">Atiyah’s Theorem</h2>
+<p>Given a locally free sheaf <span class="math inline">\(\mathcal{E}\)</span> of rank <span class="math inline">\(r\)</span> generated by global sections, there exists an exact sequence</p>
+<p><span class="math display">\[0 \longrightarrow \mathcal{O}^{r-1} \longrightarrow \mathcal{E} \longrightarrow \mathcal{L} \longrightarrow 0\]</span></p>
 <p>where <span class="math inline">\(\mathcal{L}\)</span> is an invertible sheaf.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
