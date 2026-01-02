@@ -6,60 +6,86 @@ categories: [Homological Algebra]
 ---
 
 In this post, I'm going to write down the detailed proofs of some of the exercises in Rotman's Homological Algebra. They were asked in ML and then answered by me.
->**1**. Let $A$ be a torsion abelian group. Then $\text{Ext}^1\_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}\_\mathbb{Z}(A,S^1)$, where $S^1$ is the unit circle.
 
-One point is that the structure of the [circle group](http://en.wikipedia.org/wiki/Circle_group#Group_structure) is $\mathbb{Q}/\mathbb{Z} \oplus \mathbb{R}.$ Now, since $A$ is torsion, then $\text{Hom}(A,\mathbb{R})=0.$ Therefore, it is enough to show that $\text{Ext}^1\_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}\_\mathbb{Z}(A,\mathbb{Q}/\mathbb{Z}).$
-We know that $\text{Ext}(A,-)$ functor is the right derived functor of the*left*exact (covariant) functor $\text{Hom}(A,-).$ Consider the following exact sequence of abelian groups (injective resolution)
+::: {.callout-note}
+## Problem 1
+Let $A$ be a torsion abelian group. Then $\text{Ext}^1_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}_\mathbb{Z}(A,S^1)$, where $S^1$ is the unit circle.
+:::
 
-$0 \longrightarrow \mathbb{Z} \longrightarrow \mathbb{Q} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0$
+One point is that the structure of the [circle group](http://en.wikipedia.org/wiki/Circle_group#Group_structure) is $\mathbb{Q}/\mathbb{Z} \oplus \mathbb{R}.$ Now, since $A$ is torsion, then $\text{Hom}(A,\mathbb{R})=0.$ Therefore, it is enough to show that $\text{Ext}^1_\mathbb{Z}(A, \mathbb{Z}) \cong \text{Hom}_\mathbb{Z}(A,\mathbb{Q}/\mathbb{Z}).$
+
+We know that $\text{Ext}(A,-)$ functor is the right derived functor of the *left* exact (covariant) functor $\text{Hom}(A,-).$ Consider the following exact sequence of abelian groups (injective resolution)
+
+$$0 \longrightarrow \mathbb{Z} \longrightarrow \mathbb{Q} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0$$
 
 where obviously, the second arrow is inclusion and the third one is the projection.
+
 Applying our left exact (covariant) functor $\text{Hom}(A, -)$ to the above exact sequence, we will obtain the following long exact sequence
 
-$0 \longrightarrow \text{Hom}(A,\mathbb{Z}) \longrightarrow \text{Hom}(A,\mathbb{Q}) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Ext}^1(A, \mathbb{Z}) \longrightarrow 0 $
+$$0 \longrightarrow \text{Hom}(A,\mathbb{Z}) \longrightarrow \text{Hom}(A,\mathbb{Q}) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Ext}^1(A, \mathbb{Z}) \longrightarrow 0$$
 
-Notice that, $\mathbb{Q}$ and $\mathbb{Q}/\mathbb{Z}$ are [divisible group](http://en.wikipedia.org/wiki/Divisible_group)s, hence are injective $\mathbb{Z}$-modules, thus, $\text{Ext}^i(A, \mathbb{Q})=\text{Ext}^i(A, \mathbb{Q}/\mathbb{Z})=0$ for $i>0.$
+Notice that, $\mathbb{Q}$ and $\mathbb{Q}/\mathbb{Z}$ are [divisible groups](http://en.wikipedia.org/wiki/Divisible_group), hence are injective $\mathbb{Z}$-modules, thus, $\text{Ext}^i(A, \mathbb{Q})=\text{Ext}^i(A, \mathbb{Q}/\mathbb{Z})=0$ for $i>0.$
+
 Similarly, since $A$ is torsion then $\text{Hom}(A,\mathbb{Z})=\text{Hom}(A,\mathbb{Q})=0.$ Hence,
 
-$\text{Ext}^1(A, \mathbb{Z}) \cong \text{Hom}(A,\mathbb{Q}/\mathbb{Z})$
+$$\text{Ext}^1(A, \mathbb{Z}) \cong \text{Hom}(A,\mathbb{Q}/\mathbb{Z})$$
 
 as desired.
->**2**. Let $A, B$ be finite abelian groups. Prove that $\text{Ext}^1\_\mathbb{Z} (A,B) \cong A \otimes\_\mathbb{Z} B.$
 
-By the [classification of finitely generated abelian groups](http://en.wikipedia.org/wiki/Finitely-generated_abelian_group#Classification), we can assume that $A \cong \mathbb{Z}/q\_1 \oplus \mathbb{Z}/q\_2 \oplus \cdots \oplus \mathbb{Z}/q\_k$ and $B\cong \mathbb{Z}/p\_1 \oplus \mathbb{Z}/p\_2 \oplus \cdots \oplus \mathbb{Z}/p\_l$ where $q\_i, p\_j$ are (not necessarily distinct) prime numbers.**Lemma**: Let $A$ be a finite abelian group, then
+---
 
-$\text{Ext}^1(A, \mathbb{Z}/m) \cong \frac{\text{Hom}(A, \mathbb{Q}/\mathbb{Z})}{m \text{Hom}(A, \mathbb{Q}/\mathbb{Z})}.$*Proof of the lemma*: Consider the following injective resolution for $\mathbb{Z}/m$
+::: {.callout-note}
+## Problem 2
+Let $A, B$ be finite abelian groups. Prove that $\text{Ext}^1_\mathbb{Z} (A,B) \cong A \otimes_\mathbb{Z} B.$
+:::
 
-$0 \longrightarrow \mathbb{Z}/m \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0$
+By the [classification of finitely generated abelian groups](http://en.wikipedia.org/wiki/Finitely-generated_abelian_group#Classification), we can assume that $A \cong \mathbb{Z}/q_1 \oplus \mathbb{Z}/q_2 \oplus \cdots \oplus \mathbb{Z}/q_k$ and $B\cong \mathbb{Z}/p_1 \oplus \mathbb{Z}/p_2 \oplus \cdots \oplus \mathbb{Z}/p_l$ where $q_i, p_j$ are (not necessarily distinct) prime numbers.
+
+**Lemma**: Let $A$ be a finite abelian group, then
+
+$$\text{Ext}^1(A, \mathbb{Z}/m) \cong \frac{\text{Hom}(A, \mathbb{Q}/\mathbb{Z})}{m \cdot \text{Hom}(A, \mathbb{Q}/\mathbb{Z})}.$$
+
+*Proof of the lemma*: Consider the following injective resolution for $\mathbb{Z}/m$
+
+$$0 \longrightarrow \mathbb{Z}/m \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow \mathbb{Q}/\mathbb{Z} \longrightarrow 0$$
 
 where the second arrow is multiplication by $1/m$ and the third one is multiplication by $m.$
+
 Applying $\text{Hom}(A, -)$ to the above short exact sequence, we will get
 
-$0 \longrightarrow \text{Hom}(A, \mathbb{Z}/m) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Ext}^1(A, \mathbb{Z}/m) \to 0$
+$$0 \longrightarrow \text{Hom}(A, \mathbb{Z}/m) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Hom}(A,\mathbb{Q}/\mathbb{Z}) \longrightarrow \text{Ext}^1(A, \mathbb{Z}/m) \to 0$$
 
 Note that, injectivity of $\mathbb{Q}/\mathbb{Z},$ implies that $\text{Ext}^i(A,\mathbb{Q}/\mathbb{Z})=0$ for $i>0.$ Hence, the required isomorphism. (Notice that the third arrow is the induced multiplication by $m$ from our resolution.)
-In particular, setting $A=\mathbb{Z}/n$ in the*lemma*and**using the result of the question 1)**, we get
 
-$\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \frac{\text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})}{m \text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})} \cong \frac{\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})}{m \text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})} \cong \frac{ \mathbb{Z}/n}{m \mathbb{Z}/n} \cong \mathbb{Z}/d$
+In particular, setting $A=\mathbb{Z}/n$ in the *lemma* and **using the result of Problem 1**, we get
+
+$$\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \frac{\text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})}{m \cdot \text{Hom}(\mathbb{Z}/n, \mathbb{Q}/\mathbb{Z})} \cong \frac{\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})}{m \cdot \text{Ext}^1(\mathbb{Z}/n, \mathbb{Z})} \cong \frac{ \mathbb{Z}/n}{m \cdot \mathbb{Z}/n} \cong \mathbb{Z}/d$$
 
 Note that, $\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}) \cong \mathbb{Z}/n$ and $\mathbb{Z}/d \cong \mathbb{Z}/n \otimes \mathbb{Z}/m$ where $d=\gcd(n,m).$ Therefore,
 
-$\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \mathbb{Z}/n \otimes \mathbb{Z}/m \;\;\;\; (\star)$
+$$\text{Ext}^1(\mathbb{Z}/n, \mathbb{Z}/m) \cong \mathbb{Z}/n \otimes \mathbb{Z}/m \quad (\star)$$
 
-Utilizing the [commutativity](http://en.wikipedia.org/wiki/Ext_functor#Further_properties_of_Ext) of $\text{Ext}$ and tensor product with (finite) direct sum, and $( \star),$ we obtain the required isomorphism,
+Utilizing the [commutativity](http://en.wikipedia.org/wiki/Ext_functor#Further_properties_of_Ext) of $\text{Ext}$ and tensor product with (finite) direct sum, and $(\star),$ we obtain the required isomorphism,
 
-$\text{Ext}^1(A,B)=\text{Ext}^1(\mathbb{Z}/q\_1 \oplus \mathbb{Z}/q\_2 \oplus \cdots \oplus \mathbb{Z}/q\_k, \mathbb{Z}/p\_1 \oplus \mathbb{Z}/p\_2 \oplus \cdots \oplus \mathbb{Z}/p\_l) \cong \bigoplus\_{i,j} \text{Ext}^1(\mathbb{Z}/q\_i, \mathbb{Z}/p\_j) \cong \bigoplus\_{i,j} (\mathbb{Z}/q\_i \otimes \mathbb{Z}/p\_j) \cong (\mathbb{Z}/q\_1 \oplus \mathbb{Z}/q\_2 \oplus \cdots \oplus \mathbb{Z}/q\_k) \otimes (\mathbb{Z}/p\_1 \oplus \mathbb{Z}/p\_2 \oplus \cdots \oplus \mathbb{Z}/p\_l) \cong A \otimes B.$
+$$\text{Ext}^1(A,B) \cong \bigoplus_{i,j} \text{Ext}^1(\mathbb{Z}/q_i, \mathbb{Z}/p_j) \cong \bigoplus_{i,j} (\mathbb{Z}/q_i \otimes \mathbb{Z}/p_j) \cong A \otimes B.$$
 
->**3**. Let $\_RF$ be a flat left $R$-module and $P$ be its projective covering, i.e. there is some $R$-module epimorphism $p: P \rightarrow F$. Prove that if $P$ is flat, then $\text{Ker}(p)$ is flat.
+---
+
+::: {.callout-note}
+## Problem 3
+Let $_RF$ be a flat left $R$-module and $P$ be its projective covering, i.e. there is some $R$-module epimorphism $p: P \rightarrow F$. Prove that if $P$ is flat, then $\text{Ker}(p)$ is flat.
+:::
 
 Rotman's definition of projective cover of a module $F$ is indeed, an ordered pair $(P, p),$ where $P$ is projective and $p:P \to F$ is a surjective morphism with $\text{ker}(p)$ a superfluous submodule of $P.$
+
 I will use the following [homological characterization](http://en.wikipedia.org/wiki/Flat_module#Homological_algebra) for (left) flat $R$-modules,
 
-$\text{Tor}^R\_n(-,M)=0 \;\; \text{for all} \;\; n \geq 1 \iff \_RM \;\; \text{is a flat left} \; R\text{-module}$
+$$\text{Tor}^R_n(-,M)=0 \;\; \text{for all} \;\; n \geq 1 \iff {}_RM \;\; \text{is a flat left } R\text{-module}$$
 
 By assumption, $0 \longrightarrow M \hookrightarrow P \longrightarrow F \longrightarrow 0$ is a short exact sequence of left $R$-modules, where $M:=\text{ker}(p).$
-Let $A$ be a arbitrary right $R$-module, then after applying the*right*exact functor $A \otimes\_R -$ to the above exact sequence, we will have
 
-$0 \to \text{Tor}^R\_1(A,M) \to \text{Tor}^R\_1(P,M) \to \text{Tor}^R\_1(F,M) \to A \otimes\_R M \to A \otimes\_R P \to A \otimes\_R F \to 0$
+Let $A$ be an arbitrary right $R$-module, then after applying the *right* exact functor $A \otimes_R -$ to the above exact sequence, we will have
 
-By the characterization, $\text{Tor}^R\_n(-,P)=\text{Tor}^R\_n(-,F)=0$ for $n\geq 1,$ therefore, $\text{Tor}^R\_1(A,M)=0,$ as well as $\text{Tor}^R\_n(-,M)$ for $n\geq 1.$ Hence, $\_RM$ is a flat module.
+$$0 \to \text{Tor}^R_1(A,M) \to \text{Tor}^R_1(A,P) \to \text{Tor}^R_1(A,F) \to A \otimes_R M \to A \otimes_R P \to A \otimes_R F \to 0$$
+
+By the characterization, $\text{Tor}^R_n(-,P)=\text{Tor}^R_n(-,F)=0$ for $n\geq 1,$ therefore, $\text{Tor}^R_1(A,M)=0,$ as well as $\text{Tor}^R_n(-,M)$ for $n\geq 1.$ Hence, $_RM$ is a flat module.
