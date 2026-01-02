@@ -1,0 +1,85 @@
+---
+title: "My M.Sc. Thesis: Distributed Linear Programming with Apache Spark"
+author: "Ehsan M. Kermani"
+date: "2017-01-21"
+categories: [Distributed Computing, Optimization, Apache Spark, Thesis]
+description: "I finally defended my M.Sc. thesis on solving large-scale linear programming problems using Apache Spark. Here's the full thesis and some thoughts on the journey."
+---
+
+## It's Official
+
+I defended my M.Sc. thesis at UBC! The thesis is titled "Distributed Linear Programming with Apache Spark" and it's now available in the [UBC Library Open Collections](https://open.library.ubc.ca/soa/cIRcle/collections/ubctheses/24/items/1.0340337).
+
+---
+
+## The Thesis
+
+Here's the full document:
+
+```{=html}
+<div style="border: 1px solid #444; border-radius: 8px; overflow: hidden; margin: 2rem 0; min-height: 600px;">
+<script src="https://open.library.ubc.ca/staticfile/build/embed/embed-media-file.js" data-elid="oc-i-10340337-0" data-itemid="1.0340337" data-collectionid="24" data-showmeta="false" data-width="auto" data-index="0" data-handle="undefined" async></script>
+<div id="oc-i-10340337-0"></div>
+</div>
+```
+
+Can't see the embed? [View the thesis on UBC Library →](https://open.library.ubc.ca/soa/cIRcle/collections/ubctheses/24/items/1.0340337)
+
+---
+
+## What's It About?
+
+The core idea is pretty straightforward: linear programming (LP) is fundamental to optimization, but when you have massive problems with millions of variables and constraints, traditional solvers on a single machine just don't cut it.
+
+So I implemented [Mehrotra's predictor-corrector interior point algorithm](https://en.wikipedia.org/wiki/Mehrotra_predictor%E2%80%93corrector_method) on top of Apache Spark. The result is **Spark-LP**, an open-source, fault-tolerant solver that can run on commodity clusters.
+
+### Why This Matters
+
+1. **Scale**: You can solve LP problems that are too big for a single machine
+2. **Cost**: Commodity clusters (like AWS EC2) are way cheaper than specialized hardware
+3. **Fault-tolerance**: Spark handles node failures gracefully, so long-running jobs don't die
+4. **Open-source**: Anyone can use it, extend it, improve it
+
+### The Experiments
+
+I tested Spark-LP on clusters of 16 to 64 Amazon EC2 r3.xlarge instances. We threw both sparse and dense large-scale problems at it and measured convergence and performance.
+
+The results were encouraging. For problems that fit the distributed paradigm well, Spark-LP performs competitively. There are limitations, of course. The overhead of distributed computing means it's not always faster than a well-tuned single-machine solver for medium-sized problems. But for truly large-scale stuff? That's where it shines.
+
+---
+
+## What I Learned
+
+Writing a thesis is an exercise in depth. You pick one thing and you go deep. Really deep. I learned more about interior point methods, numerical linear algebra, and distributed systems than I ever expected.
+
+I also learned that research is messy. Things don't work the first time. Or the tenth time. You spend weeks debugging numerical instability issues, only to realize you had a sign error somewhere.
+
+But when it finally works? That feeling is worth it.
+
+---
+
+## What's Next?
+
+The thesis includes suggestions for future work:
+
+- **GPU acceleration**: The JVM limits numerical performance. Integrating GPUs could dramatically speed things up.
+- **Heterogeneous clusters**: Mixing CPUs and GPUs in the same cluster for different parts of the computation.
+- **Better linear algebra**: The numerical overhead on JVM is real. Native libraries could help.
+
+I'm moving on to other things now, but I hope someone picks this up and takes it further. The code is out there. The ideas are documented. Build on it.
+
+---
+
+## Acknowledgments
+
+Huge thanks to my supervisor and committee for their guidance and patience. And to the UBC CS department for being a great place to do research.
+
+If you're interested in distributed optimization, large-scale computing, or just want to chat about Spark, feel free to reach out.
+
+---
+
+## Links
+
+- [Full thesis on UBC Library](https://open.library.ubc.ca/soa/cIRcle/collections/ubctheses/24/items/1.0340337)
+- [DOI: 10.14288/1.0340337](https://doi.org/10.14288/1.0340337)
+

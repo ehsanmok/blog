@@ -1,0 +1,88 @@
+---
+title: "My Math M.Sc. Thesis: Hilbert Schemes and the Derived McKay Correspondence"
+author: "Ehsan M. Kermani"
+date: "2013-09-09"
+categories: [Mathematics, Algebraic Geometry, Thesis]
+description: "My first M.Sc. thesis on the behavior of the Hilbert scheme of points under the derived McKay correspondence. Pure math, derived categories, and beautiful combinatorics."
+---
+
+## The Math Thesis
+
+The full title is "The behavior of the Hilbert scheme of points under the derived McKay correspondence" and it's now in the [UBC Library Open Collections](https://open.library.ubc.ca/soa/cIRcle/collections/ubctheses/24/items/1.0074268).
+
+---
+
+## The Thesis
+
+```{=html}
+<div style="border: 1px solid #444; border-radius: 8px; overflow: hidden; margin: 2rem 0; min-height: 600px;">
+<script src="https://open.library.ubc.ca/staticfile/build/embed/embed-media-file.js" data-elid="oc-i-10074268-0" data-itemid="1.0074268" data-collectionid="24" data-showmeta="false" data-width="auto" data-index="0" data-handle="undefined" async></script>
+<div id="oc-i-10074268-0"></div>
+</div>
+```
+
+Can't see the embed? [View the thesis on UBC Library →](https://open.library.ubc.ca/soa/cIRcle/collections/ubctheses/24/items/1.0074268)
+
+---
+
+## What's It About?
+
+This one is pure algebraic geometry. Let me try to explain the main ideas without losing everyone.
+
+### The Setup
+
+Start with $\mathbb{C}^2$ (the complex plane, two copies) and quotient it by a cyclic group $\mathbb{Z}/n\mathbb{Z}$. This creates a singularity, a Kleinian quotient singularity to be precise. These singularities have a beautiful structure and are classified by ADE Dynkin diagrams.
+
+Now, you can "resolve" this singularity, meaning you replace the bad point with something smooth. The minimal crepant resolution $Y$ is particularly nice because it doesn't introduce any extra "canonical" badness.
+
+### The McKay Correspondence
+
+The [McKay correspondence](https://en.wikipedia.org/wiki/McKay_graph) is one of those magical results in math that connects seemingly unrelated things:
+
+- **Representation theory** of the group $\mathbb{Z}/n\mathbb{Z}$
+- **Geometry** of the resolution $Y$
+- **Combinatorics** of Dynkin diagrams
+
+The *derived* McKay correspondence takes this further. It says there's an equivalence of categories:
+
+$$D^b(\text{Coh}(Y)) \cong D^b_{\mathbb{Z}/n}(\text{Coh}(\mathbb{C}^2))$$
+
+The derived category of coherent sheaves on $Y$ is equivalent to the equivariant derived category on $\mathbb{C}^2$. This equivalence is given by a [Fourier-Mukai transform](https://en.wikipedia.org/wiki/Fourier%E2%80%93Mukai_transform), a powerful tool in algebraic geometry.
+
+### The Main Result
+
+My thesis completely determines what happens to the [Hilbert scheme of points](https://en.wikipedia.org/wiki/Hilbert_scheme) under this equivalence.
+
+Specifically, I look at structure sheaves of zero-dimensional, torus-invariant closed subschemes on $Y$ and track their images under the Fourier-Mukai transform.
+
+The punchline? There's a beautiful combinatorial correspondence:
+
+**Partitions ↔ $\mathbb{Z}/n$-colored skew partitions**
+
+If you know about Young diagrams and partition combinatorics, this is a satisfying result. The geometry translates into pure combinatorics.
+
+---
+
+## Why I Love This Stuff
+
+There's something deeply satisfying about derived categories. They're abstract, sure. But they reveal structure that you can't see otherwise.
+
+The McKay correspondence is a perfect example. On the surface, you have a group acting on a space. Underneath, there's this rich tapestry connecting algebra, geometry, and combinatorics. The derived perspective makes it all fit together.
+
+---
+
+## The Journey
+
+This was my first thesis. I spent months reading papers, filling notebooks with diagrams, and trying to understand Bridgeland's work on derived categories. There were weeks where I felt completely lost.
+
+But when it clicked? When I finally saw how the Fourier-Mukai kernel worked, how the exceptional divisors corresponded to representations, how the combinatorics emerged from the geometry? That was worth every confused hour.
+
+Math is like that. Long periods of confusion punctuated by moments of clarity.
+
+---
+
+## Links
+
+- [Full thesis on UBC Library](https://open.library.ubc.ca/soa/cIRcle/collections/ubctheses/24/items/1.0074268)
+- [DOI: 10.14288/1.0074268](https://doi.org/10.14288/1.0074268)
+
