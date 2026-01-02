@@ -96,6 +96,8 @@ format:
             }
           });
           </script>
+      - text: |
+          <link rel="alternate" type="application/rss+xml" title="Ehsan's Blog" href="https://ehsanmkermani.com/posts.xml">
 
 execute:
   freeze: auto
