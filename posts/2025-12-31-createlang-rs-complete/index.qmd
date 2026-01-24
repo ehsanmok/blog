@@ -39,15 +39,11 @@ Six years later, here we are.
 
 Honestly? Everything.
 
-**Life happened.** Jobs changed. Priorities shifted. I moved across the country. Some months I'd write every day, other months I wouldn't touch it at all.
+**Life happened.** Losses. Jobs changed. Priorities shifted. I'm a father now, and that's a lot of responsibility.
 
 **The scope kept growing.** Every time I thought I was done, I'd realize there was another important concept I hadn't covered. Lifetime semantics. Borrow checking. LLVM integration. Optimization passes. The list kept expanding.
 
 **I didn't want to write a typical compiler book.** You know the ones. 1000 pages about parser theory that put you to sleep by chapter 3. I wanted something practical, something you could actually follow and build with. That meant finding the right balance between theory and practice, which is harder than it sounds.
-
-**Perfectionism is real.** I kept rewriting chapters. "This explanation isn't clear enough." "This example is too simple." "This code could be better." I probably rewrote the parser chapter five times.
-
-**Rust kept evolving.** When I started, we didn't have const generics. No async/await. The module system was different. Every Rust edition meant going back and updating examples.
 
 But you know what? All of that is okay. Because the book that exists now is so much better than what I envisioned in 2020.
 
